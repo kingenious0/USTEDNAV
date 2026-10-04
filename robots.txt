@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Allow: /map.html
+Allow: /download/
+Allow: /icons/
+Allow: /data/
+
+# Sitemap location for Googlebot & Bingbot
+Sitemap: https://ustednav.app/sitemap.xml
+Sitemap: https://www.ustednav.app/sitemap.xml
