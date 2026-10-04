@@ -2,6 +2,9 @@
   "name": "USTED Nav - Campus Navigation",
   "short_name": "USTED Nav",
   "description": "Offline campus navigation and room finder for USTED Kumasi.",
+  "developer": {
+    "name": "KINGENIOUS"
+  },
   "id": "/",
   "start_url": "/",
   "scope": "/",

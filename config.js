@@ -1,5 +1,7 @@
 /**
  * CampusOS / USTED Nav - Global Application Configuration
+ * Copyright (c) 2026 KINGENIOUS. All Rights Reserved.
+ * Proprietary software of KINGENIOUS (Ghana).
  * Baked-in project defaults with localStorage override support.
  */
 

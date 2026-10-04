@@ -1,5 +1,7 @@
 /**
  * View Controller Module — CampusOS USTED
+ * Copyright (c) 2026 KINGENIOUS. All Rights Reserved.
+ * Proprietary software of KINGENIOUS (Ghana).
  * Manages 2D Mapbox vs 3D Cesium mode transitions, camera synchronization,
  * visibility state, and building selection bridging.
  */

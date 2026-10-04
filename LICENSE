@@ -1,0 +1,45 @@
+PROPRIETARY SOFTWARE LICENSE & INTELLECTUAL PROPERTY NOTICE
+
+Copyright (c) 2026 KINGENIOUS. All Rights Reserved.
+Founder & Proprietor: KINGENIOUS (Ghana)
+System: CampusOS™ / USTED NAV (Smart Campus Spatial Operating System)
+
+===============================================================================
+1. INTELLECTUAL PROPERTY & OWNERSHIP
+===============================================================================
+This software system, encompassing all source code, spatial graph engines,
+Dijkstra/A* routing algorithms, 2D/3D map rendering pipelines (Cesium/Mapbox),
+system architecture, UI designs, GeoJSON coordinate schemas, and documentation,
+is the exclusive proprietary intellectual property and trade secret of KINGENIOUS.
+
+===============================================================================
+2. INSTITUTIONAL DEPLOYMENT & USAGE GRANT
+===============================================================================
+This instance of CampusOS™ is deployed specifically for the students, faculty,
+and administration of the Akenten Appiah-Menka University of Skills Training
+and Entrepreneurial Development (AAMUSTED / USTED Kumasi, Ghana).
+
+AAMUSTED is granted a non-exclusive, non-transferable institutional end-user
+license to operate and utilize this system for campus navigation and spatial
+information display. 
+
+This grant does NOT convey, transfer, or assign any ownership, copyright,
+patent rights, or intellectual property rights of the underlying software,
+source code, engine architectures, or algorithms to the institution, its
+agents, employees, contractors, or any third party.
+
+===============================================================================
+3. STRICT RESTRICTIONS
+===============================================================================
+Under international copyright treaties and the laws of Ghana:
+- No person, institution, or organization may copy, distribute, modify,
+  decompile, reverse-engineer, disassemble, or extract the source code or
+  spatial algorithms of this application.
+- No party may rebrand, white-label, re-license, sell, lease, or sub-license
+  this software or any portion thereof without explicit prior written
+  authorization from KINGENIOUS.
+- This software is strictly proprietary and is NOT licensed under MIT,
+  Apache, GPL, or any permissive open-source license.
+
+For inquiries or licensing authorization, contact KINGENIOUS:
+[EMAIL_ADDRESS]

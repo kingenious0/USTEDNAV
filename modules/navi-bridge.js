@@ -1,5 +1,7 @@
 /**
  * NaviBridge - CampusOS <-> Cactus Needle Agent Dispatcher
+ * Copyright (c) 2026 KINGENIOUS. All Rights Reserved.
+ * Proprietary software of KINGENIOUS (Ghana).
  * Bridges student natural language queries through the Cactus Needle
  * sidecar and routes clean intents directly into CampusOS data & map layer.
  */
