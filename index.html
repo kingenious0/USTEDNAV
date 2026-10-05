@@ -759,6 +759,9 @@
         <button id="bannerInstallBtn" class="install-action-btn">Install App</button>
     </div>
 
+    <script src="config.js"></script>
+    <script src="modules/telemetry.js"></script>
+    <script defer src="/_vercel/insights/script.js"></script>
     <script>
         // --- 1. SERVICE WORKER WITH AUTO-REFRESH ON UPDATE ---
         let refreshing = false;
@@ -853,6 +856,9 @@
 
         if (apkBtn) {
             apkBtn.addEventListener('click', () => {
+                if (window.CampusTelemetry) {
+                    window.CampusTelemetry.track('apk_download', { file: 'ustednav.apk' });
+                }
                 setTimeout(() => {
                     localStorage.setItem('ustednav_apk_downloaded', 'true');
                 }, 2000);
@@ -860,6 +866,9 @@
         }
 
         window.addEventListener('appinstalled', () => {
+            if (window.CampusTelemetry) {
+                window.CampusTelemetry.track('pwa_installed');
+            }
             localStorage.setItem('ustednav_app_installed', 'true');
             hideAllInstallPrompts();
             console.log('USTED NAV was installed');

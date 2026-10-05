@@ -45,6 +45,8 @@
     <script src="config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="modules/data-loader.js"></script>
+    <script src="modules/telemetry.js"></script>
+    <script defer src="/_vercel/insights/script.js"></script>
     <script src="modules/navi-bridge.js"></script>
     <!-- CesiumJS 1.145 (Official Release) -->
     <link rel="stylesheet" href="https://cesium.com/downloads/cesiumjs/releases/1.145/Build/Cesium/Widgets/widgets.css">
@@ -3482,6 +3484,9 @@
     });
 
     searchDirections?.addEventListener('click', () => {
+        if (window.CampusTelemetry) {
+            window.CampusTelemetry.track('direction_mode_click');
+        }
         showToast('Entering direction mode...');
         searchInput.focus();
     });
