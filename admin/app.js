@@ -352,7 +352,8 @@ function switchTab(tabName) {
         rooms: document.getElementById('view-rooms'),
         staff: document.getElementById('view-staff'),
         'entrance-editor': document.getElementById('view-entrance-editor'),
-        'sync-queue': document.getElementById('view-sync-queue')
+        'sync-queue': document.getElementById('view-sync-queue'),
+        analytics: document.getElementById('view-analytics')
     };
 
     Object.keys(viewMap).forEach(vKey => {
@@ -376,6 +377,7 @@ function renderCurrentTab() {
     else if (activeTab === 'staff') renderStaff();
     else if (activeTab === 'entrance-editor') renderEditorBuildingList();
     else if (activeTab === 'sync-queue') renderSyncQueue();
+    else if (activeTab === 'analytics') renderAnalyticsDashboard();
 }
 window.renderCurrentTab = renderCurrentTab;
 
@@ -2413,6 +2415,15 @@ async function initApp() {
         });
     }
 
+    // Attach Analytics Refresh Button
+    const btnRefreshAnalytics = document.getElementById('btn-refresh-analytics');
+    if (btnRefreshAnalytics) {
+        btnRefreshAnalytics.addEventListener('click', () => {
+            showToast('Refreshing live metrics...', 'info');
+            renderAnalyticsDashboard(true);
+        });
+    }
+
     // Initialize CampusSync database
     try {
         if (typeof CampusSync !== 'undefined' && CampusSync.init) {
@@ -2423,6 +2434,153 @@ async function initApp() {
         console.warn('[App] CampusSync init notice:', err);
     }
 }
+
+// =============================================================================
+// 6. ANALYTICS & TELEMETRY CONTROLLER (KINGENIOUS)
+// =============================================================================
+
+function formatTimeAgo(d) {
+    if (!d || isNaN(d.getTime())) return 'recently';
+    const sec = Math.floor((Date.now() - d.getTime()) / 1000);
+    if (sec < 60) return `${sec}s ago`;
+    const min = Math.floor(sec / 60);
+    if (min < 60) return `${min}m ago`;
+    const hr = Math.floor(min / 60);
+    if (hr < 24) return `${hr}h ago`;
+    return `${Math.floor(hr / 24)}d ago`;
+}
+
+async function renderAnalyticsDashboard(notifySuccess = false) {
+    const statVisitors = document.getElementById('stat-total-visitors');
+    const statUnique = document.getElementById('stat-unique-devices');
+    const statApk = document.getElementById('stat-apk-downloads');
+    const statPwa = document.getElementById('stat-pwa-installs');
+    const statMap = document.getElementById('stat-map-actions');
+    const osContainer = document.getElementById('analytics-os-breakdown');
+    const tableBody = document.getElementById('analytics-event-table');
+    const lastSynced = document.getElementById('analytics-last-synced');
+
+    const supabaseUrl = (window.ENV?.supabaseUrl || window.APP_CONFIG?.SUPABASE_URL || 'https://mzxmbkulgrehujpvwadt.supabase.co').replace(/\/+$/, '');
+    const supabaseKey = window.ENV?.supabaseKey || window.APP_CONFIG?.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im16eG1ia3VsZ3JlaHVqcHZ3YWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ1Njk5NjQsImV4cCI6MjEwMDE0NTk2NH0.PQMuAN1Hr82re8sgIJCbwwU09u6594UC3oIdTGoJfaE';
+
+    try {
+        const res = await fetch(`${supabaseUrl}/rest/v1/analytics_events?select=*&order=created_at.desc&limit=500`, {
+            headers: {
+                'apikey': supabaseKey,
+                'Authorization': `Bearer ${supabaseKey}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!res.ok) {
+            if (res.status === 404 || res.status === 400 || res.status === 401) {
+                if (tableBody) {
+                    tableBody.innerHTML = `<tr><td colspan="4" class="py-6 text-center text-slate-400">
+                        <div class="font-semibold text-amber-400">Supabase table 'analytics_events' awaiting creation.</div>
+                        <div class="text-xs text-slate-500 mt-1">Run <code class="text-slate-300">scripts/create_analytics_table.sql</code> in your Supabase SQL Editor to start logging live events.</div>
+                    </td></tr>`;
+                }
+                if (statVisitors) statVisitors.textContent = '0';
+                if (statUnique) statUnique.textContent = '0';
+                if (statApk) statApk.textContent = '0';
+                if (statPwa) statPwa.textContent = '0';
+                if (statMap) statMap.textContent = '0';
+                return;
+            }
+        }
+
+        const events = await res.json();
+        if (!Array.isArray(events)) return;
+
+        let totalVisits = 0;
+        const uniqueDevices = new Set();
+        let apkDownloads = 0;
+        let pwaInstalls = 0;
+        let mapActions = 0;
+        const osCount = {};
+
+        events.forEach(e => {
+            if (e.device_id) uniqueDevices.add(e.device_id);
+            if (e.event_name === 'page_view') totalVisits++;
+            else if (e.event_name === 'apk_download') apkDownloads++;
+            else if (e.event_name === 'pwa_installed') pwaInstalls++;
+            else if (e.event_name === 'direction_mode_click' || e.event_name === 'search') mapActions++;
+
+            const os = e.device_os || 'Other';
+            osCount[os] = (osCount[os] || 0) + 1;
+        });
+
+        if (statVisitors) statVisitors.textContent = totalVisits.toLocaleString();
+        if (statUnique) statUnique.textContent = uniqueDevices.size.toLocaleString();
+        if (statApk) statApk.textContent = apkDownloads.toLocaleString();
+        if (statPwa) statPwa.textContent = pwaInstalls.toLocaleString();
+        if (statMap) statMap.textContent = mapActions.toLocaleString();
+        if (lastSynced) lastSynced.textContent = `Updated ${new Date().toLocaleTimeString()}`;
+
+        // Render Platform Bars
+        const totalOsEvents = events.length || 1;
+        const sortedOs = Object.entries(osCount).sort((a,b) => b[1] - a[1]);
+        if (osContainer) {
+            if (sortedOs.length === 0) {
+                osContainer.innerHTML = '<div class="text-xs text-slate-500">No events logged yet.</div>';
+            } else {
+                osContainer.innerHTML = sortedOs.map(([os, count]) => {
+                    const pct = Math.round((count / totalOsEvents) * 100);
+                    const color = os === 'Android' ? 'bg-emerald-500' : (os === 'iOS' ? 'bg-indigo-500' : 'bg-sky-500');
+                    return `
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="font-medium text-slate-300">${os}</span>
+                                <span class="text-slate-400">${count} (${pct}%)</span>
+                            </div>
+                            <div class="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+                                <div class="h-full ${color} rounded-full" style="width: ${pct}%"></div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        // Render Live Stream Table
+        if (tableBody) {
+            if (events.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="4" class="py-6 text-center text-slate-500">No telemetry events logged yet.</td></tr>';
+            } else {
+                tableBody.innerHTML = events.slice(0, 30).map(e => {
+                    let badge = 'bg-slate-800 text-slate-300';
+                    let icon = '•';
+                    if (e.event_name === 'apk_download') { badge = 'bg-emerald-950/80 text-emerald-400 border border-emerald-500/30'; icon = '📥 APK'; }
+                    else if (e.event_name === 'pwa_installed') { badge = 'bg-amber-950/80 text-amber-400 border border-amber-500/30'; icon = '📱 PWA'; }
+                    else if (e.event_name === 'page_view') { badge = 'bg-indigo-950/80 text-indigo-300 border border-indigo-500/30'; icon = '👀 View'; }
+                    else { badge = 'bg-sky-950/80 text-sky-400 border border-sky-500/30'; icon = '🗺️ Action'; }
+
+                    const timeAgo = formatTimeAgo(new Date(e.created_at));
+                    return `
+                        <tr class="hover:bg-slate-800/30 transition">
+                            <td class="py-2.5">
+                                <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${badge}">${icon} ${e.event_name}</span>
+                            </td>
+                            <td class="py-2.5 text-slate-400 font-mono text-[11px]">${e.device_os || 'Unknown'}</td>
+                            <td class="py-2.5 text-slate-400 text-[11px] truncate max-w-[120px]">${e.path || '/'}</td>
+                            <td class="py-2.5 text-right text-slate-500 text-[11px] whitespace-nowrap">${timeAgo}</td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+        }
+
+        if (notifySuccess) {
+            showToast('Analytics refreshed', 'success');
+        }
+    } catch (err) {
+        console.error('[Analytics] Error rendering telemetry:', err);
+        if (tableBody) {
+            tableBody.innerHTML = `<tr><td colspan="4" class="py-4 text-center text-red-400">Failed to connect to Supabase: ${err.message}</td></tr>`;
+        }
+    }
+}
+window.renderAnalyticsDashboard = renderAnalyticsDashboard;
 
 // Robust execution lifecycle
 if (document.readyState === 'loading') {
