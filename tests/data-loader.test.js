@@ -122,7 +122,12 @@ console.log(`✓ PASS: Room query "ROB 26" correctly matched room and assigned s
 const swPath = path.join(__dirname, '../sw.js');
 const swContent = fs.readFileSync(swPath, 'utf8');
 
-assert(/CACHE_NAME\s*=\s*'ustednav-v1\.2\.\d+'/.test(swContent), 'sw.js cache version must be bumped to v1.2.0 or higher');
+const cacheMatch = swContent.match(/CACHE_NAME\s*=\s*'ustednav-v(\d+)\.(\d+)\.(\d+)'/);
+assert(cacheMatch, 'sw.js must declare a ustednav-vX.Y.Z CACHE_NAME');
+assert(
+    Number(cacheMatch[1]) > 1 || (Number(cacheMatch[1]) === 1 && Number(cacheMatch[2]) >= 2),
+    'sw.js cache version must be bumped to v1.2.0 or higher'
+);
 assert(swContent.includes("'./modules/data-loader.js'"), 'sw.js must precache ./modules/data-loader.js');
 assert(swContent.includes("url.pathname.endsWith('.json') || url.pathname.includes('/data/')"), 'sw.js must intercept JSON data endpoints');
 assert(swContent.includes("fetch(e.request).then(networkResponse => {"), 'sw.js must use Network-First for dynamic JSON data endpoints');

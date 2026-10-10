@@ -16,23 +16,25 @@ const adminAppCode = fs.readFileSync(adminAppPath, 'utf8');
 // Check that updateStaffRoomDropdown exists and formats room options with wing and type
 assert(adminAppCode.includes('function updateStaffRoomDropdown'), 'admin/app.js must define updateStaffRoomDropdown');
 assert(adminAppCode.includes('meta && (meta.wing || meta.type)'), 'admin/app.js must check for metadata.wing or metadata.type');
-assert(adminAppCode.includes("room.floor === 0 ? 'Ground' : room.floor"), 'admin/app.js must format floor 0 as Ground');
-assert(adminAppCode.includes("`Room ${room.room_number} (Floor ${room.floor} - ${room.description || 'Room'})`"), 'admin/app.js must provide clean fallback format');
+assert(adminAppCode.includes("room.floor === 0 ? 'Ground' : "), 'admin/app.js must format floor 0 as Ground');
+assert(adminAppCode.includes("${floorStr} - ${room.description || 'Room'}"), 'admin/app.js must provide clean fallback format');
 
-// Extract the room formatting logic and test it directly
+// Extract the room formatting logic and test it directly (mirrors admin/app.js)
 function formatAdminRoomOption(room) {
-    const meta = room.metadata || {};
-    let label = '';
-    if (meta && (meta.wing || meta.type)) {
-        const floorStr = (room.floor === 0 || room.floor === '0') ? 'Ground' : (room.floor ?? '');
-        const wingPart = meta.wing ? (meta.wing.toLowerCase().includes('wing') ? meta.wing : `${meta.wing} Wing`) : '';
-        const typePart = meta.type || room.description || '';
-        const parts = [floorStr, wingPart, typePart].filter(Boolean);
-        label = `Room ${room.room_number} (${parts.join(' · ')})`;
-    } else {
-        label = `Room ${room.room_number} (Floor ${room.floor} - ${room.description || 'Room'})`;
+    const floorStr = room.floor === 0 ? 'Ground' : `Floor ${room.floor}`;
+    let cleanRoomNo = String(room.room_number || '').trim();
+    if (/^room\s+/i.test(cleanRoomNo)) {
+        cleanRoomNo = cleanRoomNo.replace(/^room\s+/i, '').trim();
     }
-    return label;
+    const roomTitle = cleanRoomNo ? `Room ${cleanRoomNo}` : 'Room';
+    const meta = room.metadata;
+    if (meta && (meta.wing || meta.type)) {
+        const wingStr = meta.wing ? (String(meta.wing).endsWith('Wing') ? meta.wing : `${meta.wing} Wing`) : '';
+        const typeStr = meta.type || room.description || '';
+        const parts = [floorStr, wingStr, typeStr].filter(Boolean);
+        return `${roomTitle} (${parts.join(' · ')})`;
+    }
+    return `${roomTitle} (${floorStr} - ${room.description || 'Room'})`;
 }
 
 // Test room with wing and type metadata
@@ -47,7 +49,7 @@ const roomWithMeta = {
     }
 };
 const labelWithMeta = formatAdminRoomOption(roomWithMeta);
-assert.strictEqual(labelWithMeta, 'Room 026 (1 · West Wing · Staff Office)', 'Admin option label must format with floor, wing, and type');
+assert.strictEqual(labelWithMeta, 'Room 026 (Floor 1 · West Wing · Staff Office)', 'Admin option label must format with floor, wing, and type');
 console.log('✓ PASS: Formats room with metadata: ' + labelWithMeta);
 
 // Test room on Ground floor (floor: 0)
