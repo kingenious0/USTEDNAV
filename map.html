@@ -9,6 +9,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-31FQCEXNWK"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-31FQCEXNWK');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>USTED (AAMUSTED Kumasi) Campus Map &amp; Directions | USTED NAV</title>
@@ -3754,6 +3762,9 @@
             }
         }
 
+        if (window.CampusTelemetry && window.CampusTelemetry.trackSearch) {
+            window.CampusTelemetry.trackSearch(q, unique.length);
+        }
         renderResults(unique.slice(0, 15), q);
     }
 

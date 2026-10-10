@@ -60,10 +60,31 @@
            window.navigator.standalone === true;
   }
 
+  // Settled-search tracker: live search re-fires on every keystroke, so
+  // collapse typing bursts into a single 'search' event ~1.2s after the
+  // user stops typing. Identical consecutive queries are deduped.
+  let searchTrackTimer = null;
+  let lastTrackedSearchQuery = '';
+
   const CampusTelemetry = {
     deviceId: getOrSetDeviceId(),
     sessionId: getOrSetSessionId(),
     os: detectOS(),
+
+    trackSearch: function(query, resultCount) {
+      const q = String(query || '').trim().replace(/\s+/g, ' ').slice(0, 64);
+      if (!q) return;
+      if (searchTrackTimer) clearTimeout(searchTrackTimer);
+      searchTrackTimer = setTimeout(() => {
+        searchTrackTimer = null;
+        if (q === lastTrackedSearchQuery) return;
+        lastTrackedSearchQuery = q;
+        this.track('search', {
+          search_term: q,
+          result_count: Number(resultCount) || 0
+        });
+      }, 1200);
+    },
 
     track: function(eventName, customMetadata) {
       if (!eventName) return;
@@ -107,6 +128,26 @@
       try {
         if (root.va && typeof root.va === 'function') {
           root.va('event', { name: eventName, data: customMetadata });
+        }
+      } catch (_) {}
+
+      // 3. Google Analytics (gtag.js) custom event forwarder.
+      // page_view is intentionally skipped: gtag('config') already sends it
+      // on every page load, and forwarding it again would double-count.
+      try {
+        if (eventName !== 'page_view' && typeof root.gtag === 'function') {
+          const gaParams = {};
+          if (customMetadata && typeof customMetadata === 'object') {
+            Object.keys(customMetadata).forEach(function(k) {
+              const v = customMetadata[k];
+              if (typeof v === 'string' || typeof v === 'number' || typeof v === 'boolean') {
+                gaParams[k] = v;
+              }
+            });
+          }
+          gaParams.device_os = this.os;
+          gaParams.is_pwa = isStandalone();
+          root.gtag('event', String(eventName).slice(0, 40), gaParams);
         }
       } catch (_) {}
     }

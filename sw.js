@@ -3,7 +3,7 @@
  * Caches app shell + tile images for offline use
  */
 
-const CACHE_NAME  = 'ustednav-v1.3.2';
+const CACHE_NAME  = 'ustednav-v1.3.3';
 const TILE_CACHE  = 'ustednav-tiles-v1';
 
 // App shell and Studio admin files to precache on install
@@ -34,6 +34,8 @@ const PRECACHE_ASSETS = [
     './admin/sw.js',
     './config.js',
     '/config.js',
+    './modules/telemetry.js',
+    '/modules/telemetry.js',
     './modules/data-loader.js',
     '/modules/data-loader.js',
     './modules/search.js',
