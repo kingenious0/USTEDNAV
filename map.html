@@ -3102,6 +3102,16 @@
             // Handle incoming search query parameter (e.g. ?q=rob or ?search=library)
             const urlParams = new URLSearchParams(window.location.search);
             const initialQuery = (urlParams.get('q') || urlParams.get('search') || '').trim();
+
+            // Share-loop attribution: links created via the Share button carry utm_source
+            const utmSource = (urlParams.get('utm_source') || '').trim();
+            if (utmSource && window.CampusTelemetry) {
+                window.CampusTelemetry.track('shared_visit', {
+                    source: utmSource,
+                    search_term: initialQuery
+                });
+            }
+
             if (initialQuery) {
                 const sInput = document.getElementById('searchInput');
                 const sClear = document.getElementById('searchClear');
@@ -5231,15 +5241,19 @@
     }
 
     // ══════════════════════════════════════════
-    //  SHARE
+    //  SHARE — deep-links recipients into USTED NAV with the place pre-searched
     // ══════════════════════════════════════════
     function shareLocation(name, lat, lng) {
-        const url = `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}&zoom=18`;
+        // Breadcrumbs look like "CBT Building - Ground Floor, Room 20 (Abigail Nkansah)";
+        // the building name is the first segment — that is what search can resolve.
+        const q = String(name || '').split(/\s*[-–(]\s*/)[0].trim() || String(name || '');
+        const url = `https://www.ustednav.app/map.html?q=${encodeURIComponent(q)}&utm_source=share&utm_medium=share&utm_campaign=share_loop`;
+        const text = `${name} — find it on USTED NAV, the free offline AAMUSTED Kumasi campus map:`;
         if (navigator.share) {
-            navigator.share({ title: name + ' – AAMUSTED CampusOS', url });
+            navigator.share({ title: `${name} – USTED NAV`, text, url }).catch(() => {});
         } else {
             navigator.clipboard?.writeText(url);
-            showToast('Link copied to clipboard');
+            showToast('Link copied — paste it in WhatsApp to share');
         }
     }
 
