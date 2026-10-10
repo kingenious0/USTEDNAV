@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "npx -y http-server ./ -p 8080",
-    "dev": "npx -y http-server ./ -p 8080 -c-1"
+    "dev": "npx -y http-server ./ -p 8080 -c-1",
+    "seo:gen": "node scripts/generate-seo-pages.js"
   },
   "keywords": [
     "campus",
