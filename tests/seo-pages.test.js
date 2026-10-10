@@ -80,11 +80,12 @@ fs.readdirSync(path.join(ROOT, 'staff')).forEach(slug => {
 assert.strictEqual(missing, 0, 'sitemap must list every place & staff page');
 console.log(`✓ PASS: sitemap.xml covers all ${locs.length} URLs (home, map, hub, places, staff)`);
 
-// 4. Homepage crawl path to the directory
+// 4. Homepage must NOT expose the directory in its footer (privacy decision:
+//    campus directory data stays out of casual public navigation)
 const indexHtml = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-assert(indexHtml.includes('href="/directory/"'), 'index.html footer must link to /directory/');
-assert(indexHtml.includes('href="/directory/#staff"'), 'index.html footer must link to the staff section');
-console.log('✓ PASS: homepage footer links into the directory hub (crawl path)');
+assert(!indexHtml.includes('href="/directory/'), 'index.html footer must not link to the directory');
+assert(indexHtml.includes('href="/map.html"'), 'index.html footer must still link to the live map');
+console.log('✓ PASS: homepage footer exposes only map, share and privacy (no directory)');
 
 // 5. Directory hub links to every entity
 const hub = fs.readFileSync(path.join(ROOT, 'directory', 'index.html'), 'utf8');
@@ -109,7 +110,9 @@ assert(indexHtml.includes('href="/privacy/"'), 'index.html footer must link to t
 assert(hub.includes('href="/privacy/"'), 'directory hub footer must link to the privacy policy');
 const samplePlace = fs.readFileSync(path.join(ROOT, 'place', 'rob-block', 'index.html'), 'utf8');
 assert(samplePlace.includes('href="/privacy/"'), 'place page footers must link to the privacy policy');
+assert(!samplePlace.includes('href="/directory/'), 'place pages must not link to the directory hub or its sections');
 console.log('✓ PASS: privacy policy exists, discloses all data processors, and is linked site-wide');
+console.log('✓ PASS: generated pages never link out to the directory hub');
 
 console.log('\n====================================================');
 console.log('ALL PROGRAMMATIC SEO PAGE TESTS PASSED (100%)!');

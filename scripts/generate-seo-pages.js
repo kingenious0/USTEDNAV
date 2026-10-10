@@ -194,9 +194,6 @@ ${body}
         <div class="fl">
             <a href="/">Home</a>
             <a href="/map.html">Campus Map</a>
-            <a href="/directory/">Campus Directory</a>
-            <a href="/directory/#buildings">Buildings</a>
-            <a href="/directory/#staff">Staff Directory</a>
             <a href="/privacy/">Privacy</a>
         </div>
         <div class="legal">USTED NAV • Powered by CampusOS™ — Offline campus navigation for AAMUSTED (USTED) Kumasi. © 2026 KINGENIOUS. All Rights Reserved.</div>
@@ -321,7 +318,6 @@ function generateBuildingPage(b, ctx) {
   const title = `${b.name} — Map, Rooms & Directions | USTED NAV AAMUSTED`;
   const crumbs = [
     { label: 'Home', href: '/' },
-    { label: 'Places', href: '/directory/#buildings' },
     { label: b.name, href: `/place/${slug}/` }
   ];
   const mapCta = `/map.html?q=${encodeURIComponent(b.name)}`;
@@ -441,7 +437,6 @@ function generatePersonPage(p, ctx) {
   );
   const crumbs = [
     { label: 'Home', href: '/' },
-    { label: 'Staff Directory', href: '/directory/#staff' },
     { label: p.name, href: `/staff/${slug}/` }
   ];
   const mapQ = building ? building.name : (p.location && p.location.building) || p.name;
