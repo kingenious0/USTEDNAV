@@ -94,6 +94,23 @@ assert.strictEqual(placeLinks, buildings.length, 'hub must link to every buildin
 assert.strictEqual(staffLinks, people.length, 'hub must link to every staff page');
 console.log(`✓ PASS: directory hub links all ${placeLinks} buildings + ${staffLinks} staff`);
 
+// 6. Privacy policy page exists, is self-contained, and is linked site-wide
+const privacyPath = path.join(ROOT, 'privacy', 'index.html');
+assert(fs.existsSync(privacyPath), 'privacy/index.html must exist');
+const privacy = fs.readFileSync(privacyPath, 'utf8');
+assert(privacy.includes('Privacy Policy'), 'privacy page must have a Privacy Policy heading');
+assert(privacy.includes(`${ORIGIN}/privacy/`), 'privacy page must self-canonicalise');
+assert(privacy.includes('Google Analytics'), 'privacy page must disclose Google Analytics');
+assert(privacy.includes('Mapbox'), 'privacy page must disclose Mapbox');
+assert(privacy.includes('Supabase'), 'privacy page must disclose Supabase analytics storage');
+assert(privacy.includes('OSRM'), 'privacy page must disclose the OSRM driving-route service');
+assert(privacy.includes('Act 843'), 'privacy page must reference the Ghana Data Protection Act');
+assert(indexHtml.includes('href="/privacy/"'), 'index.html footer must link to the privacy policy');
+assert(hub.includes('href="/privacy/"'), 'directory hub footer must link to the privacy policy');
+const samplePlace = fs.readFileSync(path.join(ROOT, 'place', 'rob-block', 'index.html'), 'utf8');
+assert(samplePlace.includes('href="/privacy/"'), 'place page footers must link to the privacy policy');
+console.log('✓ PASS: privacy policy exists, discloses all data processors, and is linked site-wide');
+
 console.log('\n====================================================');
 console.log('ALL PROGRAMMATIC SEO PAGE TESTS PASSED (100%)!');
 console.log('====================================================');

@@ -197,6 +197,7 @@ ${body}
             <a href="/directory/">Campus Directory</a>
             <a href="/directory/#buildings">Buildings</a>
             <a href="/directory/#staff">Staff Directory</a>
+            <a href="/privacy/">Privacy</a>
         </div>
         <div class="legal">USTED NAV • Powered by CampusOS™ — Offline campus navigation for AAMUSTED (USTED) Kumasi. © 2026 KINGENIOUS. All Rights Reserved.</div>
     </div></footer>
