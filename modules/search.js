@@ -1,5 +1,5 @@
 /**
- * Search Module - Smart campus location & staff search for AAMUSTED / USTED
+ * Search Module - Smart campus location & staff search for USTED
  */
 const SearchModule = (() => {
     let searchInput, searchResults;

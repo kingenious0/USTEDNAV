@@ -99,8 +99,8 @@ This codebase is submitted as the technical artefact for the Design Science Rese
 
 * **Proprietor & Architecture:** KINGENIOUS
 * **Copyright:** © 2026 KINGENIOUS. All Rights Reserved.
-* **Institutional Deployment:** Akenten Appiah-Menka University of Skills Training and Entrepreneurial Development (AAMUSTED / USTED Kumasi).
-* **Usage Rights:** AAMUSTED holds an institutional end-user operational license for campus navigation and room guidance. All underlying software source code, spatial graph engines, route-solving algorithms, 3D rendering pipelines, and platform architecture remain the sole intellectual property of KINGENIOUS.
+* **Institutional Deployment:** Akenten Appiah-Menka University of Skills Training and Entrepreneurial Development (USTED Kumasi).
+* **Usage Rights:** USTED holds an institutional end-user operational license for campus navigation and room guidance. All underlying software source code, spatial graph engines, route-solving algorithms, 3D rendering pipelines, and platform architecture remain the sole intellectual property of KINGENIOUS.
 * **License:** UNLICENSED (Proprietary). No unauthorized reproduction, white-labeling, modification, or redistribution permitted without prior written consent from KINGENIOUS.
 
 ---

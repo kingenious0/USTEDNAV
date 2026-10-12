@@ -191,7 +191,7 @@ const CesiumViewerModule = (() => {
      * - In particular, the prototype "ROB Block" polygon in campus.geojson is known to be
      *   misaligned by ~58m relative to authoritative surveyed data in data/buildings.json.
      * - Rendering of the incorrect prototype ROB polygon extrusion is disabled.
-     * - Other prototype footprints (New Library, New Auditorium, AAMUSTED Library) continue
+     * - Other prototype footprints (New Library, New Auditorium, USTED Library) continue
      *   rendering until authoritative surveyed geometry is introduced in Phase 3.
      */
     async function loadCampusGeoJson() {

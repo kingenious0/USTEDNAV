@@ -624,7 +624,7 @@ function page({ title, desc, canonical, crumbs, body, jsonld, activeNav }) {
     <meta name="author" content="KINGENIOUS">
     <link rel="canonical" href="${esc(canonical)}">
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="USTED NAV | AAMUSTED Kumasi Campus">
+    <meta property="og:site_name" content="USTED NAV | USTED Kumasi Campus">
     <meta property="og:title" content="${esc(title)}">
     <meta property="og:description" content="${esc(desc)}">
     <meta property="og:url" content="${esc(canonical)}">
@@ -680,7 +680,7 @@ ${body}
                 <a href="/privacy/">Privacy Policy</a>
             </nav>
             <div class="legal">
-                USTED NAV • Powered by CampusOS™ • Offline campus navigation for AAMUSTED Kumasi. © 2026 KINGENIOUS. All Rights Reserved.
+                USTED NAV • Powered by CampusOS™ • Offline campus navigation for USTED Kumasi. © 2026 KINGENIOUS. All Rights Reserved.
             </div>
         </div>
     </footer>
@@ -762,24 +762,24 @@ const TYPE_PLURALS = {
 
 const TYPE_INTROS = {
   academic: [
-    'Lecture halls, tutorial rooms and teaching spaces sit inside this building, making it one of the places students pass through every week at AAMUSTED Kumasi.',
-    'This academic building hosts classes, departmental activities and student services for the AAMUSTED (USTED) Kumasi community.'
+    'Lecture halls, tutorial rooms and teaching spaces sit inside this building, making it one of the places students pass through every week at USTED Kumasi.',
+    'This academic building hosts classes, departmental activities and student services for the USTED Kumasi community.'
   ],
   facility: [
-    'A day-to-day campus facility used by students and staff of AAMUSTED Kumasi.',
-    'Part of the everyday campus life at AAMUSTED Kumasi — open to students and staff.'
+    'A day-to-day campus facility used by students and staff of USTED Kumasi.',
+    'Part of the everyday campus life at USTED Kumasi — open to students and staff.'
   ],
   hostel: [
-    'Student accommodation on the AAMUSTED Kumasi campus, home to residents across multiple levels.',
-    'A student residence hall on the AAMUSTED (USTED) Kumasi campus.'
+    'Student accommodation on the USTED Kumasi campus, home to residents across multiple levels.',
+    'A student residence hall on the USTED Kumasi campus.'
   ],
   faculty: [
-    'Home to faculty offices, teaching rooms and administrative desks of AAMUSTED Kumasi.',
-    'A faculty base at AAMUSTED Kumasi where lectures, offices and student services come together.'
+    'Home to faculty offices, teaching rooms and administrative desks of USTED Kumasi.',
+    'A faculty base at USTED Kumasi where lectures, offices and student services come together.'
   ],
   administration: [
-    'Administrative hub of AAMUSTED Kumasi, hosting registries, offices and official student services.',
-    'Where the day-to-day administration of AAMUSTED (USTED) Kumasi happens.'
+    'Administrative hub of USTED Kumasi, hosting registries, offices and official student services.',
+    'Where the day-to-day administration of USTED Kumasi happens.'
   ]
 };
 
@@ -798,10 +798,10 @@ function generateBuildingPage(b, ctx) {
   const typeLabel = TYPE_LABELS[b.type] || 'Campus Building';
   const intro = (TYPE_INTROS[b.type] || TYPE_INTROS.facility)[b.id % 2];
   const desc = truncate(
-    `${b.description || `${b.name} (${b.shortName}) on the AAMUSTED Kumasi campus.`} Find rooms, services, opening hours and walking directions on the USTED NAV campus map.`,
+    `${b.description || `${b.name} (${b.shortName}) on the USTED Kumasi campus.`} Find rooms, services, opening hours and walking directions on the USTED NAV campus map.`,
     155
   );
-  const title = `${b.name} — Map, Rooms & Directions | USTED NAV AAMUSTED`;
+  const title = `${b.name} — Map, Rooms & Directions | USTED NAV`;
   const crumbs = [
     { label: 'Home', href: '/' },
     { label: b.name, href: `/place/${slug}/` }
@@ -810,8 +810,8 @@ function generateBuildingPage(b, ctx) {
 
   const faqs = [
     [
-      `Where is ${b.name} on the AAMUSTED campus?`,
-      `${esc(b.description || `${b.name} is located on the AAMUSTED (USTED) Kumasi campus.`)}${b.shortName && b.shortName !== b.name ? ` It is commonly known as <b>${esc(b.shortName)}</b>.` : ''} Open it on the <a href="${mapCta}">USTED NAV interactive campus map</a> for walking directions from anywhere on campus.`
+      `Where is ${b.name} on the USTED campus?`,
+      `${esc(b.description || `${b.name} is located on the USTED Kumasi campus.`)}${b.shortName && b.shortName !== b.name ? ` It is commonly known as <b>${esc(b.shortName)}</b>.` : ''} Open it on the <a href="${mapCta}">USTED NAV interactive campus map</a> for walking directions from anywhere on campus.`
     ],
     ...(b.hours
       ? [[`What are ${b.name} opening hours?`, `${esc(b.name)} is open <b>${esc(b.hours)}</b>. Hours may change during exams and holidays — check notices at the building.`]]
@@ -824,7 +824,7 @@ function generateBuildingPage(b, ctx) {
       : []),
     [
       `How do I get to ${b.name}?`,
-      `Use the <a href="${mapCta}">USTED NAV map</a> — it shows ${b.name} with turn-by-turn walking directions across the AAMUSTED Kumasi campus, and works completely offline once loaded.`
+      `Use the <a href="${mapCta}">USTED NAV map</a> — it shows ${b.name} with turn-by-turn walking directions across the USTED Kumasi campus, and works completely offline once loaded.`
     ]
   ];
 
@@ -869,8 +869,8 @@ function generateBuildingPage(b, ctx) {
     : '';
 
   const body = `        <span class="chip">${esc(typeLabel)}</span>${b.shortName ? `<span class="chip">${esc(b.shortName)}</span>` : ''}
-        <h1>${esc(b.name)} — AAMUSTED Kumasi Campus Map</h1>
-        <p class="sub">Rooms, services, staff and directions for ${esc(b.name)} at AAMUSTED (USTED) Kumasi.</p>
+        <h1>${esc(b.name)} — USTED Kumasi Campus Map</h1>
+        <p class="sub">Rooms, services, staff and directions for ${esc(b.name)} at USTED Kumasi.</p>
         <p class="lead">${esc(b.description || '')} ${intro}</p>
         ${facts}
         ${services}
@@ -880,7 +880,7 @@ function generateBuildingPage(b, ctx) {
         <h2>Frequently asked questions</h2>
         ${faqBlock(faqs)}
         <div class="cta">
-          <div class="txt"><b>See ${esc(b.name)} on the live campus map</b><p>Turn-by-turn walking directions across AAMUSTED Kumasi — works 100% offline.</p></div>
+          <div class="txt"><b>See ${esc(b.name)} on the live campus map</b><p>Turn-by-turn walking directions across USTED Kumasi — works 100% offline.</p></div>
           <a class="go" href="${mapCta}">Open in USTED NAV →</a>
         </div>`;
 
@@ -890,7 +890,7 @@ function generateBuildingPage(b, ctx) {
       '@context': 'https://schema.org',
       '@type': b.type === 'academic' || b.type === 'faculty' ? 'EducationalOrganization' : 'Place',
       name: b.name,
-      description: b.description || `${b.name} on the AAMUSTED Kumasi campus.`,
+      description: b.description || `${b.name} on the USTED Kumasi campus.`,
       url: canonical,
       ...(b.lat && b.lng
         ? { geo: { '@type': 'GeoCoordinates', latitude: Number(b.lat), longitude: Number(b.lng) } }
@@ -915,10 +915,10 @@ function generatePersonPage(p, ctx) {
   if (p.location && p.location.floor) officeBits.push(p.location.floor);
   const office = officeBits.join(', ');
   const shortPos = truncate(p.position || 'Staff', 40);
-  const shortDept = truncate(stripDept(p.department) || 'AAMUSTED', 45);
-  const title = `${p.title ? p.title + ' ' : ''}${p.name} — ${shortPos}, ${shortDept} | AAMUSTED`;
+  const shortDept = truncate(stripDept(p.department) || 'USTED', 45);
+  const title = `${p.title ? p.title + ' ' : ''}${p.name} — ${shortPos}, ${shortDept} | USTED`;
   const desc = truncate(
-    `${p.title ? p.title + ' ' : ''}${p.name} is ${p.position ? p.position + ' in the ' : 'based at '}${p.department || 'AAMUSTED'}. ${office ? `Office: ${office}. ` : ''}Find the office on the USTED NAV AAMUSTED Kumasi map.`,
+    `${p.title ? p.title + ' ' : ''}${p.name} is ${p.position ? p.position + ' in the ' : 'based at '}${p.department || 'USTED'}. ${office ? `Office: ${office}. ` : ''}Find the office on the USTED NAV campus map.`,
     155
   );
   const crumbs = [
@@ -930,13 +930,13 @@ function generatePersonPage(p, ctx) {
 
   const faqs = [
     [
-      `What does ${p.name} do at AAMUSTED?`,
-      `${esc(p.title ? p.title + ' ' : '')}${esc(p.name)} is ${p.position ? `<b>${esc(p.position)}</b> ${p.department ? `in the ${esc(p.department)}` : ''}` : 'staff at AAMUSTED Kumasi'}${p.faculty ? `, ${esc(p.faculty)}` : ''}.`
+      `What does ${p.name} do at USTED?`,
+      `${esc(p.title ? p.title + ' ' : '')}${esc(p.name)} is ${p.position ? `<b>${esc(p.position)}</b> ${p.department ? `in the ${esc(p.department)}` : ''}` : 'staff at USTED Kumasi'}${p.faculty ? `, ${esc(p.faculty)}` : ''}.`
     ],
     ...(office
       ? [[
           `Where is ${p.name}'s office?`,
-          `${esc(p.name)}'s office is at <b>${esc(office)}</b>${building ? ` in <a href="/place/${ctx.buildingSlug.get(building.id)}/">${esc(building.name)}</a>` : ''} on the AAMUSTED Kumasi campus. <a href="${mapCta}">View the location on the campus map →</a>`
+          `${esc(p.name)}'s office is at <b>${esc(office)}</b>${building ? ` in <a href="/place/${ctx.buildingSlug.get(building.id)}/">${esc(building.name)}</a>` : ''} on the USTED Kumasi campus. <a href="${mapCta}">View the location on the campus map →</a>`
         ]]
       : []),
     ...(p.department
@@ -951,7 +951,7 @@ function generatePersonPage(p, ctx) {
   const body = `        <span class="chip">Staff Directory</span>
         <h1>${esc((p.title ? p.title + ' ' : '') + p.name)}</h1>
         <p class="sub">${esc(p.position || 'Staff')} ${p.department ? '• ' + esc(p.department) : ''} ${p.faculty ? '• ' + esc(p.faculty) : ''}</p>
-        <p class="lead">${esc(p.title ? p.title + ' ' : '')}${esc(p.name)} is part of the AAMUSTED (USTED) Kumasi community. This page shows the office location, department and faculty details published in the USTED NAV campus directory.</p>
+        <p class="lead">${esc(p.title ? p.title + ' ' : '')}${esc(p.name)} is part of the USTED Kumasi community. This page shows the office location, department and faculty details published in the USTED NAV campus directory.</p>
         <div class="facts">
           <div class="fact"><b>Position</b><span>${esc(p.position || '—')}</span></div>
           <div class="fact"><b>Department</b><span>${esc(p.department || '—')}</span></div>
@@ -964,7 +964,7 @@ function generatePersonPage(p, ctx) {
         <h2>Frequently asked questions</h2>
         ${faqBlock(faqs)}
         <div class="cta">
-          <div class="txt"><b>Find this office on the campus map</b><p>USTED NAV shows every building and room at AAMUSTED Kumasi — offline, for free.</p></div>
+          <div class="txt"><b>Find this office on the campus map</b><p>USTED NAV shows every building and room at USTED Kumasi — offline, for free.</p></div>
           <a class="go" href="${mapCta}">Open in USTED NAV →</a>
         </div>`;
 
@@ -979,7 +979,7 @@ function generatePersonPage(p, ctx) {
       url: canonical,
       worksFor: {
         '@type': 'EducationalOrganization',
-        name: p.faculty || 'AAMUSTED Kumasi',
+        name: p.faculty || 'USTED Kumasi',
         department: p.department || undefined
       }
     },
@@ -1054,8 +1054,8 @@ function generateDirectory(ctx) {
     .join('');
 
   const canonical = `${ORIGIN}/directory/`;
-  const title = 'USTED NAV Campus Directory — Buildings & Staff | AAMUSTED Kumasi';
-  const desc = `Every building, lecture hall, facility and staff office at AAMUSTED (USTED) Kumasi campus — searchable directory powered by the USTED NAV offline campus map.`;
+  const title = 'USTED NAV Campus Directory — Buildings & Staff | USTED Kumasi';
+  const desc = `Every building, lecture hall, facility and staff office at USTED Kumasi campus — searchable directory powered by the USTED NAV offline campus map.`;
   const crumbs = [
     { label: 'Home', href: '/' },
     { label: 'Campus Directory', href: '/directory/' }
@@ -1067,7 +1067,7 @@ function generateDirectory(ctx) {
                 <i class="fas fa-compass"></i> Campus Index &amp; Directory
             </span>
             <h1>USTED NAV Campus Directory</h1>
-            <p class="sub">Every building, faculty hall, department and staff office at AAMUSTED (USTED) Kumasi — one tap away from walking directions.</p>
+            <p class="sub">Every building, faculty hall, department and staff office at USTED Kumasi — one tap away from walking directions.</p>
         </div>
 
         <p class="lead">Browse <b>${ctx.buildings.length} campus landmarks</b> (lecture blocks, faculty complexes, hostels, laboratories and amenities) and <b>${ctx.people.length} faculty and staff members</b> with verified office locations. Tap any entry to inspect room schedules, opening hours, or launch real-time directions on the offline interactive map.</p>

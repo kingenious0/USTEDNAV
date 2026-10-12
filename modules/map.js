@@ -1,5 +1,5 @@
 /**
- * Map Module - USTED NAV AAMUSTED Kumasi Campus
+ * Map Module - USTED NAV Kumasi Campus
  */
 const MapModule = (() => {
     let map;
@@ -8,7 +8,7 @@ const MapModule = (() => {
     let userMarker = null;
     let userLocation = null;
 
-    // AAMUSTED campus centre — Google Maps verified
+    // USTED campus centre — Google Maps verified
     const CAMPUS_CENTER = [6.697332044485389, -1.6815135625745574];
     const DEFAULT_ZOOM = 17;
 
@@ -42,7 +42,7 @@ const MapModule = (() => {
             fillOpacity: 0.04,
             weight: 2,
             dashArray: '6 4'
-        }).addTo(map).bindTooltip('AAMUSTED Kumasi Campus', { permanent: false });
+        }).addTo(map).bindTooltip('USTED Kumasi Campus', { permanent: false });
     };
 
     const updateTileLayer = (isDark) => {
