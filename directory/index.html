@@ -19,7 +19,8 @@
     <link rel="apple-touch-icon" href="/icons/icon-192.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-31FQCEXNWK"></script>
     <script>
@@ -30,183 +31,839 @@
     </script>
     <script defer src="/_vercel/insights/script.js"></script>
     <style>
-:root{--bg:#090d16;--surface:#0f1524;--surface2:#131b2e;--border:#1e293b;--text:#e2e8f0;--muted:#94a3b8;--accent:#6366f1;--accent2:#4f46e5}
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased}
-a{color:#a5b4fc;text-decoration:none}
-a:hover{text-decoration:underline}
-.wrap{max-width:860px;margin:0 auto;padding:0 20px}
-.top{border-bottom:1px solid var(--border);background:rgba(9,13,22,.92);position:sticky;top:0;z-index:5}
-.top .wrap{display:flex;align-items:center;justify-content:space-between;height:56px}
-.brand{font-weight:800;letter-spacing:.04em;color:var(--text);font-size:15px}
-.brand span{color:var(--accent)}
-.top a.map-btn{background:var(--accent2);color:#fff;padding:8px 16px;border-radius:10px;font-size:13px;font-weight:600}
-.top a.map-btn:hover{text-decoration:none;background:var(--accent)}
-.crumbs{font-size:12.5px;color:var(--muted);padding:18px 0 0}
-.crumbs a{color:var(--muted)}
-.crumbs a:hover{color:#a5b4fc}
-h1{font-size:clamp(26px,5vw,38px);line-height:1.2;margin:14px 0 6px;font-weight:800;letter-spacing:-.02em}
-.sub{color:var(--muted);font-size:15px;margin-bottom:22px}
-.chip{display:inline-block;background:var(--surface2);border:1px solid var(--border);color:#a5b4fc;font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:.06em;margin-right:8px;vertical-align:middle}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px 22px;margin:18px 0}
-.lead{font-size:16.5px;color:#cbd5e1}
-.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:18px 0}
-.fact{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px 14px}
-.fact b{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin-bottom:3px}
-.fact span{font-size:14.5px;color:var(--text)}
-h2{font-size:21px;margin:34px 0 12px;font-weight:700;letter-spacing:-.01em}
-h3{font-size:15px;margin:16px 0 8px;color:#cbd5e1}
-ul.list{list-style:none}
-ul.list li{padding:9px 0;border-bottom:1px solid rgba(30,41,59,.6);font-size:14.5px}
-ul.list li:last-child{border-bottom:none}
-ul.list li .muted,.muted{color:var(--muted);font-size:13px}
-.rooms-floor{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin:18px 0 6px}
-.room{display:flex;gap:10px;align-items:baseline;padding:7px 0;border-bottom:1px solid rgba(30,41,59,.6);font-size:14.5px}
-.room b{color:var(--text);min-width:86px;font-weight:700}
-.room span{color:var(--muted)}
-details.faq{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 18px;margin:10px 0}
-details.faq summary{cursor:pointer;font-weight:600;font-size:15px;list-style:none;display:flex;justify-content:space-between;align-items:center}
-details.faq summary::-webkit-details-marker{display:none}
-details.faq summary::after{content:'+';color:var(--accent);font-size:20px;font-weight:400}
-details.faq[open] summary::after{content:'–'}
-details.faq p{margin-top:10px;color:#cbd5e1;font-size:14.5px}
-.cta{display:flex;flex-wrap:wrap;gap:14px;align-items:center;background:linear-gradient(135deg,#1d2450,#0f1524);border:1px solid #3730a3;border-radius:16px;padding:22px;margin:26px 0}
-.cta .txt{flex:1;min-width:220px}
-.cta b{font-size:17px;display:block;margin-bottom:4px}
-.cta p{color:var(--muted);font-size:13.5px}
-.cta a.go{background:var(--accent2);color:#fff;padding:12px 22px;border-radius:11px;font-weight:700;font-size:14.5px;white-space:nowrap}
-.cta a.go:hover{text-decoration:none;background:var(--accent)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;margin-top:14px}
-.grid a{display:block;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px 15px;color:var(--text);font-size:14.5px;font-weight:600}
-.grid a:hover{border-color:var(--accent);text-decoration:none}
-.grid a .muted{display:block;font-weight:400;font-size:12.5px;margin-top:2px}
-footer{border-top:1px solid var(--border);margin-top:48px;padding:26px 0 40px;color:var(--muted);font-size:13px}
-footer .fl{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:10px}
-footer a{color:var(--muted)}
-.legal{font-size:11.5px;color:#475569}
+:root {
+    --bg: #090d16;
+    --surface: #0f1524;
+    --surface2: #131b2e;
+    --border: #1e293b;
+    --border-highlight: rgba(99, 102, 241, 0.25);
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --accent: #f59e0b;
+    --accent-glow: rgba(245, 158, 11, 0.2);
+    --primary: #6366f1;
+    --primary-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow-x: hidden;
+}
+.ambient-glow {
+    position: fixed;
+    top: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 700px;
+    height: 380px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.18) 0%, rgba(245, 158, 11, 0.08) 50%, transparent 70%);
+    filter: blur(60px);
+    pointer-events: none;
+    z-index: 0;
+}
+a { color: #a5b4fc; text-decoration: none; transition: all 0.2s ease; }
+a:hover { color: #c7d2fe; text-decoration: underline; }
+.wrap { max-width: 860px; width: 100%; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+/* Top Navigation Bar */
+.top {
+    border-bottom: 1px solid var(--border);
+    background: rgba(9, 13, 22, 0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+.top .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+}
+.brand-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 16px;
+    letter-spacing: -0.02em;
+}
+.brand-link:hover { text-decoration: none; }
+.brand-logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    object-fit: cover;
+}
+.brand-link span { color: var(--accent); }
+.top-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+.top-nav-links a.active {
+    color: #fbbf24;
+    font-weight: 600;
+}
+.nav-link-sub {
+    color: #94a3b8;
+    font-size: 13.5px;
+    font-weight: 500;
+}
+.nav-link-sub:hover {
+    color: #f8fafc;
+    text-decoration: none;
+}
+.map-btn {
+    background: var(--primary-gradient);
+    color: #090d16 !important;
+    padding: 8px 18px;
+    border-radius: 9999px;
+    font-size: 13px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.map-btn:hover {
+    color: #090d16 !important;
+    text-decoration: none !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(245, 158, 11, 0.4);
+}
+
+/* Header & Breadcrumbs */
+.crumbs { font-size: 12.5px; color: var(--muted); padding: 24px 0 0; }
+.crumbs a { color: var(--muted); }
+.crumbs a:hover { color: #a5b4fc; }
+
+.header-title-section {
+    margin: 20px 0 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+}
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #38bdf8;
+    background: rgba(14, 165, 233, 0.12);
+    border: 1px solid rgba(14, 165, 233, 0.28);
+    padding: 4px 12px;
+    border-radius: 9999px;
+    margin-bottom: 12px;
+}
+.hero-badge.badge-amber {
+    color: #fbbf24;
+    background: rgba(245, 158, 11, 0.12);
+    border-color: rgba(245, 158, 11, 0.28);
+}
+h1 {
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    font-size: clamp(28px, 5.5vw, 42px);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+.sub {
+    color: var(--muted);
+    font-size: 16px;
+    font-weight: 400;
+    max-width: 680px;
+    line-height: 1.6;
+}
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: #a5b4fc;
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+.lead {
+    font-size: 16.5px;
+    color: #cbd5e1;
+    line-height: 1.75;
+    margin-bottom: 24px;
+}
+
+/* Quick Navigation Index / Card */
+.toc-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px 22px;
+    margin-bottom: 32px;
+}
+.toc-title {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.toc-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 8px 16px;
+    list-style: none;
+}
+.toc-list a {
+    color: #cbd5e1;
+    font-size: 13.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.toc-list a:hover {
+    color: #fbbf24;
+    text-decoration: none;
+}
+.toc-count {
+    font-size: 11px;
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    padding: 2px 7px;
+    border-radius: 999px;
+    font-weight: 700;
+    margin-left: auto;
+}
+
+/* Section styling */
+.guide-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 28px;
+    margin-bottom: 28px;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25);
+    transition: border-color 0.2s ease;
+}
+.guide-section:hover {
+    border-color: var(--border-highlight);
+}
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+}
+.section-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(99, 102, 241, 0.15);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #a5b4fc;
+    font-weight: 800;
+    font-size: 15px;
+    flex-shrink: 0;
+}
+.section-header h2 {
+    margin: 0;
+}
+
+h2 {
+    font-size: 21px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+    margin: 32px 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+h3 {
+    font-size: 15px;
+    margin: 20px 0 10px;
+    color: #e2e8f0;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+p {
+    color: #cbd5e1;
+    font-size: 15px;
+    margin-bottom: 14px;
+    line-height: 1.75;
+}
+p:last-child { margin-bottom: 0; }
+
+.tip-callout {
+    background: rgba(245, 158, 11, 0.08);
+    border-left: 3px solid var(--accent);
+    padding: 12px 16px;
+    border-radius: 0 10px 10px 0;
+    margin-top: 14px;
+    font-size: 13.5px;
+    color: #fef3c7;
+}
+.tip-callout strong {
+    color: #fbbf24;
+}
+
+/* Facts Grid */
+.facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin: 20px 0;
+}
+.fact {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+}
+.fact b {
+    display: block;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+.fact span {
+    font-size: 14.5px;
+    color: var(--text);
+    font-weight: 600;
+}
+
+/* Lists */
+ul.list { list-style: none; }
+ul.list li {
+    padding: 11px 0;
+    border-bottom: 1px solid rgba(30, 41, 59, 0.6);
+    font-size: 14.5px;
+}
+ul.list li:last-child { border-bottom: none; }
+ul.list li .muted, .muted { color: var(--muted); font-size: 13px; }
+
+.rooms-floor {
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin: 20px 0 8px;
+}
+.room {
+    display: flex;
+    gap: 12px;
+    align-items: baseline;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(30, 41, 59, 0.6);
+    font-size: 14.5px;
+}
+.room b { color: var(--text); min-width: 90px; font-weight: 700; }
+.room span { color: var(--muted); }
+
+/* FAQ Collapsibles */
+details.faq {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin: 12px 0;
+    transition: border-color 0.2s ease;
+}
+details.faq:hover {
+    border-color: var(--border-highlight);
+}
+details.faq summary {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+}
+details.faq summary::-webkit-details-marker { display: none; }
+details.faq summary::after {
+    content: '+';
+    color: var(--accent);
+    font-size: 20px;
+    font-weight: 600;
+    transition: transform 0.2s;
+}
+details.faq[open] summary::after {
+    content: '–';
+}
+details.faq p {
+    margin-top: 12px;
+    color: #cbd5e1;
+    font-size: 14.5px;
+}
+
+/* Map CTA Card */
+.map-cta-card, .cta {
+    background: linear-gradient(135deg, #1e1b4b 0%, #0f1524 100%);
+    border: 1px solid #4338ca;
+    border-radius: 18px;
+    padding: 24px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: 32px 0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+.map-cta-card .txt, .cta .txt { flex: 1; min-width: 240px; }
+.map-cta-card h3, .cta b {
+    font-size: 18px;
+    color: #fff;
+    margin-bottom: 6px;
+    font-weight: 700;
+    display: block;
+}
+.map-cta-card p, .cta p {
+    color: #c7d2fe;
+    font-size: 14px;
+    margin: 0;
+    line-height: 1.6;
+}
+.map-cta-card a.map-btn, .cta a.go {
+    background: var(--primary-gradient);
+    color: #090d16 !important;
+    padding: 10px 22px;
+    border-radius: 9999px;
+    font-weight: 700;
+    font-size: 14px;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.map-cta-card a.map-btn:hover, .cta a.go:hover {
+    text-decoration: none !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(245, 158, 11, 0.4);
+}
+
+/* Card Directory Grid */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 12px;
+    margin-top: 14px;
+    margin-bottom: 20px;
+}
+.grid a {
+    display: block;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 18px;
+    color: var(--text);
+    font-size: 14.5px;
+    font-weight: 600;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+    transition: all 0.2s ease;
+}
+.grid a:hover {
+    border-color: rgba(245, 158, 11, 0.45);
+    background: var(--surface2);
+    transform: translateY(-2px);
+    text-decoration: none;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+.grid a .muted {
+    display: block;
+    font-weight: 400;
+    font-size: 12.5px;
+    margin-top: 6px;
+    line-height: 1.5;
+}
+
+/* Footer */
+footer {
+    border-top: 1px solid var(--border);
+    margin-top: auto;
+    padding: 36px 0 44px;
+    color: var(--muted);
+    font-size: 13px;
+    background: rgba(9, 13, 22, 0.6);
+}
+.footer-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin-bottom: 14px;
+}
+.footer-nav a {
+    color: #94a3b8;
+    font-size: 13.5px;
+    font-weight: 500;
+}
+.footer-nav a:hover { color: #f8fafc; text-decoration: underline; }
+.legal { font-size: 12px; color: #64748b; line-height: 1.6; }
+
+@media (max-width: 640px) {
+    .wrap { padding: 0 16px; }
+    .guide-section { padding: 20px; }
+    .top-nav-links a.nav-link-sub { display: none; }
+    .map-cta-card, .cta { padding: 20px; flex-direction: column; align-items: flex-start; }
+}
 </style>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://www.ustednav.app/"},{"@type":"ListItem","position":2,"name":"Campus Directory","item":"https://www.ustednav.app/directory/"}]}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"USTED NAV Campus Directory — Buildings & Staff | AAMUSTED Kumasi","description":"Every building, lecture hall, facility and staff office at AAMUSTED (USTED) Kumasi campus — searchable directory powered by the USTED NAV offline campus map.","url":"https://www.ustednav.app/directory/"}</script>
 </head>
 <body>
-    <header class="top"><div class="wrap">
-        <a class="brand" href="/">USTED<span>NAV</span></a>
-        <a class="map-btn" href="/map.html">Open Campus Map</a>
-    </div></header>
+    <div class="ambient-glow"></div>
+
+    <!-- Sticky Top Navigation -->
+    <header class="top">
+        <div class="wrap">
+            <a href="/" class="brand-link" aria-label="USTED NAV Home">
+                <img src="/logo.png" alt="USTED Logo" class="brand-logo">
+                <div>USTED<span>NAV</span></div>
+            </a>
+            <nav class="top-nav-links" aria-label="Page navigation">
+                <a href="/guide.html" class="nav-link-sub">Campus Guide</a>
+                <a href="/directory/" class="nav-link-sub active">Directory</a>
+                <a href="/about.html" class="nav-link-sub">About</a>
+                <a href="/map.html" class="map-btn">
+                    <i class="fas fa-location-arrow"></i>
+                    <span>Campus Map</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
     <main class="wrap">
         <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <span>Campus Directory</span></nav>
-        <span class="chip">Directory</span>
-        <h1>USTED NAV Campus Directory</h1>
-        <p class="sub">Every building and staff office at AAMUSTED (USTED) Kumasi — one click from walking directions.</p>
-        <p class="lead">Browse <b>47 buildings</b> — lecture blocks, faculties, hostels, workshops and facilities — and <b>96 staff members</b> with office locations. Each entry links to a detailed page with rooms, opening hours and an interactive map that works completely offline on your phone.</p>
-        <div class="cta">
-          <div class="txt"><b>Looking for a room or lecturer?</b><p>Search instantly across the whole campus instead.</p></div>
-          <a class="go" href="/map.html">Open Campus Map →</a>
+        <!-- Header -->
+        <div class="header-title-section">
+            <span class="hero-badge badge-amber">
+                <i class="fas fa-compass"></i> Campus Index &amp; Directory
+            </span>
+            <h1>USTED NAV Campus Directory</h1>
+            <p class="sub">Every building, faculty hall, department and staff office at AAMUSTED (USTED) Kumasi — one tap away from walking directions.</p>
         </div>
-        <h2 id="buildings">Buildings &amp; Places (47)</h2>
+
+        <p class="lead">Browse <b>47 campus landmarks</b> (lecture blocks, faculty complexes, hostels, laboratories and amenities) and <b>96 faculty and staff members</b> with verified office locations. Tap any entry to inspect room schedules, opening hours, or launch real-time directions on the offline interactive map.</p>
+
+        <!-- Guide-styled Overview Index / Quick Jump -->
+        <div class="toc-card">
+            <div class="toc-title">
+                <i class="fas fa-list-check"></i> Directory Quick Jump
+            </div>
+            <ul class="toc-list">
+                <li><a href="#academic"><i class="fas fa-chevron-right" style="font-size:11px;"></i> Academic Buildings <span class="toc-count">19</span></a></li><li><a href="#faculty"><i class="fas fa-chevron-right" style="font-size:11px;"></i> Faculty Buildings <span class="toc-count">2</span></a></li><li><a href="#administration"><i class="fas fa-chevron-right" style="font-size:11px;"></i> Administration Buildings <span class="toc-count">4</span></a></li><li><a href="#hostel"><i class="fas fa-chevron-right" style="font-size:11px;"></i> Student Hostels <span class="toc-count">4</span></a></li><li><a href="#facility"><i class="fas fa-chevron-right" style="font-size:11px;"></i> Campus Facilities <span class="toc-count">18</span></a></li>
+                <li><a href="#staff-directory"><i class="fas fa-chevron-right" style="font-size:11px;"></i> Staff Faculties (11) <span class="toc-count">96</span></a></li>
+            </ul>
+        </div>
+
+        <div class="map-cta-card">
+          <div class="txt">
+            <h3>Looking for a specific room or lecturer?</h3>
+            <p>Use the campus-wide instant search on the interactive 2D &amp; 3D offline map.</p>
+          </div>
+          <a class="map-btn" href="/map.html">
+            <i class="fas fa-diamond-turn-right"></i>
+            <span>Launch Campus Map</span>
+          </a>
+        </div>
+
+        <div style="margin: 36px 0 18px; display: flex; align-items: baseline; justify-content: space-between;">
+            <h2 id="buildings" style="margin:0;"><i class="fas fa-building-columns" style="color:var(--accent);"></i> Campus Places &amp; Buildings (47)</h2>
+        </div>
         
-        <h2 id="academic">Academic Buildings</h2>
-        <div class="grid"><a href="/place/usted-library/">USTED Library<span class="muted">Main campus library with reading rooms, digital resources and WiFi…</span></a><a href="/place/new-auditorium/">New Auditorium<span class="muted">Large campus auditorium for convocations, events and large gatherings.</span></a><a href="/place/new-library/">New Library<span class="muted">Newly built library facility with expanded study spaces, digital…</span></a><a href="/place/mechanical-workshop/">Mechanical Workshop<span class="muted">Workshop facility for mechanical engineering practical sessions and…</span></a><a href="/place/department-of-management/">Department of Management<span class="muted">Department handling management and business-related academic programmes.</span></a><a href="/place/t-l-block/">T.L. Block<span class="muted">Teaching and Learning Block housing lecture halls and tutorial rooms.</span></a><a href="/place/catering-and-hospitality-lab/">Catering and Hospitality Lab<span class="muted">Laboratory and training facility for catering, hospitality and food…</span></a><a href="/place/fashion-and-textiles-lab/">Fashion and Textiles Lab<span class="muted">Laboratory for fashion design, textiles and clothing technology…</span></a><a href="/place/mechanical-workshop-annex/">Mechanical Workshop (Annex)<span class="muted">Additional mechanical workshop facility for technology and engineering…</span></a><a href="/place/aamusted-automotive-workshop/">AAMUSTED Automotive Workshop<span class="muted">Automotive engineering workshop for vehicle maintenance, repair and…</span></a><a href="/place/woodlab-workshop/">Woodlab Workshop<span class="muted">Woodwork laboratory and workshop for construction technology and…</span></a><a href="/place/executive-students-association-esa-lecture-block/">Executive Students Association (ESA) Lecture Block<span class="muted">Lecture Block housing lecture auditoriums and faculty offices.</span></a><a href="/place/nfb/">NFB<span class="muted">New Faculty Building with lecture halls, seminar rooms and department…</span></a><a href="/place/nlb/">NLB<span class="muted">New Lecture Building providing modern lecture halls and academic spaces.</span></a><a href="/place/department-of-economics-education/">Department of Economics Education<span class="muted">Department offering economics education and business studies programmes.</span></a><a href="/place/ict-lab/">ICT Lab<span class="muted">Computer and ICT laboratory providing computing resources, internet…</span></a><a href="/place/graduate-block/">Graduate Block<span class="muted">Building dedicated to postgraduate students and the graduate school…</span></a><a href="/place/new-building/">New Building<span class="muted">Newly constructed academic facility providing modern lecture halls and…</span></a><a href="/place/cbt-building/">CBT Building<span class="muted">Competency-Based Training Centre housing Faculty of Vocational…</span></a></div>
-        <h2 id="faculty">Faculty Buildings</h2>
-        <div class="grid"><a href="/place/faculty-of-technical-education/">Faculty of Technical Education<span class="muted">Faculty offering mechanical, electrical, automotive and construction…</span></a><a href="/place/fasme-block/">FASME Block<span class="muted">Faculty of Applied Science and Mathematics Education — science, maths…</span></a></div>
-        <h2 id="administration">Administration Buildings</h2>
-        <div class="grid"><a href="/place/rob-block/">ROB Block<span class="muted">Reynolds Okine Building — Academic and administrative hub housing the…</span></a><a href="/place/main-administration-block/">Main Administration Block<span class="muted">Main university administration building housing the Vice-Chancellor's…</span></a><a href="/place/deans-office-odsa/">Dean's Office (ODSA)<span class="muted">Office of the Dean of Student Affairs (ODSA) handling student welfare,…</span></a><a href="/place/security-office/">Security Office<span class="muted">Campus security headquarters managing safety, access control and…</span></a></div>
-        <h2 id="hostel">Student Hostels</h2>
-        <div class="grid"><a href="/place/atwima-hall/">Atwima Hall<span class="muted">Student residential hall with study rooms and recreational facilities.</span></a><a href="/place/opoku-ware-hall/">Opoku Ware Hall<span class="muted">Student residential hall with study rooms and recreational facilities.</span></a><a href="/place/opoku-ware-ii-hall/">Opoku Ware II Hall<span class="muted">Second Opoku Ware residential hall with modern student accommodation…</span></a><a href="/place/autonomy-hall/">Autonomy Hall<span class="muted">Modern student residential hall with accommodation, study areas and…</span></a></div>
-        <h2 id="facility">Campus Facilities</h2>
-        <div class="grid"><a href="/place/the-clinic/">The Clinic<span class="muted">Campus health facility offering primary care, first aid and pharmacy…</span></a><a href="/place/ubs/">UBS<span class="muted">University Banking Services on campus for student and staff financial…</span></a><a href="/place/opoku-ware-mosque/">Opoku Ware Mosque<span class="muted">Campus mosque for Islamic worship and community activities.</span></a><a href="/place/aamusted-football-field/">AAMUSTED Football Field<span class="muted">Main campus football field (soccer park) for sports events, training…</span></a><a href="/place/mynd-fm/">MYND FM<span class="muted">Campus radio station broadcasting news, entertainment and educational…</span></a><a href="/place/st-williams-chaplaincy/">St. Williams Chaplaincy<span class="muted">Campus chaplaincy centre for Christian worship, counselling and…</span></a><a href="/place/aamusted-canteen/">AAMUSTED Canteen<span class="muted">Main campus canteen providing affordable meals, snacks and…</span></a><a href="/place/food-court/">Food Court<span class="muted">Campus food court area with multiple food vendors offering diverse…</span></a><a href="/place/handball-court/">Handball Court<span class="muted">Dedicated handball court for recreational sports and competitive…</span></a><a href="/place/transport-hub/">Transport Hub<span class="muted">Campus transport and logistics hub for university vehicles, staff…</span></a><a href="/place/credit-union/">Credit Union<span class="muted">Staff and student credit union offering savings, loans and financial…</span></a><a href="/place/esa-pavilion/">ESA Pavilion<span class="muted">Outdoor pavilion near the ESA building used for campus events,…</span></a><a href="/place/volleyball-court/">Volleyball Court<span class="muted">Campus volleyball court for recreational play, inter-departmental…</span></a><a href="/place/basketball-court/">Basketball Court<span class="muted">Outdoor basketball court for recreational play and campus sports…</span></a><a href="/place/uba/">UBA<span class="muted">United Bank for Africa (UBA) branch on campus offering banking…</span></a><a href="/place/franky-jay-shopping-mall/">Franky Jay Shopping Mall<span class="muted">On-campus shopping mall with retail shops, phone accessories,…</span></a><a href="/place/opoku-ware-tennis-court/">Opoku Ware Tennis Court<span class="muted">Tennis court adjacent to Opoku Ware Hall for recreational and…</span></a><a href="/place/campus-atm/">Campus ATM<span class="muted">On-campus ATM for quick cash withdrawals. Supported banks include UBA,…</span></a></div>
-        <h2 id="staff">Staff Directory (96)</h2>
+        <div class="guide-section" id="academic">
+            <div class="section-header">
+                <div class="section-num"><i class="fas fa-book-open"></i></div>
+                <div>
+                    <h2>Academic Buildings</h2>
+                    <span class="muted" style="font-size:13px;">19 locations on campus</span>
+                </div>
+            </div>
+            <div class="grid"><a href="/place/usted-library/">USTED Library<span class="muted">Main campus library with reading rooms, digital resources and WiFi…</span></a><a href="/place/new-auditorium/">New Auditorium<span class="muted">Large campus auditorium for convocations, events and large gatherings.</span></a><a href="/place/new-library/">New Library<span class="muted">Newly built library facility with expanded study spaces, digital…</span></a><a href="/place/mechanical-workshop/">Mechanical Workshop<span class="muted">Workshop facility for mechanical engineering practical sessions and…</span></a><a href="/place/department-of-management/">Department of Management<span class="muted">Department handling management and business-related academic programmes.</span></a><a href="/place/t-l-block/">T.L. Block<span class="muted">Teaching and Learning Block housing lecture halls and tutorial rooms.</span></a><a href="/place/catering-and-hospitality-lab/">Catering and Hospitality Lab<span class="muted">Laboratory and training facility for catering, hospitality and food…</span></a><a href="/place/fashion-and-textiles-lab/">Fashion and Textiles Lab<span class="muted">Laboratory for fashion design, textiles and clothing technology…</span></a><a href="/place/mechanical-workshop-annex/">Mechanical Workshop (Annex)<span class="muted">Additional mechanical workshop facility for technology and engineering…</span></a><a href="/place/aamusted-automotive-workshop/">AAMUSTED Automotive Workshop<span class="muted">Automotive engineering workshop for vehicle maintenance, repair and…</span></a><a href="/place/woodlab-workshop/">Woodlab Workshop<span class="muted">Woodwork laboratory and workshop for construction technology and…</span></a><a href="/place/executive-students-association-esa-lecture-block/">Executive Students Association (ESA) Lecture Block<span class="muted">Lecture Block housing lecture auditoriums and faculty offices.</span></a><a href="/place/nfb/">NFB<span class="muted">New Faculty Building with lecture halls, seminar rooms and department…</span></a><a href="/place/nlb/">NLB<span class="muted">New Lecture Building providing modern lecture halls and academic spaces.</span></a><a href="/place/department-of-economics-education/">Department of Economics Education<span class="muted">Department offering economics education and business studies programmes.</span></a><a href="/place/ict-lab/">ICT Lab<span class="muted">Computer and ICT laboratory providing computing resources, internet…</span></a><a href="/place/graduate-block/">Graduate Block<span class="muted">Building dedicated to postgraduate students and the graduate school…</span></a><a href="/place/new-building/">New Building<span class="muted">Newly constructed academic facility providing modern lecture halls and…</span></a><a href="/place/cbt-building/">CBT Building<span class="muted">Competency-Based Training Centre housing Faculty of Vocational…</span></a></div>
+        </div>
+        <div class="guide-section" id="faculty">
+            <div class="section-header">
+                <div class="section-num"><i class="fas fa-landmark"></i></div>
+                <div>
+                    <h2>Faculty Buildings</h2>
+                    <span class="muted" style="font-size:13px;">2 locations on campus</span>
+                </div>
+            </div>
+            <div class="grid"><a href="/place/faculty-of-technical-education/">Faculty of Technical Education<span class="muted">Faculty offering mechanical, electrical, automotive and construction…</span></a><a href="/place/fasme-block/">FASME Block<span class="muted">Faculty of Applied Science and Mathematics Education — science, maths…</span></a></div>
+        </div>
+        <div class="guide-section" id="administration">
+            <div class="section-header">
+                <div class="section-num"><i class="fas fa-briefcase"></i></div>
+                <div>
+                    <h2>Administration Buildings</h2>
+                    <span class="muted" style="font-size:13px;">4 locations on campus</span>
+                </div>
+            </div>
+            <div class="grid"><a href="/place/rob-block/">ROB Block<span class="muted">Reynolds Okine Building — Academic and administrative hub housing the…</span></a><a href="/place/main-administration-block/">Main Administration Block<span class="muted">Main university administration building housing the Vice-Chancellor's…</span></a><a href="/place/deans-office-odsa/">Dean's Office (ODSA)<span class="muted">Office of the Dean of Student Affairs (ODSA) handling student welfare,…</span></a><a href="/place/security-office/">Security Office<span class="muted">Campus security headquarters managing safety, access control and…</span></a></div>
+        </div>
+        <div class="guide-section" id="hostel">
+            <div class="section-header">
+                <div class="section-num"><i class="fas fa-hotel"></i></div>
+                <div>
+                    <h2>Student Hostels</h2>
+                    <span class="muted" style="font-size:13px;">4 locations on campus</span>
+                </div>
+            </div>
+            <div class="grid"><a href="/place/atwima-hall/">Atwima Hall<span class="muted">Student residential hall with study rooms and recreational facilities.</span></a><a href="/place/opoku-ware-hall/">Opoku Ware Hall<span class="muted">Student residential hall with study rooms and recreational facilities.</span></a><a href="/place/opoku-ware-ii-hall/">Opoku Ware II Hall<span class="muted">Second Opoku Ware residential hall with modern student accommodation…</span></a><a href="/place/autonomy-hall/">Autonomy Hall<span class="muted">Modern student residential hall with accommodation, study areas and…</span></a></div>
+        </div>
+        <div class="guide-section" id="facility">
+            <div class="section-header">
+                <div class="section-num"><i class="fas fa-map-pin"></i></div>
+                <div>
+                    <h2>Campus Facilities</h2>
+                    <span class="muted" style="font-size:13px;">18 locations on campus</span>
+                </div>
+            </div>
+            <div class="grid"><a href="/place/the-clinic/">The Clinic<span class="muted">Campus health facility offering primary care, first aid and pharmacy…</span></a><a href="/place/ubs/">UBS<span class="muted">University Banking Services on campus for student and staff financial…</span></a><a href="/place/opoku-ware-mosque/">Opoku Ware Mosque<span class="muted">Campus mosque for Islamic worship and community activities.</span></a><a href="/place/aamusted-football-field/">AAMUSTED Football Field<span class="muted">Main campus football field (soccer park) for sports events, training…</span></a><a href="/place/mynd-fm/">MYND FM<span class="muted">Campus radio station broadcasting news, entertainment and educational…</span></a><a href="/place/st-williams-chaplaincy/">St. Williams Chaplaincy<span class="muted">Campus chaplaincy centre for Christian worship, counselling and…</span></a><a href="/place/aamusted-canteen/">AAMUSTED Canteen<span class="muted">Main campus canteen providing affordable meals, snacks and…</span></a><a href="/place/food-court/">Food Court<span class="muted">Campus food court area with multiple food vendors offering diverse…</span></a><a href="/place/handball-court/">Handball Court<span class="muted">Dedicated handball court for recreational sports and competitive…</span></a><a href="/place/transport-hub/">Transport Hub<span class="muted">Campus transport and logistics hub for university vehicles, staff…</span></a><a href="/place/credit-union/">Credit Union<span class="muted">Staff and student credit union offering savings, loans and financial…</span></a><a href="/place/esa-pavilion/">ESA Pavilion<span class="muted">Outdoor pavilion near the ESA building used for campus events,…</span></a><a href="/place/volleyball-court/">Volleyball Court<span class="muted">Campus volleyball court for recreational play, inter-departmental…</span></a><a href="/place/basketball-court/">Basketball Court<span class="muted">Outdoor basketball court for recreational play and campus sports…</span></a><a href="/place/uba/">UBA<span class="muted">United Bank for Africa (UBA) branch on campus offering banking…</span></a><a href="/place/franky-jay-shopping-mall/">Franky Jay Shopping Mall<span class="muted">On-campus shopping mall with retail shops, phone accessories,…</span></a><a href="/place/opoku-ware-tennis-court/">Opoku Ware Tennis Court<span class="muted">Tennis court adjacent to Opoku Ware Hall for recreational and…</span></a><a href="/place/campus-atm/">Campus ATM<span class="muted">On-campus ATM for quick cash withdrawals. Supported banks include UBA,…</span></a></div>
+        </div>
+
+        <div id="staff-directory" style="margin: 48px 0 18px; display: flex; align-items: baseline; justify-content: space-between;">
+            <h2 id="staff" style="margin:0;"><i class="fas fa-id-badge" style="color:var(--accent);"></i> Staff &amp; Faculty Directory (96)</h2>
+        </div>
         
-        <h2 id="academic-affairs">Academic Affairs</h2>
-        
-        <h3>Admissions Office <span class="muted">(1)</span></h3>
-        <div class="grid"><a href="/staff/ms-beatrice-acheampong/">Ms. Ms. Beatrice Acheampong<span class="muted">Assistant Registrar</span></a></div>
-        <h2 id="directorate-of-it-services">Directorate of IT Services</h2>
-        
-        <h3>Department of Information Technology Education <span class="muted">(1)</span></h3>
-        <div class="grid"><a href="/staff/donald-yeboah/">Donald Yeboah<span class="muted">Snr It Asst • Main Administration Block</span></a></div>
-        <h3>Directorate of IT Services <span class="muted">(1)</span></h3>
-        <div class="grid"><a href="/staff/nicholas-donkor/">Nicholas Donkor<span class="muted">Ag. Director - IT Services • Main Administration Block</span></a></div>
-        <h2 id="directorate-of-quality-assurance-planning-and-accreditation-">Directorate of Quality Assurance Planning and Accreditation (QAPA)</h2>
-        
-        <h3>Department of Interdisciplinary Studies <span class="muted">(1)</span></h3>
-        <div class="grid"><a href="/staff/professor-edmond-akwasi-agyeman/">Prof. Prof. Edmond Akwasi Agyeman<span class="muted">Director, Quality Assurance, Planning &amp; Accreditation</span></a></div>
-        <h2 id="faculty-of-applied-sciences-and-mathematics-education-fasme">Faculty of Applied Sciences and Mathematics Education (FASME)</h2>
-        
-        <h3>Department of Information Technology Education <span class="muted">(4)</span></h3>
-        <div class="grid"><a href="/staff/dr-adasa-nkrumah-kofi-frimpong/">Dr. Dr. Adasa Nkrumah Kofi Frimpong<span class="muted">Lecturer Ag Head Academic And Administrative Computing • ADB</span></a><a href="/staff/dr-george-asante/">Dr. Dr. George Asante<span class="muted">Senior Lecturer</span></a><a href="/staff/franco-osei-wusu/">Franco Osei-Wusu<span class="muted">Assist. Lecturer</span></a><a href="/staff/mr-eldad-antwi-bekoe/">Mr. Mr. Eldad Antwi-Bekoe<span class="muted">Senior Lecturer</span></a></div>
-        <h3>Department of Mathematics Education <span class="muted">(9)</span></h3>
-        <div class="grid"><a href="/staff/dr-appiagyei-ebenezer/">Dr. Dr. Appiagyei Ebenezer<span class="muted">Lecturer</span></a><a href="/staff/mr-emmanuel-akweittey/">Dr. Dr. Emmanuel Akweittey<span class="muted">H.O.D, DME , Senior Lecturer</span></a><a href="/staff/mr-ernest-larbi/">Dr. Dr. Ernest Larbi<span class="muted">Lecturer</span></a><a href="/staff/dr-joseph-frank-gordon/">Dr. Dr. Joseph Frank Gordon<span class="muted">Lecturer • FBR</span></a><a href="/staff/mr-kennedy-gyimah/">Mr. Mr. Kennedy Gyimah<span class="muted">Lecturer</span></a><a href="/staff/prof-ebenezer-bonyah/">Prof. Prof. Ebenezer Bonyah<span class="muted">Ag. Director, DRIPIA • FBR</span></a><a href="/staff/dr-francis-ohene-boateng/">Prof. Prof. Francis Ohene Boateng<span class="muted">Assoc Prof</span></a><a href="/staff/prof-yarhands-dissou-arthur/">Prof. Prof. Yarhands Dissou Arthur<span class="muted">DEAN, FASME</span></a><a href="/staff/rev-dr-benjamin-adu-obeng/">Rev. Dr. Rev. Dr. Benjamin Adu Obeng<span class="muted">Lecturer</span></a></div>
-        <h2 id="faculty-of-business-education-fbe">Faculty of Business Education (FBE)</h2>
-        
-        <h3>Department of Accounting Studies Education <span class="muted">(1)</span></h3>
-        <div class="grid"><a href="/staff/assoc-prof-dr-dr-frank-yao-gbadago/">Assoc. Prof. Dr. Dr. ASSOC. PROF. DR. DR. FRANK YAO GBADAGO<span class="muted">Head Department Of Accounting Studies Education • ROB</span></a></div>
-        <h3>Department of Economics Education <span class="muted">(7)</span></h3>
-        <div class="grid"><a href="/staff/dr-mrs-ellen-animah-agyei/">Dr. (Mrs.) Dr (Mrs) Ellen Animah Agyei<span class="muted">Lecturer • ROB</span></a><a href="/staff/dr-kwadwo-arhin/">Dr. Dr. Kwadwo Arhin<span class="muted">Lecturer • ROB</span></a><a href="/staff/dr-kwame-acheampong/">Dr. Dr. Kwame Acheampong<span class="muted">Senior Lecturer • ROB</span></a><a href="/staff/dr-yaw-boateng-atakorah/">Dr. Dr. Yaw Boateng Atakorah<span class="muted">Lecturer</span></a><a href="/staff/mr-eric-effah-sarkodie/">Mr. Mr. Eric Effah Sarkodie<span class="muted">H.O.D - Dept. Economics Edu. , Senior Lecturer • ROB</span></a><a href="/staff/mr-williams-kwasi-boachie/">Mr. Mr. Williams Kwasi Boachie<span class="muted">Senior Lecturer • ROB</span></a><a href="/staff/prof-joseph-antwi-baafi/">Prof. Prof. Joseph Antwi Baafi<span class="muted">Assoc Prof • ROB</span></a></div>
-        <h3>Department of Management Studies Education <span class="muted">(6)</span></h3>
-        <div class="grid"><a href="/staff/dr-mrs-veronica-adu-brobbey/">Dr. (Mrs.) Dr. (Mrs) Veronica Adu-Brobbey<span class="muted">Senior Lecturer • ROB</span></a><a href="/staff/dr-courage-s-k-dogbe/">Dr. Dr. Courage S.K. Dogbe<span class="muted">Senior Lecturer • ESA</span></a><a href="/staff/lawyer-mrs-ohenewaa-boateng-newman/">Dr. Lawyer Mrs. Dr. Lawyer Mrs. Ohenewaa Boateng Newman<span class="muted">Senior Lecturer • ROB</span></a><a href="/staff/dr-mavis-adu-gyamfi/">Dr. Dr. Mavis Adu-Gyamfi<span class="muted">Lecturer</span></a><a href="/staff/francis-opuni-kesseh-esq/">FRANCIS OPUNI KESSEH, ESQ.<span class="muted">Lecturer • ROB</span></a><a href="/staff/prof-dr-masud-ibrahim/">Prof. Dr. Prof. Dr. Masud Ibrahim<span class="muted">Assoc Prof • ROB</span></a></div>
-        <h3>Department of Human Resource and Business Strategy <span class="muted">(1)</span></h3>
-        <div class="grid"><a href="/staff/dr-claudia-nyarko-mensah/">Dr. Dr. Claudia Nyarko Mensah (Ph.D)<span class="muted">Senior Lecturer</span></a></div>
-        <h3>Department of Accounting Education <span class="muted">(2)</span></h3>
-        <div class="grid"><a href="/staff/prince-gyimah-phd-fchpa/">Prince Gyimah (PhD, FChPA)<span class="muted">Senior Lecturer • ROB</span></a><a href="/staff/mrs-rabiatu-kamil/">Rabiatu Kamil (Ph.D. FCCA, ICAG)<span class="muted">Lecturer • ROB</span></a></div>
-        <h2 id="faculty-of-education-and-communication-sciences-fecs">Faculty of Education and Communication Sciences (FECS)</h2>
-        
-        <h3>Department of Interdisciplinary Studies <span class="muted">(8)</span></h3>
-        <div class="grid"><a href="/staff/dr-james-nsoh-adogpa/">Dr. Dr. James Nsoh Adogpa<span class="muted">Lecturer • ROB</span></a><a href="/staff/dr-kotor-asare/">Dr. Dr. Kotor Asare<span class="muted">Lecturer • ROB</span></a><a href="/staff/mr-nathan-ohene-gyang/">Dr. Dr. Nathan Ohene Gyang<span class="muted">Lecturer • NFB</span></a><a href="/staff/abraham-yeboah/">Mr. Mr. Abraham Yeboah<span class="muted">Lecturer • NFB</span></a><a href="/staff/mr-ficus-gyasi/">Mr. Mr. Ficus Gyasi<span class="muted">Senior Lecturer • ROB</span></a><a href="/staff/mr-philip-boateng/">Mr. Mr. Philip Boateng<span class="muted">Senior Lecturer • ROB</span></a><a href="/staff/mr-sylvanus-kofie/">Mr. Mr. Sylvanus Kofie<span class="muted">Lecturer • ROB</span></a><a href="/staff/dr-isaac-addai/">Prof. PROF. ISAAC ADDAI<span class="muted">Vice Dean, SGS • ROB</span></a></div>
-        <h3>Department of Languages Education <span class="muted">(2)</span></h3>
-        <div class="grid"><a href="/staff/mr-jonathan-essuman/">Dr. Dr. Jonathan Essuman<span class="muted">Senior Lecturer • ROB</span></a><a href="/staff/mr-franklin-benjamin-appiah/">Mr. Mr. Franklin Benjamin Appiah<span class="muted">Lecturer • ROB</span></a></div>
-        <h3>Department of Educational Leadership <span class="muted">(3)</span></h3>
-        <div class="grid"><a href="/staff/dr-samuel-kwadwo-aboagye/">Dr. Dr. Samuel Kwadwo Aboagye<span class="muted">Lecturer • NFB</span></a><a href="/staff/prof-dr-philip-oti-agyen/">Prof. Dr. Prof. Dr. Philip Oti-Agyen<span class="muted">Assoc. Prof. , H.O.D, DEL • ODSA</span></a><a href="/staff/sr-dr-mary-assumpta-ayikue/">Sr. Dr. Sr. Dr. Mary Assumpta Ayikue<span class="muted">Lecturer • ROB</span></a></div>
-        <h3>Department of Interdisciplinary Studies (DIS) <span class="muted">(2)</span></h3>
-        <div class="grid"><a href="/staff/dr-theresa-dede-lawer/">Senior Lecturer Dr. Theresa Dede Lawer<span class="muted">Senior Lecturer • Main Administration Block</span></a><a href="/staff/prof-stephen-baffour-adjei/">Prof. Prof. Stephen Baffour Adjei<span class="muted">Associate Professor • ROB Block</span></a></div>
-        <h2 id="faculty-of-engineering-and-technology-fet">Faculty of Engineering and Technology (FET)</h2>
-        
-        <h3>Department of Mechanical and Automotive Technology Education <span class="muted">(1)</span></h3>
-        <div class="grid"><a href="/staff/antwi-edmund/">Antwi Edmund<span class="muted">Assist. Lecturer</span></a></div>
-        <h3>Department of Civil Engineering <span class="muted">(1)</span></h3>
-        <div class="grid"><a href="/staff/assoc-prof-kwaku-antwi/">Assoc. Prof. Dr. Engr. Associate Professor Dr. Engr. Kwaku Antwi<span class="muted">Assoc Prof, Head of Department • FBR</span></a></div>
-        <h3>Department of Electrical and Electronic Engineering Technology Education <span class="muted">(1)</span></h3>
-        <div class="grid"><a href="/staff/dr-mrs-priscilla-oyeladun-ajiboye/">Dr. (Mrs.) Dr. (Mrs.) Priscilla Oyeladun Ajiboye<span class="muted">Lecturer</span></a></div>
-        <h2 id="faculty-of-technical-education-fte">Faculty of Technical Education (FTE)</h2>
-        
-        <h3>Department of Construction and Wood Technology Education <span class="muted">(9)</span></h3>
-        <div class="grid"><a href="/staff/arc-wisdom-d-adzraku/">Arc. Arc. Wisdom D. Adzraku<span class="muted">Senior Lecturer</span></a><a href="/staff/dr-fredrick-simpeh/">Dr. Dr. Fredrick Simpeh<span class="muted">Senior Lecturer • FBR</span></a><a href="/staff/dr-jacob-ofori-darko/">Dr. Dr. Jacob Ofori-Darko<span class="muted">Lecturer • FBR</span></a><a href="/staff/dr-justice-williams/">Dr. Dr. Justice Williams<span class="muted">Lecturer • FBR</span></a><a href="/staff/dr-mark-bright-donkoh/">Dr. Dr. Mark Bright Donkoh<span class="muted">Lecturer</span></a><a href="/staff/dr-nongiba-a-kheni/">Dr. Dr. Nongiba A. Kheni<span class="muted">Senior Lecturer</span></a><a href="/staff/seth-amoako/">Dr. Dr. Seth Amoako<span class="muted">Lecturer</span></a><a href="/staff/engr-dorothy-manu/">Engr. Engr. Dorothy Manu<span class="muted">Lecturer</span></a><a href="/staff/mr-k-b-owusu-akyaw/">Mr. Mr. K.B. Owusu-Akyaw<span class="muted">Lecturer</span></a></div>
-        <h3>Department of Mechanical and Automotive Technology Education <span class="muted">(6)</span></h3>
-        <div class="grid"><a href="/staff/chibudo-kenneth-nworu/">Chibudo Kenneth Nworu<span class="muted">Lecturer</span></a><a href="/staff/engr-martha-danso-mrs/">Dr. Engr. Dr. Engr. Martha Danso (Mrs)<span class="muted">Senior Lecturer</span></a><a href="/staff/dr-kwabena-offeh-gyimah/">Dr. Dr. Kwabena Offeh Gyimah<span class="muted">Senior Lecturer</span></a><a href="/staff/dr-philip-baidoo/">Dr. Dr. Philip Baidoo<span class="muted">Senior Lecturer</span></a><a href="/staff/dr-enock-andrews-duodu/">Ing. Dr. Enock Andrews Duodu<span class="muted">Senior Lecturer</span></a><a href="/staff/prof-dr-sherry-kwabla-amedorme/">Prof. Dr. Prof. Dr. Sherry Kwabla Amedorme<span class="muted">Assoc. Prof. , H.O.D, DMATE</span></a></div>
-        <h3>Department of Electrical and Electronic Engineering Technology Education <span class="muted">(4)</span></h3>
-        <div class="grid"><a href="/staff/mr-p-n-ayambire/">Dr. Engr. Dr. Engr. P. N. Ayambire<span class="muted">Lecturer</span></a><a href="/staff/dr-ing-koffi-a-dotche/">Dr. Ing. Dr. Ing. Koffi A. Dotche<span class="muted">Lecturer</span></a><a href="/staff/dr-albert-k-awopone/">Engr. Dr. Engr. Dr. Albert Kotawoke Awopone<span class="muted">Senior Lecturer</span></a><a href="/staff/ms-akosua-afriyie-addi/">Ms. Ms. Akosua Afriyie Addi<span class="muted">Prin Admin Assist • FBR</span></a></div>
-        <h3>Department of Construction Technology and Management <span class="muted">(1)</span></h3>
-        <div class="grid"><a href="/staff/mr-elijah-kusi/">Engr. Dr. Engr. Dr. Elijah Kusi<span class="muted">Lecturer • FBR</span></a></div>
-        <h3>Department of Civil Engineering <span class="muted">(1)</span></h3>
-        <div class="grid"><a href="/staff/prof-emmanuel-appiah-kubi/">Ing. Prof. Ing. Prof. Emmanuel Appiah-Kubi (PhD, SPE-GhIE)<span class="muted">DEAN, FTE</span></a></div>
-        <h2 id="faculty-of-vocational-education-fve">Faculty of Vocational Education (FVE)</h2>
-        
-        <h3>Department of Fashion Design and Textiles Education <span class="muted">(7)</span></h3>
-        <div class="grid"><a href="/staff/abigail-nkansah/">Ms. Abigail Nkansah<span class="muted">Assist. Lecturer • CBT</span></a><a href="/staff/andrew-adu-asabere/">Mr. Andrew Adu Asabere<span class="muted">Assist. Lecturer • CBT</span></a><a href="/staff/dr-daniel-kwabena-danso/">Dr. Dr Daniel Kwabena Danso<span class="muted">FVE Examination Officer , Senior Lecturer • CBT</span></a><a href="/staff/dr-haruna-ibrahim/">Dr. Dr. Haruna Ibrahim<span class="muted">Lecturer • CBT</span></a><a href="/staff/ninette-afi-appiah-phd/">Dr. Dr. Ninette Afi Appiah<span class="muted">Senior Lecturer • CBT</span></a><a href="/staff/phyllis-mensah/">Dr. Dr. Phyllis Mensah<span class="muted">Assist. Lecturer • CBT</span></a><a href="/staff/josephine-aboagyewaa-ntiri/">Prof. Prof. Josephine Aboagyewaa-Ntiri<span class="muted">Assoc. Prof. , Dean • CBT</span></a></div>
-        <h3>Department of Hospitality and Tourism Education <span class="muted">(10)</span></h3>
-        <div class="grid"><a href="/staff/charlotte-caitoe/">Charlotte Caitoe<span class="muted">Assist. Lecturer • CBT</span></a><a href="/staff/claudia-miakimeni-pumpuni/">Ms. Claudia Miakimeni Pumpuni<span class="muted">Lecturer • CBT</span></a><a href="/staff/doreen-dedo-adi/">Prof. Doreen Dedo Adi<span class="muted">Assoc Prof • CBT</span></a><a href="/staff/florence-brenyah/">Dr. (Mrs.) Dr. Mrs. Florence Brenyah<span class="muted">Lecturer • CBT</span></a><a href="/staff/mercy-boadi/">Dr. (Mrs.) Dr. Mrs. Mercy Boadi<span class="muted">Lecturer • CBT</span></a><a href="/staff/miss-nafisatu-salam/">Miss Miss Nafisatu Salam<span class="muted">Lecturer • CBT</span></a><a href="/staff/mrs-abena-sekyere/">Mrs. Mrs. Abena Sekyere<span class="muted">Lecturer • CBT</span></a><a href="/staff/stella-appiah/">Prof. Prof. Stella Appiah<span class="muted">Assoc Prof • ESA</span></a><a href="/staff/sawan-dankyi/">Sawan Dankyi<span class="muted">Lecturer • ESA</span></a><a href="/staff/veronica-adwoa-agyare/">Ms. Veronica Adwoa Agyare<span class="muted">Assist. Lecturer • ESA</span></a></div>
-        <h3>Department of Fashion Design and Textiles Education (DFDTE) <span class="muted">(1)</span></h3>
-        <div class="grid"><a href="/staff/prof-dr-isaac-abraham/">Prof. Dr. Prof. Dr. Isaac Abraham<span class="muted">Assoc Prof, Head of Department • CBT</span></a></div>
-        <h2 id="other">Other</h2>
-        
-        <h3>Quality Assurance Planning and Accreditation Directorate <span class="muted">(2)</span></h3>
-        <div class="grid"><a href="/staff/mr-benjamin-mensah/">Mr. Mr. Benjamin Mensah<span class="muted">Assistant Registrar , Head, Planning Section, QAPA</span></a><a href="/staff/victoria-timah/">Victoria Timah<span class="muted">Assistant Registrar</span></a></div>
-        <h3>Guidance and Counselling Centre <span class="muted">(1)</span></h3>
-        <div class="grid"><a href="/staff/mrs-gertrude-effeh-brew/">Mrs. Mrs. Gertrude Effeh Brew<span class="muted">University Counsellor • ROB</span></a></div>
-        <h2 id="school-of-graduate-studies-sgs">School of Graduate Studies (SGS)</h2>
-        
-        <h3>School of Graduate Studies <span class="muted">(1)</span></h3>
-        <div class="grid"><a href="/staff/mrs-emma-maame-afua-darkoa-douglas-anyan/">Mrs. Mrs. Emma Maame Afua Darkoa Douglas Anyan<span class="muted">Snr. Assist. Registrar • ROB</span></a></div>
-        <h3>Department of Construction and Wood Technology Education <span class="muted">(1)</span></h3>
-        <div class="grid"><a href="/staff/prof-humprey-danso/">Prof. Prof. Humprey Danso<span class="muted">Dean, School of Graduate Studies • ROB</span></a></div>
+        <div class="guide-section" id="academic-affairs">
+            <div class="section-header">
+                <div class="section-num"><i class="fas fa-users-rectangle"></i></div>
+                <div>
+                    <h2>Academic Affairs</h2>
+                    <span class="muted" style="font-size:13px;">1 staff profile</span>
+                </div>
+            </div>
+            
+            <h3><i class="fas fa-folder-tree" style="color:var(--accent);font-size:13px;"></i> Admissions Office <span class="muted">(1)</span></h3>
+            <div class="grid"><a href="/staff/ms-beatrice-acheampong/">Ms. Ms. Beatrice Acheampong<span class="muted">Assistant Registrar</span></a></div>
+        </div>
+        <div class="guide-section" id="directorate-of-it-services">
+            <div class="section-header">
+                <div class="section-num"><i class="fas fa-users-rectangle"></i></div>
+                <div>
+                    <h2>Directorate of IT Services</h2>
+                    <span class="muted" style="font-size:13px;">2 staff profiles</span>
+                </div>
+            </div>
+            
+            <h3><i class="fas fa-folder-tree" style="color:var(--accent);font-size:13px;"></i> Department of Information Technology Education <span class="muted">(1)</span></h3>
+            <div class="grid"><a href="/staff/donald-yeboah/">Donald Yeboah<span class="muted">Snr It Asst • Main Administration Block</span></a></div>
+            <h3><i class="fas fa-folder-tree" style="color:var(--accent);font-size:13px;"></i> Directorate of IT Services <span class="muted">(1)</span></h3>
+            <div class="grid"><a href="/staff/nicholas-donkor/">Nicholas Donkor<span class="muted">Ag. Director - IT Services • Main Administration Block</span></a></div>
+        </div>
+        <div class="guide-section" id="directorate-of-quality-assurance-planning-and-accreditation-">
+            <div class="section-header">
+                <div class="section-num"><i class="fas fa-users-rectangle"></i></div>
+                <div>
+                    <h2>Directorate of Quality Assurance Planning and Accreditation (QAPA)</h2>
+                    <span class="muted" style="font-size:13px;">1 staff profile</span>
+                </div>
+            </div>
+            
+            <h3><i class="fas fa-folder-tree" style="color:var(--accent);font-size:13px;"></i> Department of Interdisciplinary Studies <span class="muted">(1)</span></h3>
+            <div class="grid"><a href="/staff/professor-edmond-akwasi-agyeman/">Prof. Prof. Edmond Akwasi Agyeman<span class="muted">Director, Quality Assurance, Planning &amp; Accreditation</span></a></div>
+        </div>
+        <div class="guide-section" id="faculty-of-applied-sciences-and-mathematics-education-fasme">
+            <div class="section-header">
+                <div class="section-num"><i class="fas fa-users-rectangle"></i></div>
+                <div>
+                    <h2>Faculty of Applied Sciences and Mathematics Education (FASME)</h2>
+                    <span class="muted" style="font-size:13px;">13 staff profiles</span>
+                </div>
+            </div>
+            
+            <h3><i class="fas fa-folder-tree" style="color:var(--accent);font-size:13px;"></i> Department of Information Technology Education <span class="muted">(4)</span></h3>
+            <div class="grid"><a href="/staff/dr-adasa-nkrumah-kofi-frimpong/">Dr. Dr. Adasa Nkrumah Kofi Frimpong<span class="muted">Lecturer Ag Head Academic And Administrative Computing • ADB</span></a><a href="/staff/dr-george-asante/">Dr. Dr. George Asante<span class="muted">Senior Lecturer</span></a><a href="/staff/franco-osei-wusu/">Franco Osei-Wusu<span class="muted">Assist. Lecturer</span></a><a href="/staff/mr-eldad-antwi-bekoe/">Mr. Mr. Eldad Antwi-Bekoe<span class="muted">Senior Lecturer</span></a></div>
+            <h3><i class="fas fa-folder-tree" style="color:var(--accent);font-size:13px;"></i> Department of Mathematics Education <span class="muted">(9)</span></h3>
+            <div class="grid"><a href="/staff/dr-appiagyei-ebenezer/">Dr. Dr. Appiagyei Ebenezer<span class="muted">Lecturer</span></a><a href="/staff/mr-emmanuel-akweittey/">Dr. Dr. Emmanuel Akweittey<span class="muted">H.O.D, DME , Senior Lecturer</span></a><a href="/staff/mr-ernest-larbi/">Dr. Dr. Ernest Larbi<span class="muted">Lecturer</span></a><a href="/staff/dr-joseph-frank-gordon/">Dr. Dr. Joseph Frank Gordon<span class="muted">Lecturer • FBR</span></a><a href="/staff/mr-kennedy-gyimah/">Mr. Mr. Kennedy Gyimah<span class="muted">Lecturer</span></a><a href="/staff/prof-ebenezer-bonyah/">Prof. Prof. Ebenezer Bonyah<span class="muted">Ag. Director, DRIPIA • FBR</span></a><a href="/staff/dr-francis-ohene-boateng/">Prof. Prof. Francis Ohene Boateng<span class="muted">Assoc Prof</span></a><a href="/staff/prof-yarhands-dissou-arthur/">Prof. Prof. Yarhands Dissou Arthur<span class="muted">DEAN, FASME</span></a><a href="/staff/rev-dr-benjamin-adu-obeng/">Rev. Dr. Rev. Dr. Benjamin Adu Obeng<span class="muted">Lecturer</span></a></div>
+        </div>
+        <div class="guide-section" id="faculty-of-business-education-fbe">
+            <div class="section-header">
+                <div class="section-num"><i class="fas fa-users-rectangle"></i></div>
+                <div>
+                    <h2>Faculty of Business Education (FBE)</h2>
+                    <span class="muted" style="font-size:13px;">17 staff profiles</span>
+                </div>
+            </div>
+            
+            <h3><i class="fas fa-folder-tree" style="color:var(--accent);font-size:13px;"></i> Department of Accounting Studies Education <span class="muted">(1)</span></h3>
+            <div class="grid"><a href="/staff/assoc-prof-dr-dr-frank-yao-gbadago/">Assoc. Prof. Dr. Dr. ASSOC. PROF. DR. DR. FRANK YAO GBADAGO<span class="muted">Head Department Of Accounting Studies Education • ROB</span></a></div>
+            <h3><i class="fas fa-folder-tree" style="color:var(--accent);font-size:13px;"></i> Department of Economics Education <span class="muted">(7)</span></h3>
+            <div class="grid"><a href="/staff/dr-mrs-ellen-animah-agyei/">Dr. (Mrs.) Dr (Mrs) Ellen Animah Agyei<span class="muted">Lecturer • ROB</span></a><a href="/staff/dr-kwadwo-arhin/">Dr. Dr. Kwadwo Arhin<span class="muted">Lecturer • ROB</span></a><a href="/staff/dr-kwame-acheampong/">Dr. Dr. Kwame Acheampong<span class="muted">Senior Lecturer • ROB</span></a><a href="/staff/dr-yaw-boateng-atakorah/">Dr. Dr. Yaw Boateng Atakorah<span class="muted">Lecturer</span></a><a href="/staff/mr-eric-effah-sarkodie/">Mr. Mr. Eric Effah Sarkodie<span class="muted">H.O.D - Dept. Economics Edu. , Senior Lecturer • ROB</span></a><a href="/staff/mr-williams-kwasi-boachie/">Mr. Mr. Williams Kwasi Boachie<span class="muted">Senior Lecturer • ROB</span></a><a href="/staff/prof-joseph-antwi-baafi/">Prof. Prof. Joseph Antwi Baafi<span class="muted">Assoc Prof • ROB</span></a></div>
+            <h3><i class="fas fa-folder-tree" style="color:var(--accent);font-size:13px;"></i> Department of Management Studies Education <span class="muted">(6)</span></h3>
+            <div class="grid"><a href="/staff/dr-mrs-veronica-adu-brobbey/">Dr. (Mrs.) Dr. (Mrs) Veronica Adu-Brobbey<span class="muted">Senior Lecturer • ROB</span></a><a href="/staff/dr-courage-s-k-dogbe/">Dr. Dr. Courage S.K. Dogbe<span class="muted">Senior Lecturer • ESA</span></a><a href="/staff/lawyer-mrs-ohenewaa-boateng-newman/">Dr. Lawyer Mrs. Dr. Lawyer Mrs. Ohenewaa Boateng Newman<span class="muted">Senior Lecturer • ROB</span></a><a href="/staff/dr-mavis-adu-gyamfi/">Dr. Dr. Mavis Adu-Gyamfi<span class="muted">Lecturer</span></a><a href="/staff/francis-opuni-kesseh-esq/">FRANCIS OPUNI KESSEH, ESQ.<span class="muted">Lecturer • ROB</span></a><a href="/staff/prof-dr-masud-ibrahim/">Prof. Dr. Prof. Dr. Masud Ibrahim<span class="muted">Assoc Prof • ROB</span></a></div>
+            <h3><i class="fas fa-folder-tree" style="color:var(--accent);font-size:13px;"></i> Department of Human Resource and Business Strategy <span class="muted">(1)</span></h3>
+            <div class="grid"><a href="/staff/dr-claudia-nyarko-mensah/">Dr. Dr. Claudia Nyarko Mensah (Ph.D)<span class="muted">Senior Lecturer</span></a></div>
+            <h3><i class="fas fa-folder-tree" style="color:var(--accent);font-size:13px;"></i> Department of Accounting Education <span class="muted">(2)</span></h3>
+            <div class="grid"><a href="/staff/prince-gyimah-phd-fchpa/">Prince Gyimah (PhD, FChPA)<span class="muted">Senior Lecturer • ROB</span></a><a href="/staff/mrs-rabiatu-kamil/">Rabiatu Kamil (Ph.D. FCCA, ICAG)<span class="muted">Lecturer • ROB</span></a></div>
+        </div>
+        <div class="guide-section" id="faculty-of-education-and-communication-sciences-fecs">
+            <div class="section-header">
+                <div class="section-num"><i class="fas fa-users-rectangle"></i></div>
+                <div>
+                    <h2>Faculty of Education and Communication Sciences (FECS)</h2>
+                    <span class="muted" style="font-size:13px;">15 staff profiles</span>
+                </div>
+            </div>
+            
+            <h3><i class="fas fa-folder-tree" style="color:var(--accent);font-size:13px;"></i> Department of Interdisciplinary Studies <span class="muted">(8)</span></h3>
+            <div class="grid"><a href="/staff/dr-james-nsoh-adogpa/">Dr. Dr. James Nsoh Adogpa<span class="muted">Lecturer • ROB</span></a><a href="/staff/dr-kotor-asare/">Dr. Dr. Kotor Asare<span class="muted">Lecturer • ROB</span></a><a href="/staff/mr-nathan-ohene-gyang/">Dr. Dr. Nathan Ohene Gyang<span class="muted">Lecturer • NFB</span></a><a href="/staff/abraham-yeboah/">Mr. Mr. Abraham Yeboah<span class="muted">Lecturer • NFB</span></a><a href="/staff/mr-ficus-gyasi/">Mr. Mr. Ficus Gyasi<span class="muted">Senior Lecturer • ROB</span></a><a href="/staff/mr-philip-boateng/">Mr. Mr. Philip Boateng<span class="muted">Senior Lecturer • ROB</span></a><a href="/staff/mr-sylvanus-kofie/">Mr. Mr. Sylvanus Kofie<span class="muted">Lecturer • ROB</span></a><a href="/staff/dr-isaac-addai/">Prof. PROF. ISAAC ADDAI<span class="muted">Vice Dean, SGS • ROB</span></a></div>
+            <h3><i class="fas fa-folder-tree" style="color:var(--accent);font-size:13px;"></i> Department of Languages Education <span class="muted">(2)</span></h3>
+            <div class="grid"><a href="/staff/mr-jonathan-essuman/">Dr. Dr. Jonathan Essuman<span class="muted">Senior Lecturer • ROB</span></a><a href="/staff/mr-franklin-benjamin-appiah/">Mr. Mr. Franklin Benjamin Appiah<span class="muted">Lecturer • ROB</span></a></div>
+            <h3><i class="fas fa-folder-tree" style="color:var(--accent);font-size:13px;"></i> Department of Educational Leadership <span class="muted">(3)</span></h3>
+            <div class="grid"><a href="/staff/dr-samuel-kwadwo-aboagye/">Dr. Dr. Samuel Kwadwo Aboagye<span class="muted">Lecturer • NFB</span></a><a href="/staff/prof-dr-philip-oti-agyen/">Prof. Dr. Prof. Dr. Philip Oti-Agyen<span class="muted">Assoc. Prof. , H.O.D, DEL • ODSA</span></a><a href="/staff/sr-dr-mary-assumpta-ayikue/">Sr. Dr. Sr. Dr. Mary Assumpta Ayikue<span class="muted">Lecturer • ROB</span></a></div>
+            <h3><i class="fas fa-folder-tree" style="color:var(--accent);font-size:13px;"></i> Department of Interdisciplinary Studies (DIS) <span class="muted">(2)</span></h3>
+            <div class="grid"><a href="/staff/dr-theresa-dede-lawer/">Senior Lecturer Dr. Theresa Dede Lawer<span class="muted">Senior Lecturer • Main Administration Block</span></a><a href="/staff/prof-stephen-baffour-adjei/">Prof. Prof. Stephen Baffour Adjei<span class="muted">Associate Professor • ROB Block</span></a></div>
+        </div>
+        <div class="guide-section" id="faculty-of-engineering-and-technology-fet">
+            <div class="section-header">
+                <div class="section-num"><i class="fas fa-users-rectangle"></i></div>
+                <div>
+                    <h2>Faculty of Engineering and Technology (FET)</h2>
+                    <span class="muted" style="font-size:13px;">3 staff profiles</span>
+                </div>
+            </div>
+            
+            <h3><i class="fas fa-folder-tree" style="color:var(--accent);font-size:13px;"></i> Department of Mechanical and Automotive Technology Education <span class="muted">(1)</span></h3>
+            <div class="grid"><a href="/staff/antwi-edmund/">Antwi Edmund<span class="muted">Assist. Lecturer</span></a></div>
+            <h3><i class="fas fa-folder-tree" style="color:var(--accent);font-size:13px;"></i> Department of Civil Engineering <span class="muted">(1)</span></h3>
+            <div class="grid"><a href="/staff/assoc-prof-kwaku-antwi/">Assoc. Prof. Dr. Engr. Associate Professor Dr. Engr. Kwaku Antwi<span class="muted">Assoc Prof, Head of Department • FBR</span></a></div>
+            <h3><i class="fas fa-folder-tree" style="color:var(--accent);font-size:13px;"></i> Department of Electrical and Electronic Engineering Technology Education <span class="muted">(1)</span></h3>
+            <div class="grid"><a href="/staff/dr-mrs-priscilla-oyeladun-ajiboye/">Dr. (Mrs.) Dr. (Mrs.) Priscilla Oyeladun Ajiboye<span class="muted">Lecturer</span></a></div>
+        </div>
+        <div class="guide-section" id="faculty-of-technical-education-fte">
+            <div class="section-header">
+                <div class="section-num"><i class="fas fa-users-rectangle"></i></div>
+                <div>
+                    <h2>Faculty of Technical Education (FTE)</h2>
+                    <span class="muted" style="font-size:13px;">21 staff profiles</span>
+                </div>
+            </div>
+            
+            <h3><i class="fas fa-folder-tree" style="color:var(--accent);font-size:13px;"></i> Department of Construction and Wood Technology Education <span class="muted">(9)</span></h3>
+            <div class="grid"><a href="/staff/arc-wisdom-d-adzraku/">Arc. Arc. Wisdom D. Adzraku<span class="muted">Senior Lecturer</span></a><a href="/staff/dr-fredrick-simpeh/">Dr. Dr. Fredrick Simpeh<span class="muted">Senior Lecturer • FBR</span></a><a href="/staff/dr-jacob-ofori-darko/">Dr. Dr. Jacob Ofori-Darko<span class="muted">Lecturer • FBR</span></a><a href="/staff/dr-justice-williams/">Dr. Dr. Justice Williams<span class="muted">Lecturer • FBR</span></a><a href="/staff/dr-mark-bright-donkoh/">Dr. Dr. Mark Bright Donkoh<span class="muted">Lecturer</span></a><a href="/staff/dr-nongiba-a-kheni/">Dr. Dr. Nongiba A. Kheni<span class="muted">Senior Lecturer</span></a><a href="/staff/seth-amoako/">Dr. Dr. Seth Amoako<span class="muted">Lecturer</span></a><a href="/staff/engr-dorothy-manu/">Engr. Engr. Dorothy Manu<span class="muted">Lecturer</span></a><a href="/staff/mr-k-b-owusu-akyaw/">Mr. Mr. K.B. Owusu-Akyaw<span class="muted">Lecturer</span></a></div>
+            <h3><i class="fas fa-folder-tree" style="color:var(--accent);font-size:13px;"></i> Department of Mechanical and Automotive Technology Education <span class="muted">(6)</span></h3>
+            <div class="grid"><a href="/staff/chibudo-kenneth-nworu/">Chibudo Kenneth Nworu<span class="muted">Lecturer</span></a><a href="/staff/engr-martha-danso-mrs/">Dr. Engr. Dr. Engr. Martha Danso (Mrs)<span class="muted">Senior Lecturer</span></a><a href="/staff/dr-kwabena-offeh-gyimah/">Dr. Dr. Kwabena Offeh Gyimah<span class="muted">Senior Lecturer</span></a><a href="/staff/dr-philip-baidoo/">Dr. Dr. Philip Baidoo<span class="muted">Senior Lecturer</span></a><a href="/staff/dr-enock-andrews-duodu/">Ing. Dr. Enock Andrews Duodu<span class="muted">Senior Lecturer</span></a><a href="/staff/prof-dr-sherry-kwabla-amedorme/">Prof. Dr. Prof. Dr. Sherry Kwabla Amedorme<span class="muted">Assoc. Prof. , H.O.D, DMATE</span></a></div>
+            <h3><i class="fas fa-folder-tree" style="color:var(--accent);font-size:13px;"></i> Department of Electrical and Electronic Engineering Technology Education <span class="muted">(4)</span></h3>
+            <div class="grid"><a href="/staff/mr-p-n-ayambire/">Dr. Engr. Dr. Engr. P. N. Ayambire<span class="muted">Lecturer</span></a><a href="/staff/dr-ing-koffi-a-dotche/">Dr. Ing. Dr. Ing. Koffi A. Dotche<span class="muted">Lecturer</span></a><a href="/staff/dr-albert-k-awopone/">Engr. Dr. Engr. Dr. Albert Kotawoke Awopone<span class="muted">Senior Lecturer</span></a><a href="/staff/ms-akosua-afriyie-addi/">Ms. Ms. Akosua Afriyie Addi<span class="muted">Prin Admin Assist • FBR</span></a></div>
+            <h3><i class="fas fa-folder-tree" style="color:var(--accent);font-size:13px;"></i> Department of Construction Technology and Management <span class="muted">(1)</span></h3>
+            <div class="grid"><a href="/staff/mr-elijah-kusi/">Engr. Dr. Engr. Dr. Elijah Kusi<span class="muted">Lecturer • FBR</span></a></div>
+            <h3><i class="fas fa-folder-tree" style="color:var(--accent);font-size:13px;"></i> Department of Civil Engineering <span class="muted">(1)</span></h3>
+            <div class="grid"><a href="/staff/prof-emmanuel-appiah-kubi/">Ing. Prof. Ing. Prof. Emmanuel Appiah-Kubi (PhD, SPE-GhIE)<span class="muted">DEAN, FTE</span></a></div>
+        </div>
+        <div class="guide-section" id="faculty-of-vocational-education-fve">
+            <div class="section-header">
+                <div class="section-num"><i class="fas fa-users-rectangle"></i></div>
+                <div>
+                    <h2>Faculty of Vocational Education (FVE)</h2>
+                    <span class="muted" style="font-size:13px;">18 staff profiles</span>
+                </div>
+            </div>
+            
+            <h3><i class="fas fa-folder-tree" style="color:var(--accent);font-size:13px;"></i> Department of Fashion Design and Textiles Education <span class="muted">(7)</span></h3>
+            <div class="grid"><a href="/staff/abigail-nkansah/">Ms. Abigail Nkansah<span class="muted">Assist. Lecturer • CBT</span></a><a href="/staff/andrew-adu-asabere/">Mr. Andrew Adu Asabere<span class="muted">Assist. Lecturer • CBT</span></a><a href="/staff/dr-daniel-kwabena-danso/">Dr. Dr Daniel Kwabena Danso<span class="muted">FVE Examination Officer , Senior Lecturer • CBT</span></a><a href="/staff/dr-haruna-ibrahim/">Dr. Dr. Haruna Ibrahim<span class="muted">Lecturer • CBT</span></a><a href="/staff/ninette-afi-appiah-phd/">Dr. Dr. Ninette Afi Appiah<span class="muted">Senior Lecturer • CBT</span></a><a href="/staff/phyllis-mensah/">Dr. Dr. Phyllis Mensah<span class="muted">Assist. Lecturer • CBT</span></a><a href="/staff/josephine-aboagyewaa-ntiri/">Prof. Prof. Josephine Aboagyewaa-Ntiri<span class="muted">Assoc. Prof. , Dean • CBT</span></a></div>
+            <h3><i class="fas fa-folder-tree" style="color:var(--accent);font-size:13px;"></i> Department of Hospitality and Tourism Education <span class="muted">(10)</span></h3>
+            <div class="grid"><a href="/staff/charlotte-caitoe/">Charlotte Caitoe<span class="muted">Assist. Lecturer • CBT</span></a><a href="/staff/claudia-miakimeni-pumpuni/">Ms. Claudia Miakimeni Pumpuni<span class="muted">Lecturer • CBT</span></a><a href="/staff/doreen-dedo-adi/">Prof. Doreen Dedo Adi<span class="muted">Assoc Prof • CBT</span></a><a href="/staff/florence-brenyah/">Dr. (Mrs.) Dr. Mrs. Florence Brenyah<span class="muted">Lecturer • CBT</span></a><a href="/staff/mercy-boadi/">Dr. (Mrs.) Dr. Mrs. Mercy Boadi<span class="muted">Lecturer • CBT</span></a><a href="/staff/miss-nafisatu-salam/">Miss Miss Nafisatu Salam<span class="muted">Lecturer • CBT</span></a><a href="/staff/mrs-abena-sekyere/">Mrs. Mrs. Abena Sekyere<span class="muted">Lecturer • CBT</span></a><a href="/staff/stella-appiah/">Prof. Prof. Stella Appiah<span class="muted">Assoc Prof • ESA</span></a><a href="/staff/sawan-dankyi/">Sawan Dankyi<span class="muted">Lecturer • ESA</span></a><a href="/staff/veronica-adwoa-agyare/">Ms. Veronica Adwoa Agyare<span class="muted">Assist. Lecturer • ESA</span></a></div>
+            <h3><i class="fas fa-folder-tree" style="color:var(--accent);font-size:13px;"></i> Department of Fashion Design and Textiles Education (DFDTE) <span class="muted">(1)</span></h3>
+            <div class="grid"><a href="/staff/prof-dr-isaac-abraham/">Prof. Dr. Prof. Dr. Isaac Abraham<span class="muted">Assoc Prof, Head of Department • CBT</span></a></div>
+        </div>
+        <div class="guide-section" id="other">
+            <div class="section-header">
+                <div class="section-num"><i class="fas fa-users-rectangle"></i></div>
+                <div>
+                    <h2>Other</h2>
+                    <span class="muted" style="font-size:13px;">3 staff profiles</span>
+                </div>
+            </div>
+            
+            <h3><i class="fas fa-folder-tree" style="color:var(--accent);font-size:13px;"></i> Quality Assurance Planning and Accreditation Directorate <span class="muted">(2)</span></h3>
+            <div class="grid"><a href="/staff/mr-benjamin-mensah/">Mr. Mr. Benjamin Mensah<span class="muted">Assistant Registrar , Head, Planning Section, QAPA</span></a><a href="/staff/victoria-timah/">Victoria Timah<span class="muted">Assistant Registrar</span></a></div>
+            <h3><i class="fas fa-folder-tree" style="color:var(--accent);font-size:13px;"></i> Guidance and Counselling Centre <span class="muted">(1)</span></h3>
+            <div class="grid"><a href="/staff/mrs-gertrude-effeh-brew/">Mrs. Mrs. Gertrude Effeh Brew<span class="muted">University Counsellor • ROB</span></a></div>
+        </div>
+        <div class="guide-section" id="school-of-graduate-studies-sgs">
+            <div class="section-header">
+                <div class="section-num"><i class="fas fa-users-rectangle"></i></div>
+                <div>
+                    <h2>School of Graduate Studies (SGS)</h2>
+                    <span class="muted" style="font-size:13px;">2 staff profiles</span>
+                </div>
+            </div>
+            
+            <h3><i class="fas fa-folder-tree" style="color:var(--accent);font-size:13px;"></i> School of Graduate Studies <span class="muted">(1)</span></h3>
+            <div class="grid"><a href="/staff/mrs-emma-maame-afua-darkoa-douglas-anyan/">Mrs. Mrs. Emma Maame Afua Darkoa Douglas Anyan<span class="muted">Snr. Assist. Registrar • ROB</span></a></div>
+            <h3><i class="fas fa-folder-tree" style="color:var(--accent);font-size:13px;"></i> Department of Construction and Wood Technology Education <span class="muted">(1)</span></h3>
+            <div class="grid"><a href="/staff/prof-humprey-danso/">Prof. Prof. Humprey Danso<span class="muted">Dean, School of Graduate Studies • ROB</span></a></div>
+        </div>
+
+        <div class="map-cta-card">
+          <div class="txt">
+            <h3>Ready to navigate in person?</h3>
+            <p>Get GPS turn-by-turn guidance to any building or staff office on campus without using your internet data.</p>
+          </div>
+          <a class="map-btn" href="/map.html">
+            <i class="fas fa-location-arrow"></i>
+            <span>Open Interactive Map</span>
+          </a>
+        </div>
     </main>
-    <footer><div class="wrap">
-        <div class="fl">
-            <a href="/">Home</a>
-            <a href="/map.html">Campus Map</a>
-            <a href="/privacy/">Privacy</a>
+
+    <!-- Footer -->
+    <footer>
+        <div class="wrap">
+            <nav class="footer-nav" aria-label="Footer Navigation">
+                <a href="/">← Open Interactive Map</a>
+                <a href="/guide.html">Campus Guide</a>
+                <a href="/directory/">Campus Directory</a>
+                <a href="/about.html">About Platform</a>
+                <a href="/privacy/">Privacy Policy</a>
+            </nav>
+            <div class="legal">
+                USTED NAV • Powered by CampusOS™ • Offline campus navigation for AAMUSTED Kumasi. © 2026 KINGENIOUS. All Rights Reserved.
+            </div>
         </div>
-        <div class="legal">USTED NAV • Powered by CampusOS™ — Offline campus navigation for AAMUSTED (USTED) Kumasi. © 2026 KINGENIOUS. All Rights Reserved.</div>
-    </div></footer>
+    </footer>
 </body>
 </html>

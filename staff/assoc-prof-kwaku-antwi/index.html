@@ -19,7 +19,8 @@
     <link rel="apple-touch-icon" href="/icons/icon-192.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-31FQCEXNWK"></script>
     <script>
@@ -30,70 +31,549 @@
     </script>
     <script defer src="/_vercel/insights/script.js"></script>
     <style>
-:root{--bg:#090d16;--surface:#0f1524;--surface2:#131b2e;--border:#1e293b;--text:#e2e8f0;--muted:#94a3b8;--accent:#6366f1;--accent2:#4f46e5}
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased}
-a{color:#a5b4fc;text-decoration:none}
-a:hover{text-decoration:underline}
-.wrap{max-width:860px;margin:0 auto;padding:0 20px}
-.top{border-bottom:1px solid var(--border);background:rgba(9,13,22,.92);position:sticky;top:0;z-index:5}
-.top .wrap{display:flex;align-items:center;justify-content:space-between;height:56px}
-.brand{font-weight:800;letter-spacing:.04em;color:var(--text);font-size:15px}
-.brand span{color:var(--accent)}
-.top a.map-btn{background:var(--accent2);color:#fff;padding:8px 16px;border-radius:10px;font-size:13px;font-weight:600}
-.top a.map-btn:hover{text-decoration:none;background:var(--accent)}
-.crumbs{font-size:12.5px;color:var(--muted);padding:18px 0 0}
-.crumbs a{color:var(--muted)}
-.crumbs a:hover{color:#a5b4fc}
-h1{font-size:clamp(26px,5vw,38px);line-height:1.2;margin:14px 0 6px;font-weight:800;letter-spacing:-.02em}
-.sub{color:var(--muted);font-size:15px;margin-bottom:22px}
-.chip{display:inline-block;background:var(--surface2);border:1px solid var(--border);color:#a5b4fc;font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:.06em;margin-right:8px;vertical-align:middle}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px 22px;margin:18px 0}
-.lead{font-size:16.5px;color:#cbd5e1}
-.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:18px 0}
-.fact{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px 14px}
-.fact b{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin-bottom:3px}
-.fact span{font-size:14.5px;color:var(--text)}
-h2{font-size:21px;margin:34px 0 12px;font-weight:700;letter-spacing:-.01em}
-h3{font-size:15px;margin:16px 0 8px;color:#cbd5e1}
-ul.list{list-style:none}
-ul.list li{padding:9px 0;border-bottom:1px solid rgba(30,41,59,.6);font-size:14.5px}
-ul.list li:last-child{border-bottom:none}
-ul.list li .muted,.muted{color:var(--muted);font-size:13px}
-.rooms-floor{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin:18px 0 6px}
-.room{display:flex;gap:10px;align-items:baseline;padding:7px 0;border-bottom:1px solid rgba(30,41,59,.6);font-size:14.5px}
-.room b{color:var(--text);min-width:86px;font-weight:700}
-.room span{color:var(--muted)}
-details.faq{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 18px;margin:10px 0}
-details.faq summary{cursor:pointer;font-weight:600;font-size:15px;list-style:none;display:flex;justify-content:space-between;align-items:center}
-details.faq summary::-webkit-details-marker{display:none}
-details.faq summary::after{content:'+';color:var(--accent);font-size:20px;font-weight:400}
-details.faq[open] summary::after{content:'–'}
-details.faq p{margin-top:10px;color:#cbd5e1;font-size:14.5px}
-.cta{display:flex;flex-wrap:wrap;gap:14px;align-items:center;background:linear-gradient(135deg,#1d2450,#0f1524);border:1px solid #3730a3;border-radius:16px;padding:22px;margin:26px 0}
-.cta .txt{flex:1;min-width:220px}
-.cta b{font-size:17px;display:block;margin-bottom:4px}
-.cta p{color:var(--muted);font-size:13.5px}
-.cta a.go{background:var(--accent2);color:#fff;padding:12px 22px;border-radius:11px;font-weight:700;font-size:14.5px;white-space:nowrap}
-.cta a.go:hover{text-decoration:none;background:var(--accent)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;margin-top:14px}
-.grid a{display:block;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px 15px;color:var(--text);font-size:14.5px;font-weight:600}
-.grid a:hover{border-color:var(--accent);text-decoration:none}
-.grid a .muted{display:block;font-weight:400;font-size:12.5px;margin-top:2px}
-footer{border-top:1px solid var(--border);margin-top:48px;padding:26px 0 40px;color:var(--muted);font-size:13px}
-footer .fl{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:10px}
-footer a{color:var(--muted)}
-.legal{font-size:11.5px;color:#475569}
+:root {
+    --bg: #090d16;
+    --surface: #0f1524;
+    --surface2: #131b2e;
+    --border: #1e293b;
+    --border-highlight: rgba(99, 102, 241, 0.25);
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --accent: #f59e0b;
+    --accent-glow: rgba(245, 158, 11, 0.2);
+    --primary: #6366f1;
+    --primary-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow-x: hidden;
+}
+.ambient-glow {
+    position: fixed;
+    top: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 700px;
+    height: 380px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.18) 0%, rgba(245, 158, 11, 0.08) 50%, transparent 70%);
+    filter: blur(60px);
+    pointer-events: none;
+    z-index: 0;
+}
+a { color: #a5b4fc; text-decoration: none; transition: all 0.2s ease; }
+a:hover { color: #c7d2fe; text-decoration: underline; }
+.wrap { max-width: 860px; width: 100%; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+/* Top Navigation Bar */
+.top {
+    border-bottom: 1px solid var(--border);
+    background: rgba(9, 13, 22, 0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+.top .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+}
+.brand-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 16px;
+    letter-spacing: -0.02em;
+}
+.brand-link:hover { text-decoration: none; }
+.brand-logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    object-fit: cover;
+}
+.brand-link span { color: var(--accent); }
+.top-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+.top-nav-links a.active {
+    color: #fbbf24;
+    font-weight: 600;
+}
+.nav-link-sub {
+    color: #94a3b8;
+    font-size: 13.5px;
+    font-weight: 500;
+}
+.nav-link-sub:hover {
+    color: #f8fafc;
+    text-decoration: none;
+}
+.map-btn {
+    background: var(--primary-gradient);
+    color: #090d16 !important;
+    padding: 8px 18px;
+    border-radius: 9999px;
+    font-size: 13px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.map-btn:hover {
+    color: #090d16 !important;
+    text-decoration: none !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(245, 158, 11, 0.4);
+}
+
+/* Header & Breadcrumbs */
+.crumbs { font-size: 12.5px; color: var(--muted); padding: 24px 0 0; }
+.crumbs a { color: var(--muted); }
+.crumbs a:hover { color: #a5b4fc; }
+
+.header-title-section {
+    margin: 20px 0 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+}
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #38bdf8;
+    background: rgba(14, 165, 233, 0.12);
+    border: 1px solid rgba(14, 165, 233, 0.28);
+    padding: 4px 12px;
+    border-radius: 9999px;
+    margin-bottom: 12px;
+}
+.hero-badge.badge-amber {
+    color: #fbbf24;
+    background: rgba(245, 158, 11, 0.12);
+    border-color: rgba(245, 158, 11, 0.28);
+}
+h1 {
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    font-size: clamp(28px, 5.5vw, 42px);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+.sub {
+    color: var(--muted);
+    font-size: 16px;
+    font-weight: 400;
+    max-width: 680px;
+    line-height: 1.6;
+}
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: #a5b4fc;
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+.lead {
+    font-size: 16.5px;
+    color: #cbd5e1;
+    line-height: 1.75;
+    margin-bottom: 24px;
+}
+
+/* Quick Navigation Index / Card */
+.toc-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px 22px;
+    margin-bottom: 32px;
+}
+.toc-title {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.toc-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 8px 16px;
+    list-style: none;
+}
+.toc-list a {
+    color: #cbd5e1;
+    font-size: 13.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.toc-list a:hover {
+    color: #fbbf24;
+    text-decoration: none;
+}
+.toc-count {
+    font-size: 11px;
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    padding: 2px 7px;
+    border-radius: 999px;
+    font-weight: 700;
+    margin-left: auto;
+}
+
+/* Section styling */
+.guide-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 28px;
+    margin-bottom: 28px;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25);
+    transition: border-color 0.2s ease;
+}
+.guide-section:hover {
+    border-color: var(--border-highlight);
+}
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+}
+.section-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(99, 102, 241, 0.15);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #a5b4fc;
+    font-weight: 800;
+    font-size: 15px;
+    flex-shrink: 0;
+}
+.section-header h2 {
+    margin: 0;
+}
+
+h2 {
+    font-size: 21px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+    margin: 32px 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+h3 {
+    font-size: 15px;
+    margin: 20px 0 10px;
+    color: #e2e8f0;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+p {
+    color: #cbd5e1;
+    font-size: 15px;
+    margin-bottom: 14px;
+    line-height: 1.75;
+}
+p:last-child { margin-bottom: 0; }
+
+.tip-callout {
+    background: rgba(245, 158, 11, 0.08);
+    border-left: 3px solid var(--accent);
+    padding: 12px 16px;
+    border-radius: 0 10px 10px 0;
+    margin-top: 14px;
+    font-size: 13.5px;
+    color: #fef3c7;
+}
+.tip-callout strong {
+    color: #fbbf24;
+}
+
+/* Facts Grid */
+.facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin: 20px 0;
+}
+.fact {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+}
+.fact b {
+    display: block;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+.fact span {
+    font-size: 14.5px;
+    color: var(--text);
+    font-weight: 600;
+}
+
+/* Lists */
+ul.list { list-style: none; }
+ul.list li {
+    padding: 11px 0;
+    border-bottom: 1px solid rgba(30, 41, 59, 0.6);
+    font-size: 14.5px;
+}
+ul.list li:last-child { border-bottom: none; }
+ul.list li .muted, .muted { color: var(--muted); font-size: 13px; }
+
+.rooms-floor {
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin: 20px 0 8px;
+}
+.room {
+    display: flex;
+    gap: 12px;
+    align-items: baseline;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(30, 41, 59, 0.6);
+    font-size: 14.5px;
+}
+.room b { color: var(--text); min-width: 90px; font-weight: 700; }
+.room span { color: var(--muted); }
+
+/* FAQ Collapsibles */
+details.faq {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin: 12px 0;
+    transition: border-color 0.2s ease;
+}
+details.faq:hover {
+    border-color: var(--border-highlight);
+}
+details.faq summary {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+}
+details.faq summary::-webkit-details-marker { display: none; }
+details.faq summary::after {
+    content: '+';
+    color: var(--accent);
+    font-size: 20px;
+    font-weight: 600;
+    transition: transform 0.2s;
+}
+details.faq[open] summary::after {
+    content: '–';
+}
+details.faq p {
+    margin-top: 12px;
+    color: #cbd5e1;
+    font-size: 14.5px;
+}
+
+/* Map CTA Card */
+.map-cta-card, .cta {
+    background: linear-gradient(135deg, #1e1b4b 0%, #0f1524 100%);
+    border: 1px solid #4338ca;
+    border-radius: 18px;
+    padding: 24px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: 32px 0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+.map-cta-card .txt, .cta .txt { flex: 1; min-width: 240px; }
+.map-cta-card h3, .cta b {
+    font-size: 18px;
+    color: #fff;
+    margin-bottom: 6px;
+    font-weight: 700;
+    display: block;
+}
+.map-cta-card p, .cta p {
+    color: #c7d2fe;
+    font-size: 14px;
+    margin: 0;
+    line-height: 1.6;
+}
+.map-cta-card a.map-btn, .cta a.go {
+    background: var(--primary-gradient);
+    color: #090d16 !important;
+    padding: 10px 22px;
+    border-radius: 9999px;
+    font-weight: 700;
+    font-size: 14px;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.map-cta-card a.map-btn:hover, .cta a.go:hover {
+    text-decoration: none !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(245, 158, 11, 0.4);
+}
+
+/* Card Directory Grid */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 12px;
+    margin-top: 14px;
+    margin-bottom: 20px;
+}
+.grid a {
+    display: block;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 18px;
+    color: var(--text);
+    font-size: 14.5px;
+    font-weight: 600;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+    transition: all 0.2s ease;
+}
+.grid a:hover {
+    border-color: rgba(245, 158, 11, 0.45);
+    background: var(--surface2);
+    transform: translateY(-2px);
+    text-decoration: none;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+.grid a .muted {
+    display: block;
+    font-weight: 400;
+    font-size: 12.5px;
+    margin-top: 6px;
+    line-height: 1.5;
+}
+
+/* Footer */
+footer {
+    border-top: 1px solid var(--border);
+    margin-top: auto;
+    padding: 36px 0 44px;
+    color: var(--muted);
+    font-size: 13px;
+    background: rgba(9, 13, 22, 0.6);
+}
+.footer-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin-bottom: 14px;
+}
+.footer-nav a {
+    color: #94a3b8;
+    font-size: 13.5px;
+    font-weight: 500;
+}
+.footer-nav a:hover { color: #f8fafc; text-decoration: underline; }
+.legal { font-size: 12px; color: #64748b; line-height: 1.6; }
+
+@media (max-width: 640px) {
+    .wrap { padding: 0 16px; }
+    .guide-section { padding: 20px; }
+    .top-nav-links a.nav-link-sub { display: none; }
+    .map-cta-card, .cta { padding: 20px; flex-direction: column; align-items: flex-start; }
+}
 </style>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://www.ustednav.app/"},{"@type":"ListItem","position":2,"name":"Associate Professor Dr. Engr. Kwaku Antwi","item":"https://www.ustednav.app/staff/assoc-prof-kwaku-antwi/"}]}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Associate Professor Dr. Engr. Kwaku Antwi","honorificPrefix":"Assoc. Prof. Dr. Engr.","jobTitle":"Assoc Prof, Head of Department","url":"https://www.ustednav.app/staff/assoc-prof-kwaku-antwi/","worksFor":{"@type":"EducationalOrganization","name":"Faculty of Engineering and Technology (FET)","department":"Department of Civil Engineering"}}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What does Associate Professor Dr. Engr. Kwaku Antwi do at AAMUSTED?","acceptedAnswer":{"@type":"Answer","text":"Assoc. Prof. Dr. Engr. Associate Professor Dr. Engr. Kwaku Antwi is Assoc Prof, Head of Department in the Department of Civil Engineering, Faculty of Engineering and Technology (FET)."}},{"@type":"Question","name":"Where is Associate Professor Dr. Engr. Kwaku Antwi's office?","acceptedAnswer":{"@type":"Answer","text":"Associate Professor Dr. Engr. Kwaku Antwi's office is at FBR, 02 in Faculty of Technical Education on the AAMUSTED Kumasi campus. View the location on the campus map →"}},{"@type":"Question","name":"Which department is Associate Professor Dr. Engr. Kwaku Antwi in?","acceptedAnswer":{"@type":"Answer","text":"Associate Professor Dr. Engr. Kwaku Antwi belongs to the Department of Civil Engineering under the Faculty of Engineering and Technology (FET)."}}]}</script>
 </head>
 <body>
-    <header class="top"><div class="wrap">
-        <a class="brand" href="/">USTED<span>NAV</span></a>
-        <a class="map-btn" href="/map.html">Open Campus Map</a>
-    </div></header>
+    <div class="ambient-glow"></div>
+
+    <!-- Sticky Top Navigation -->
+    <header class="top">
+        <div class="wrap">
+            <a href="/" class="brand-link" aria-label="USTED NAV Home">
+                <img src="/logo.png" alt="USTED Logo" class="brand-logo">
+                <div>USTED<span>NAV</span></div>
+            </a>
+            <nav class="top-nav-links" aria-label="Page navigation">
+                <a href="/guide.html" class="nav-link-sub">Campus Guide</a>
+                
+                <a href="/about.html" class="nav-link-sub">About</a>
+                <a href="/map.html" class="map-btn">
+                    <i class="fas fa-location-arrow"></i>
+                    <span>Campus Map</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
     <main class="wrap">
         <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <span>Associate Professor Dr. Engr. Kwaku Antwi</span></nav>
         <span class="chip">Staff Directory</span>
@@ -118,13 +598,21 @@ footer a{color:var(--muted)}
           <a class="go" href="/map.html?q=Faculty%20of%20Technical%20Education">Open in USTED NAV →</a>
         </div>
     </main>
-    <footer><div class="wrap">
-        <div class="fl">
-            <a href="/">Home</a>
-            <a href="/map.html">Campus Map</a>
-            <a href="/privacy/">Privacy</a>
+
+    <!-- Footer -->
+    <footer>
+        <div class="wrap">
+            <nav class="footer-nav" aria-label="Footer Navigation">
+                <a href="/">← Open Interactive Map</a>
+                <a href="/guide.html">Campus Guide</a>
+                
+                <a href="/about.html">About Platform</a>
+                <a href="/privacy/">Privacy Policy</a>
+            </nav>
+            <div class="legal">
+                USTED NAV • Powered by CampusOS™ • Offline campus navigation for AAMUSTED Kumasi. © 2026 KINGENIOUS. All Rights Reserved.
+            </div>
         </div>
-        <div class="legal">USTED NAV • Powered by CampusOS™ — Offline campus navigation for AAMUSTED (USTED) Kumasi. © 2026 KINGENIOUS. All Rights Reserved.</div>
-    </div></footer>
+    </footer>
 </body>
 </html>
