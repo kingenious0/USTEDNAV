@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About USTEDNav — AAMUSTED Campus Navigation Initiative</title>
+    <meta name="description" content="USTEDNav is an interactive digital campus directory and navigation platform designed for AAMUSTED Kumasi campus. Learn about our mission, open accessibility, and student initiative.">
+    <meta name="author" content="KINGENIOUS">
+    <link rel="canonical" href="https://www.ustednav.app/about.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="USTED NAV | AAMUSTED Kumasi Campus">
+    <meta property="og:title" content="About USTEDNav — AAMUSTED Campus Navigation Initiative">
+    <meta property="og:description" content="Interactive digital campus directory and navigation platform for AAMUSTED Kumasi campus.">
+    <meta property="og:url" content="https://www.ustednav.app/about.html">
+    <meta property="og:image" content="https://www.ustednav.app/icons/icon-512.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#090d16">
+    <link rel="icon" type="image/png" href="/icons/icon-192.png">
+    <link rel="apple-touch-icon" href="/icons/icon-192.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-31FQCEXNWK"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-31FQCEXNWK');
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+    <style>
+        :root {
+            --bg: #090d16;
+            --surface: #0f1524;
+            --surface2: #131b2e;
+            --border: #1e293b;
+            --border-highlight: rgba(99, 102, 241, 0.25);
+            --text: #e2e8f0;
+            --muted: #94a3b8;
+            --accent: #f59e0b;
+            --accent-glow: rgba(245, 158, 11, 0.2);
+            --primary: #6366f1;
+            --primary-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+        }
+        /* Spatial ambient backdrop glow */
+        .ambient-glow {
+            position: fixed;
+            top: -120px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 700px;
+            height: 380px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.18) 0%, rgba(245, 158, 11, 0.08) 50%, transparent 70%);
+            filter: blur(60px);
+            pointer-events: none;
+            z-index: 0;
+        }
+        a { color: #a5b4fc; text-decoration: none; transition: color 0.2s; }
+        a:hover { color: #c7d2fe; text-decoration: underline; }
+        .wrap { max-width: 860px; width: 100%; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+        
+        /* Navigation Top Bar */
+        .top {
+            border-bottom: 1px solid var(--border);
+            background: rgba(9, 13, 22, 0.88);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .top .wrap {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+        .brand-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 16px;
+            letter-spacing: -0.02em;
+        }
+        .brand-link:hover { text-decoration: none; }
+        .brand-logo {
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            object-fit: cover;
+        }
+        .brand-link span { color: var(--accent); }
+        .top-nav-links {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .top-nav-links a.active {
+            color: #fbbf24;
+            font-weight: 600;
+        }
+        .map-btn {
+            background: var(--primary-gradient);
+            color: #090d16;
+            padding: 8px 18px;
+            border-radius: 9999px;
+            font-size: 13px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .map-btn:hover {
+            color: #090d16;
+            text-decoration: none;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(245, 158, 11, 0.4);
+        }
+
+        /* Hero Header */
+        .crumbs { font-size: 12.5px; color: var(--muted); padding: 24px 0 0; }
+        .crumbs a { color: var(--muted); }
+        .crumbs a:hover { color: #a5b4fc; }
+        
+        .header-title-section {
+            margin: 20px 0 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #fbbf24;
+            background: rgba(245, 158, 11, 0.12);
+            border: 1px solid rgba(245, 158, 11, 0.28);
+            padding: 4px 12px;
+            border-radius: 9999px;
+            margin-bottom: 12px;
+        }
+        h1 {
+            font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+            font-size: clamp(28px, 5.5vw, 42px);
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -0.03em;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+        .sub {
+            color: var(--muted);
+            font-size: 16px;
+            font-weight: 400;
+            max-width: 680px;
+        }
+
+        /* Content Sections & Cards */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin: 24px 0 36px;
+        }
+        .feature-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px 22px;
+            transition: all 0.2s ease;
+        }
+        .feature-card:hover {
+            border-color: var(--border-highlight);
+            transform: translateY(-2px);
+        }
+        .feature-card .icon-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(99, 102, 241, 0.12);
+            border: 1px solid rgba(99, 102, 241, 0.24);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #818cf8;
+            font-size: 17px;
+            margin-bottom: 14px;
+        }
+        .feature-card h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #f8fafc;
+            margin-bottom: 6px;
+        }
+        .feature-card p {
+            font-size: 13.5px;
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+
+        .content-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25);
+        }
+        h2 {
+            font-size: 21px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        h2 i {
+            color: var(--accent);
+            font-size: 18px;
+        }
+        p {
+            color: #cbd5e1;
+            font-size: 15px;
+            margin-bottom: 16px;
+            line-height: 1.75;
+        }
+        p:last-child { margin-bottom: 0; }
+
+        /* Contact Box */
+        .contact-box {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(19, 27, 46, 0.9));
+            border: 1px solid rgba(99, 102, 241, 0.25);
+            border-radius: 16px;
+            padding: 22px;
+            margin-top: 18px;
+        }
+        .contact-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14.5px;
+            color: #cbd5e1;
+        }
+        .contact-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            background: rgba(245, 158, 11, 0.12);
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+        .contact-item a {
+            color: #60a5fa;
+            font-weight: 600;
+        }
+        .contact-item a:hover {
+            color: #93c5fd;
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            margin-top: auto;
+            padding: 36px 0 44px;
+            color: var(--muted);
+            font-size: 13px;
+            background: rgba(9, 13, 22, 0.6);
+        }
+        .footer-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            margin-bottom: 14px;
+        }
+        .footer-nav a {
+            color: #94a3b8;
+            font-size: 13.5px;
+            font-weight: 500;
+        }
+        .footer-nav a:hover { color: #f8fafc; text-decoration: underline; }
+        .legal { font-size: 12px; color: #64748b; line-height: 1.6; }
+
+        @media (max-width: 640px) {
+            .wrap { padding: 0 16px; }
+            .content-card { padding: 20px; }
+            .top-nav-links a.nav-link-sub { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="ambient-glow"></div>
+
+    <!-- Sticky Top Navigation -->
+    <header class="top">
+        <div class="wrap">
+            <a href="/" class="brand-link" aria-label="USTED NAV Home">
+                <img src="/logo.png" alt="USTED Logo" class="brand-logo">
+                <div>USTED<span>NAV</span></div>
+            </a>
+            <nav class="top-nav-links" aria-label="Page navigation">
+                <a href="/guide.html" class="nav-link-sub">Campus Guide</a>
+                <a href="/privacy/" class="nav-link-sub">Privacy</a>
+                <a href="/map.html" class="map-btn">
+                    <i class="fas fa-location-arrow"></i>
+                    <span>Campus Map</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="wrap">
+        <!-- Breadcrumbs -->
+        <nav class="crumbs" aria-label="Breadcrumb">
+            <a href="/">Home</a> › <span>About USTEDNav</span>
+        </nav>
+
+        <!-- Header -->
+        <div class="header-title-section">
+            <span class="hero-badge">
+                <i class="fas fa-compass"></i> Campus Spatial Intelligence
+            </span>
+            <h1>About USTEDNav</h1>
+            <p class="sub">The Independent Campus Navigation &amp; Directory Platform for AAMUSTED Kumasi</p>
+        </div>
+
+        <!-- Metric highlights -->
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="icon-box"><i class="fas fa-bullseye"></i></div>
+                <h3>Project Mission</h3>
+                <p>Pinpoint accuracy for lecture halls, administrative offices, laboratories, and welfare amenities.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon-box"><i class="fas fa-bolt"></i></div>
+                <h3>100% Offline-Ready</h3>
+                <p>Engineered to work seamlessly across campus even during zero or fluctuating mobile connectivity.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon-box"><i class="fas fa-users"></i></div>
+                <h3>Community-Driven</h3>
+                <p>Curated through active ground mapping, faculty verification, and student feedback loops.</p>
+            </div>
+        </div>
+
+        <!-- Section 1: Mission -->
+        <section class="content-card">
+            <h2><i class="fas fa-map-location-dot"></i> Project Mission</h2>
+            <p>
+                USTEDNav is an interactive digital campus directory and navigation platform designed 
+                specifically for the Akenten Appiah-Menka University of Skills Training and Entrepreneurial 
+                Development (AAMUSTED) Kumasi campus. Built to assist freshers, continuing students, faculty, 
+                and campus visitors, USTEDNav provides seamless spatial guidance across academic complexes, 
+                administrative blocks, lecture theaters, and student welfare facilities.
+            </p>
+            <p>
+                Whether you need to find a specific lecturer's office in ROB Block, the exact examination room 
+                inside the New Great Hall, or the nearest banking and health facility, USTEDNav removes 
+                the guesswork with turnkey walking directions and verified spatial footprints.
+            </p>
+        </section>
+
+        <!-- Section 2: Open Accessibility -->
+        <section class="content-card">
+            <h2><i class="fas fa-universal-access"></i> Commitment to Open Accessibility</h2>
+            <p>
+                Navigating an expanding tertiary campus can be challenging for new students. USTEDNav 
+                bridges this gap by delivering lightweight, mobile-first progressive web tools that function 
+                smoothly even under fluctuating mobile network connectivity.
+            </p>
+            <p>
+                Our data is curated through active on-the-ground mapping and feedback from the university 
+                community. Vector campus basemaps, routing graphs, and directory search indexes are 
+                cached locally on-device so you never lose your way during lectures or matriculation ceremonies.
+            </p>
+        </section>
+
+        <!-- Section 3: Developer & Contact -->
+        <section class="content-card">
+            <h2><i class="fas fa-envelope-open-text"></i> Developer &amp; Community Contact</h2>
+            <p>
+                USTEDNav is an independent student innovation project maintained with passion for the AAMUSTED 
+                tech community. For map correction notices, partnerships, vendor directory verification, or 
+                technical inquiries, reach out to the project desk:
+            </p>
+
+            <div class="contact-box">
+                <ul class="contact-list">
+                    <li class="contact-item">
+                        <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                        <div>
+                            <strong>Support &amp; Corrections:</strong> 
+                            <a href="mailto:support@ustednav.app">support@ustednav.app</a>
+                        </div>
+                    </li>
+                    <li class="contact-item">
+                        <div class="contact-icon"><i class="fas fa-location-dot"></i></div>
+                        <div>
+                            <strong>Location:</strong> Kumasi, Ashanti Region, Ghana
+                        </div>
+                    </li>
+                    <li class="contact-item">
+                        <div class="contact-icon"><i class="fab fa-github"></i></div>
+                        <div>
+                            <strong>Developer Desk:</strong> 
+                            <a href="https://github.com/kingenious0" target="_blank" rel="noopener">github.com/kingenious0</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="wrap">
+            <nav class="footer-nav" aria-label="Footer Navigation">
+                <a href="/">← Back to Campus Map</a>
+                <a href="/guide.html">Campus Guide</a>
+                <a href="/directory/">Campus Directory</a>
+                <a href="/privacy/">Privacy Policy</a>
+            </nav>
+            <div class="legal">
+                USTED NAV • Powered by CampusOS™ • Offline campus navigation for AAMUSTED Kumasi. © 2026 KINGENIOUS. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

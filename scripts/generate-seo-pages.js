@@ -614,6 +614,8 @@ function generate() {
   const urls = [
     { loc: `${ORIGIN}/`, changefreq: 'weekly', priority: '1.0' },
     { loc: `${ORIGIN}/map.html`, changefreq: 'daily', priority: '0.9' },
+    { loc: `${ORIGIN}/about.html`, changefreq: 'monthly', priority: '0.8' },
+    { loc: `${ORIGIN}/guide.html`, changefreq: 'weekly', priority: '0.8' },
     { loc: `${ORIGIN}/directory/`, changefreq: 'weekly', priority: '0.8' }
   ];
 
