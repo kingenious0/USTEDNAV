@@ -1405,6 +1405,141 @@
             color: #ffffff;
         }
 
+        /* ── SEARCH TABS & FILTER PILLS (MOBILE-OPTIMIZED) ── */
+        .search-filter-pills-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            background: var(--surface, #ffffff);
+            border-bottom: 1px solid var(--border, #e2e8f0);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .search-filter-pills-row::-webkit-scrollbar { display: none; }
+        .search-tab-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+            background: var(--surface-2, rgba(0, 0, 0, 0.04));
+            color: var(--muted, #64748b);
+            border: 1px solid var(--border, #e2e8f0);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .search-tab-pill:hover,
+        .search-tab-pill.active {
+            background: #4f46e5;
+            color: #ffffff;
+            border-color: #4f46e5;
+            box-shadow: 0 2px 6px rgba(79, 70, 229, 0.25);
+        }
+        .search-tab-pill .pill-count {
+            font-size: 9px;
+            padding: 1px 5px;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.08);
+            color: inherit;
+        }
+        .search-tab-pill.active .pill-count {
+            background: rgba(255, 255, 255, 0.25);
+            color: #ffffff;
+        }
+
+        /* ── RECENT SEARCH CHIPS ── */
+        .recent-searches-box {
+            padding: 12px 14px;
+        }
+        .recent-searches-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--muted, #64748b);
+            margin-bottom: 8px;
+        }
+        .recent-clear-btn {
+            background: none;
+            border: none;
+            color: #4f46e5;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 2px 6px;
+        }
+        .recent-chips-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .recent-search-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 11px;
+            border-radius: 20px;
+            background: var(--surface-2, #f1f5f9);
+            color: var(--text, #1e293b);
+            border: 1px solid var(--border, #e2e8f0);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .recent-search-chip:hover,
+        .recent-search-chip:active {
+            background: rgba(79, 70, 229, 0.08);
+            border-color: #c7d2fe;
+            color: #4338ca;
+        }
+        .recent-search-chip .chip-delete {
+            opacity: 0.5;
+            font-size: 10px;
+            padding: 2px;
+        }
+        .recent-search-chip .chip-delete:hover {
+            opacity: 1;
+            color: #ef4444;
+        }
+
+        /* ── FLOOR SUBHEADER INSIDE BUILDING/ROOM GROUP ── */
+        .floor-group-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: #6366f1;
+            background: rgba(99, 102, 241, 0.05);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        }
+        .floor-group-header i {
+            font-size: 10px;
+        }
+
+        /* ── RESULT ITEM KEYBOARD HIGHLIGHT ── */
+        .result-item.is-selected {
+            background: rgba(79, 70, 229, 0.09) !important;
+            border-left: 3px solid #4f46e5 !important;
+        }
+
         /* Mobile Search & Full-Width Dropdown (< 768px) */
         @media (max-width: 767px) {
             .top-bar {
@@ -2718,7 +2853,7 @@
             align-items: center;
             justify-content: space-between;
             gap: 10px;
-            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), bottom 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
             opacity: 0;
             pointer-events: none;
         }
@@ -2726,6 +2861,15 @@
             transform: translateX(-50%) translateY(0);
             opacity: 1;
             pointer-events: auto;
+        }
+        /* When a place card (bottom sheet) is open, push the toast above the sheet so buttons are completely clear */
+        body.sheet-active .pwa-install-toast {
+            bottom: calc(40dvh + 12px);
+        }
+        body.sheet-expanded .pwa-install-toast {
+            bottom: auto;
+            top: calc(76px + env(safe-area-inset-top));
+            transform: translateX(-50%) translateY(0);
         }
         .pwa-toast-info {
             display: flex;
@@ -3841,12 +3985,110 @@
         }
     });
 
+    // Recent searches helpers for map.html
+    function getMapRecentSearches() {
+        try {
+            const raw = localStorage.getItem('ustednav_recent_searches');
+            return raw ? JSON.parse(raw) : [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function saveMapRecentSearch(label, query) {
+        if (!label || !query) return;
+        try {
+            let recents = getMapRecentSearches();
+            recents = recents.filter(r => r.label.toLowerCase() !== label.toLowerCase() && r.query.toLowerCase() !== query.toLowerCase());
+            recents.unshift({ label, query, time: Date.now() });
+            if (recents.length > 6) recents = recents.slice(0, 6);
+            localStorage.setItem('ustednav_recent_searches', JSON.stringify(recents));
+        } catch (e) {}
+    }
+
+    function removeMapRecentSearch(label) {
+        try {
+            let recents = getMapRecentSearches().filter(r => r.label.toLowerCase() !== label.toLowerCase());
+            localStorage.setItem('ustednav_recent_searches', JSON.stringify(recents));
+        } catch (e) {}
+    }
+
+    function renderMapRecentSearches() {
+        const recents = getMapRecentSearches();
+        if (!recents || !recents.length) {
+            searchResults.innerHTML = '';
+            searchResults.classList.remove('open');
+            return;
+        }
+
+        searchResults.innerHTML = `
+            <div class="recent-searches-box">
+                <div class="recent-searches-header">
+                    <span><i class="fas fa-clock-rotate-left" style="margin-right:4px"></i> Recent Searches</span>
+                    <button type="button" class="recent-clear-btn" id="mapRecentClearBtn">Clear all</button>
+                </div>
+                <div class="recent-chips-wrap">
+                    ${recents.map(r => `
+                        <div class="recent-search-chip" data-query="${escapeHtml(r.query)}">
+                            <span class="chip-text">${escapeHtml(r.label)}</span>
+                            <span class="chip-delete" data-label="${escapeHtml(r.label)}" title="Remove">✕</span>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+
+        const clearBtn = searchResults.querySelector('#mapRecentClearBtn');
+        if (clearBtn) {
+            clearBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                try { localStorage.removeItem('ustednav_recent_searches'); } catch (err) {}
+                renderMapRecentSearches();
+            });
+        }
+
+        searchResults.querySelectorAll('.recent-search-chip').forEach(chip => {
+            chip.addEventListener('click', (e) => {
+                const del = e.target.closest('.chip-delete');
+                if (del) {
+                    e.stopPropagation();
+                    removeMapRecentSearch(del.getAttribute('data-label'));
+                    renderMapRecentSearches();
+                    return;
+                }
+                const qVal = chip.getAttribute('data-query');
+                if (qVal) {
+                    searchInput.value = qVal;
+                    searchClear.style.display = 'flex';
+                    searchSearchBtn.style.display = 'none';
+                    // Trigger search immediately
+                    doSearch(qVal);
+                    // If results were populated, simulate immediate selection or open dropdown with focus
+                    setTimeout(() => {
+                        const firstItem = searchResults.querySelector('.result-item');
+                        if (firstItem) {
+                            firstItem.click();
+                        } else {
+                            searchResults.classList.add('open');
+                        }
+                    }, 50);
+                }
+            });
+        });
+
+        searchResults.classList.add('open');
+    }
+
     searchInput.addEventListener('input', e => {
         const q = e.target.value.trim();
         searchClear.style.display = q ? 'flex' : 'none';
         searchSearchBtn.style.display = q ? 'none' : 'flex';
         clearTimeout(debounce);
-        debounce = setTimeout(() => doSearch(q), 180);
+        if (!q) {
+            renderMapRecentSearches();
+        } else {
+            debounce = setTimeout(() => doSearch(q), 180);
+        }
     });
 
     searchInput.addEventListener('keydown', e => {
@@ -3874,7 +4116,12 @@
 
     searchInput.addEventListener('focus', () => {
         document.body.classList.add('search-focused');
-        if (searchInput.value.trim()) doSearch(searchInput.value.trim());
+        const q = searchInput.value.trim();
+        if (q) {
+            doSearch(q);
+        } else {
+            renderMapRecentSearches();
+        }
     });
 
     // Dismiss virtual keyboard when user begins scrolling through results
@@ -4154,7 +4401,8 @@
         results.sort((a, b) => b.score - a.score);
         for (const item of results) {
             const key = item.type === 'staff' ? `staff_${item.data.id}` :
-                        item.type === 'room' ? `room_${item.building.id}_${item.data.number}` :
+                        it
+                        em.type === 'room' ? `room_${item.building.id}_${item.data.number}` :
                         item.type === 'service' ? `service_${item.building.id}_${item.data.name}` :
                         `building_${item.data.id}`;
             if (!seen.has(key)) {
@@ -4169,6 +4417,8 @@
         renderResults(unique.slice(0, 15), q);
     }
 
+    let mapSearchActiveFilter = 'all';
+
     function renderResults(hits, q) {
         searchResults.innerHTML = '';
 
@@ -4178,22 +4428,56 @@
             return;
         }
 
-        const categories = [
-            { key: 'staff', label: 'Staff & Lecturers', icon: 'fa-user-tie', color: '#4f46e5' },
-            { key: 'service', label: 'Services & Offices', icon: 'fa-concierge-bell', color: '#0284c7' },
-            { key: 'room', label: 'Rooms & Lecture Halls', icon: 'fa-door-open', color: '#10b981' },
-            { key: 'building', label: 'Buildings', icon: 'fa-building', color: '#2563eb' }
-        ];
-
-        const grouped = { staff: [], service: [], room: [], building: [] };
+        const grouped = { building: [], room: [], service: [], staff: [] };
         hits.forEach(h => {
             if (grouped[h.type]) grouped[h.type].push(h);
             else grouped.building.push(h);
         });
 
+        // 1. Mobile Filter Pills Row
+        const availableTabs = [
+            { key: 'all', label: 'All', count: hits.length, icon: 'fa-layer-group' }
+        ];
+
+        if (grouped.building.length > 0) availableTabs.push({ key: 'building', label: 'Buildings', count: grouped.building.length, icon: 'fa-building' });
+        if (grouped.room.length > 0) availableTabs.push({ key: 'room', label: 'Rooms & Halls', count: grouped.room.length, icon: 'fa-door-open' });
+        if (grouped.service.length > 0) availableTabs.push({ key: 'service', label: 'Services', count: grouped.service.length, icon: 'fa-concierge-bell' });
+        if (grouped.staff.length > 0) availableTabs.push({ key: 'staff', label: 'Staff', count: grouped.staff.length, icon: 'fa-user-tie' });
+
+        if (availableTabs.length > 2) {
+            const tabsRow = document.createElement('div');
+            tabsRow.className = 'search-filter-pills-row';
+            tabsRow.innerHTML = availableTabs.map(t => `
+                <button type="button" class="search-tab-pill ${mapSearchActiveFilter === t.key ? 'active' : ''}" data-cat="${t.key}">
+                    <i class="fas ${t.icon}"></i>
+                    <span>${t.label}</span>
+                    <span class="pill-count">${t.count}</span>
+                </button>
+            `).join('');
+
+            tabsRow.querySelectorAll('.search-tab-pill').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    mapSearchActiveFilter = btn.getAttribute('data-cat');
+                    renderResults(hits, q);
+                });
+            });
+            searchResults.appendChild(tabsRow);
+        } else {
+            mapSearchActiveFilter = 'all';
+        }
+
+        const categories = [
+            { key: 'building', label: 'Buildings', icon: 'fa-building', color: '#2563eb' },
+            { key: 'room', label: 'Rooms & Lecture Halls', icon: 'fa-door-open', color: '#10b981' },
+            { key: 'service', label: 'Services & Offices', icon: 'fa-concierge-bell', color: '#0284c7' },
+            { key: 'staff', label: 'Staff & Lecturers', icon: 'fa-user-tie', color: '#4f46e5' }
+        ];
+
         const origin = userLatLng || { lat: CAMPUS.lat, lng: CAMPUS.lng };
 
         categories.forEach(cat => {
+            if (mapSearchActiveFilter !== 'all' && mapSearchActiveFilter !== cat.key) return;
             const items = grouped[cat.key];
             if (!items || !items.length) return;
 
@@ -4208,6 +4492,9 @@
                 <span class="search-category-count">${items.length}</span>
             `;
             searchResults.appendChild(header);
+
+            // Floor divider tracking for rooms
+            let lastFloor = null;
 
             items.forEach((hit, idx) => {
                 const { type, data, building } = hit;
@@ -4256,6 +4543,7 @@
                     const qBtn = el.querySelector('.quick-route-btn');
                     qBtn.addEventListener('click', (e) => {
                         e.stopPropagation();
+                        saveMapRecentSearch(p.name, q);
                         searchResults.classList.remove('open');
                         document.body.classList.remove('search-focused');
                         searchInput.blur();
@@ -4270,6 +4558,7 @@
 
                     // Row tap -> Fly to building entrance & open details sheet
                     el.addEventListener('click', () => {
+                        saveMapRecentSearch(p.name, q);
                         searchResults.classList.remove('open');
                         document.body.classList.remove('search-focused');
                         searchInput.blur();
@@ -4325,6 +4614,7 @@
                     const qBtn = el.querySelector('.quick-route-btn');
                     qBtn.addEventListener('click', (e) => {
                         e.stopPropagation();
+                        saveMapRecentSearch(s.name, q);
                         searchResults.classList.remove('open');
                         document.body.classList.remove('search-focused');
                         searchInput.blur();
@@ -4339,6 +4629,7 @@
 
                     // Row tap
                     el.addEventListener('click', () => {
+                        saveMapRecentSearch(s.name, q);
                         searchResults.classList.remove('open');
                         document.body.classList.remove('search-focused');
                         searchInput.blur();
@@ -4356,13 +4647,24 @@
                     const r = data;
                     const b = building || bObj;
                     const bPrefix = b.shortName || b.name;
-                    const floorStr = r.floor ? (r.floor.toLowerCase().includes('floor') ? r.floor : r.floor + ' Floor') : 'Ground Floor';
+                    const currentFloor = r.floor ? (String(r.floor).toLowerCase().includes('floor') ? r.floor : r.floor + ' Floor') : 'Ground Floor';
+
+                    // If floor changes and we have multiple rooms, show a subtle floor divider
+                    if (items.length > 2 && currentFloor !== lastFloor) {
+                        lastFloor = currentFloor;
+                        const floorSubHeader = document.createElement('div');
+                        floorSubHeader.className = 'floor-group-header';
+                        floorSubHeader.innerHTML = `<i class="fas fa-layer-group"></i> ${currentFloor}`;
+                        searchResults.appendChild(floorSubHeader);
+                    }
+
                     const roomStr = formatRoomNumber(r.number);
-                    const pillText = `${bPrefix} — ${floorStr}, ${roomStr}`;
+                    const pillText = `${bPrefix} — ${currentFloor}`;
                     const breadcrumb = formatRoomBreadcrumb(b, r);
                     const occupants = r.occupant ? `Occupant: ${r.occupant}` : (r.staff && r.staff.length ? `Staff: ${r.staff.join(', ')}` : `Located in ${b.name}`);
                     const isDept = /Department|Dept\.?/i.test(roomStr);
-                    const tagText = isDept ? 'Department' : (/Lab/i.test(roomStr) ? 'Lab' : 'Room');
+                    const tagText = isDept ? 'Department' : (/Lab/i.test(roomStr) ? 'Lab' : (/Exam|Office|HOD/i.test(r.description || '') ? 'Office' : 'Room'));
+                    const titleText = (r.description && !roomStr.toLowerCase().includes(r.description.toLowerCase())) ? `${r.description} (${roomStr})` : `${bPrefix} - ${roomStr}`;
 
                     el.className = 'result-item room-result';
                     el.innerHTML = `
@@ -4370,7 +4672,7 @@
                         <div class="result-name" style="width:100%;min-width:0">
                             <!-- Line 1: Room code & name -->
                             <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-                                <strong style="font-size:14px;color:var(--text);font-weight:700">${highlight(bPrefix + ' - ' + roomStr, q)}</strong>
+                                <strong style="font-size:14px;color:var(--text);font-weight:700">${highlight(titleText, q)}</strong>
                                 <span class="staff-pos-tag" style="color:#059669;background:rgba(16,185,129,0.1)">${tagText}</span>
                             </div>
                             <!-- Line 2: Occupant or Building -->
@@ -4393,6 +4695,7 @@
                     const qBtn = el.querySelector('.quick-route-btn');
                     qBtn.addEventListener('click', (e) => {
                         e.stopPropagation();
+                        saveMapRecentSearch(titleText, q);
                         searchResults.classList.remove('open');
                         document.body.classList.remove('search-focused');
                         searchInput.blur();
@@ -4407,6 +4710,7 @@
 
                     // Row tap
                     el.addEventListener('click', () => {
+                        saveMapRecentSearch(titleText, q);
                         searchResults.classList.remove('open');
                         document.body.classList.remove('search-focused');
                         searchInput.blur();
@@ -4456,6 +4760,7 @@
                     const qBtn = el.querySelector('.quick-route-btn');
                     qBtn.addEventListener('click', (e) => {
                         e.stopPropagation();
+                        saveMapRecentSearch(name, q);
                         searchResults.classList.remove('open');
                         document.body.classList.remove('search-focused');
                         searchInput.blur();
@@ -4470,6 +4775,7 @@
 
                     // Row tap
                     el.addEventListener('click', () => {
+                        saveMapRecentSearch(name, q);
                         searchResults.classList.remove('open');
                         document.body.classList.remove('search-focused');
                         searchInput.blur();
@@ -4955,14 +5261,16 @@
     // in Chrome/Edge/Safari on Android/iOS since 2016.
     const isHttp = location.protocol === 'http:';
 
-    function tryGeolocation() {
+    function tryGeolocation(isRetry = false) {
         if (!navigator.geolocation) {
             showLocationUnavailable();
             return;
         }
 
-        // Some browsers still allow geolocation on localhost over HTTP.
-        // We attempt it; if the error code is PERMISSION_DENIED we show help.
+        const locateBtn = document.getElementById('btnLocate');
+        if (locateBtn) locateBtn.classList.add('tracking');
+
+        // Fast resolution: first try high accuracy with an 8-second ceiling
         navigator.geolocation.getCurrentPosition(
             pos => {
                 const { latitude: lat, longitude: lng } = pos.coords;
@@ -4970,20 +5278,47 @@
                 placeUserMarker(lat, lng, pos.coords.heading);
                 map.flyTo({ center: [lng, lat], zoom: 18, duration: 800 });
                 startWatching();
+                if (locateBtn) locateBtn.classList.remove('tracking');
             },
             err => {
                 if (err.code === 1 /* PERMISSION_DENIED */ && isHttp) {
-                    // Browser blocks GPS on HTTP — offer manual picker
+                    if (locateBtn) locateBtn.classList.remove('tracking');
                     showLocationBlockedSheet();
-                } else if (err.code === 2 /* POSITION_UNAVAILABLE */) {
+                    return;
+                }
+
+                // If high accuracy times out or fails momentarily, gracefully try quick cached/cellular position
+                if (!isRetry && (err.code === 3 /* TIMEOUT */ || err.code === 2 /* POSITION_UNAVAILABLE */)) {
+                    navigator.geolocation.getCurrentPosition(
+                        fallbackPos => {
+                            const { latitude: lat, longitude: lng } = fallbackPos.coords;
+                            userLatLng = { lat, lng };
+                            placeUserMarker(lat, lng, fallbackPos.coords.heading);
+                            map.flyTo({ center: [lng, lat], zoom: 18, duration: 800 });
+                            startWatching();
+                            if (locateBtn) locateBtn.classList.remove('tracking');
+                        },
+                        () => {
+                            if (locateBtn) locateBtn.classList.remove('tracking');
+                            if (err.code === 2) showToast('GPS signal lost — try again outside');
+                            else if (err.code === 3) showToast('Location timed out — tap 📍 to retry');
+                            else showLocationUnavailable();
+                        },
+                        { enableHighAccuracy: false, timeout: 8000, maximumAge: 60000 }
+                    );
+                    return;
+                }
+
+                if (locateBtn) locateBtn.classList.remove('tracking');
+                if (err.code === 2) {
                     showToast('GPS signal lost — try again outside');
-                } else if (err.code === 3 /* TIMEOUT */) {
-                    showToast('Location timed out — try again');
+                } else if (err.code === 3) {
+                    showToast('Location timed out — tap 📍 to retry');
                 } else {
                     showLocationUnavailable();
                 }
             },
-            { enableHighAccuracy: true, timeout: 10000 }
+            { enableHighAccuracy: true, timeout: 8000, maximumAge: 10000 }
         );
     }
 

@@ -139,19 +139,157 @@ const SearchModule = (() => {
             });
         }
 
+        // Recent searches helper
+        const getRecentSearches = () => {
+            try {
+                const raw = localStorage.getItem('ustednav_recent_searches');
+                return raw ? JSON.parse(raw) : [];
+            } catch (e) {
+                return [];
+            }
+        };
+
+        const saveRecentSearch = (label, query) => {
+            if (!label || !query) return;
+            try {
+                let recents = getRecentSearches();
+                recents = recents.filter(r => r.label.toLowerCase() !== label.toLowerCase() && r.query.toLowerCase() !== query.toLowerCase());
+                recents.unshift({ label, query, time: Date.now() });
+                if (recents.length > 6) recents = recents.slice(0, 6);
+                localStorage.setItem('ustednav_recent_searches', JSON.stringify(recents));
+            } catch (e) {}
+        };
+
+        const removeRecentSearch = (label) => {
+            try {
+                let recents = getRecentSearches().filter(r => r.label.toLowerCase() !== label.toLowerCase());
+                localStorage.setItem('ustednav_recent_searches', JSON.stringify(recents));
+            } catch (e) {}
+        };
+
+        const renderRecentSearches = () => {
+            if (!searchResults) return;
+            const recents = getRecentSearches();
+            if (!recents || recents.length === 0) {
+                searchResults.innerHTML = '';
+                if (searchResults.classList) searchResults.classList.remove('open');
+                return;
+            }
+
+            searchResults.innerHTML = `
+                <div class="recent-searches-box">
+                    <div class="recent-searches-header">
+                        <span><i class="fas fa-clock-rotate-left" style="margin-right:4px"></i> Recent Searches</span>
+                        <button type="button" class="recent-clear-btn" id="recentClearBtn">Clear all</button>
+                    </div>
+                    <div class="recent-chips-wrap">
+                        ${recents.map(r => `
+                            <div class="recent-search-chip" data-query="${escapeHtml(r.query)}">
+                                <span class="chip-text">${escapeHtml(r.label)}</span>
+                                <span class="chip-delete" data-label="${escapeHtml(r.label)}" title="Remove">✕</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            // Clear all event
+            const clearBtn = searchResults.querySelector('#recentClearBtn');
+            if (clearBtn) {
+                clearBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    try { localStorage.removeItem('ustednav_recent_searches'); } catch (err) {}
+                    renderRecentSearches();
+                });
+            }
+
+            // Chip click events
+            searchResults.querySelectorAll('.recent-search-chip').forEach(chip => {
+                chip.addEventListener('click', (e) => {
+                    const del = e.target.closest('.chip-delete');
+                    if (del) {
+                        e.stopPropagation();
+                        removeRecentSearch(del.getAttribute('data-label'));
+                        renderRecentSearches();
+                        return;
+                    }
+                    const q = chip.getAttribute('data-query');
+                    if (q && searchInput) {
+                        searchInput.value = q;
+                        handleSearch(q);
+                        setTimeout(() => {
+                            const firstItem = searchResults.querySelector('.result-item');
+                            if (firstItem) {
+                                firstItem.click();
+                            } else if (searchResults.classList) {
+                                searchResults.classList.add('open');
+                            }
+                        }, 50);
+                    }
+                });
+            });
+
+            if (searchResults.classList) searchResults.classList.add('open');
+        };
+
+        // Keyboard navigation state
+        let currentSelectedIndex = -1;
+
+        const updateKeyboardSelection = (items, index) => {
+            items.forEach((item, idx) => {
+                if (idx === index) {
+                    item.classList.add('is-selected');
+                    item.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                } else {
+                    item.classList.remove('is-selected');
+                }
+            });
+        };
+
         if (searchInput) {
             searchInput.addEventListener('input', (e) => {
                 clearTimeout(debounceTimer);
-                debounceTimer = setTimeout(() => handleSearch(e.target.value), 180);
+                currentSelectedIndex = -1;
+                const val = e.target.value.trim();
+                if (val.length === 0) {
+                    renderRecentSearches();
+                } else {
+                    debounceTimer = setTimeout(() => handleSearch(val), 180);
+                }
             });
 
             searchInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') clearSearch();
+                if (e.key === 'Escape') {
+                    clearSearch();
+                    return;
+                }
+
+                if (!searchResults || !searchResults.classList.contains('open')) return;
+                const items = Array.from(searchResults.querySelectorAll('.result-item'));
+                if (items.length === 0) return;
+
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    currentSelectedIndex = (currentSelectedIndex + 1) % items.length;
+                    updateKeyboardSelection(items, currentSelectedIndex);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    currentSelectedIndex = (currentSelectedIndex - 1 + items.length) % items.length;
+                    updateKeyboardSelection(items, currentSelectedIndex);
+                } else if (e.key === 'Enter') {
+                    if (currentSelectedIndex >= 0 && currentSelectedIndex < items.length) {
+                        e.preventDefault();
+                        items[currentSelectedIndex].click();
+                    }
+                }
             });
 
             searchInput.addEventListener('focus', () => {
                 if (typeof document !== 'undefined' && document.body) {
                     document.body.classList.add('search-focused');
+                }
+                if (!searchInput.value || searchInput.value.trim().length === 0) {
+                    renderRecentSearches();
                 }
             });
         }
@@ -715,6 +853,8 @@ const SearchModule = (() => {
         }
     };
 
+    let activeSearchFilter = 'all';
+
     const displayResults = (results, query) => {
         if (!searchResults) return;
         searchResults.innerHTML = '';
@@ -730,10 +870,10 @@ const SearchModule = (() => {
         }
 
         const categorized = {
-            staff: [],
-            service: [],
+            building: [],
             room: [],
-            building: []
+            service: [],
+            staff: []
         };
 
         results.forEach(r => {
@@ -744,20 +884,54 @@ const SearchModule = (() => {
             }
         });
 
+        // 1. Mobile Filter Pills Row
+        const availableTabs = [
+            { key: 'all', label: 'All', count: results.length, icon: 'fa-layer-group' }
+        ];
+
+        if (categorized.building.length > 0) availableTabs.push({ key: 'building', label: 'Buildings', count: categorized.building.length, icon: 'fa-building' });
+        if (categorized.room.length > 0) availableTabs.push({ key: 'room', label: 'Rooms & Halls', count: categorized.room.length, icon: 'fa-door-open' });
+        if (categorized.service.length > 0) availableTabs.push({ key: 'service', label: 'Services', count: categorized.service.length, icon: 'fa-concierge-bell' });
+        if (categorized.staff.length > 0) availableTabs.push({ key: 'staff', label: 'Staff', count: categorized.staff.length, icon: 'fa-user-tie' });
+
+        if (availableTabs.length > 2) {
+            const tabsRow = document.createElement('div');
+            tabsRow.className = 'search-filter-pills-row';
+            tabsRow.innerHTML = availableTabs.map(t => `
+                <button type="button" class="search-tab-pill ${activeSearchFilter === t.key ? 'active' : ''}" data-cat="${t.key}">
+                    <i class="fas ${t.icon}"></i>
+                    <span>${t.label}</span>
+                    <span class="pill-count">${t.count}</span>
+                </button>
+            `).join('');
+
+            tabsRow.querySelectorAll('.search-tab-pill').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    activeSearchFilter = btn.getAttribute('data-cat');
+                    displayResults(results, query);
+                });
+            });
+            searchResults.appendChild(tabsRow);
+        } else {
+            activeSearchFilter = 'all';
+        }
+
         const CATEGORY_CONFIG = [
-            { key: 'staff', label: 'Staff & Lecturers', icon: 'fa-user-tie', color: '#4f46e5' },
-            { key: 'service', label: 'Services & Offices', icon: 'fa-concierge-bell', color: '#0284c7' },
+            { key: 'building', label: 'Buildings', icon: 'fa-building', color: '#2563eb' },
             { key: 'room', label: 'Rooms & Lecture Halls', icon: 'fa-door-open', color: '#10b981' },
-            { key: 'building', label: 'Buildings', icon: 'fa-building', color: '#2563eb' }
+            { key: 'service', label: 'Services & Offices', icon: 'fa-concierge-bell', color: '#0284c7' },
+            { key: 'staff', label: 'Staff & Lecturers', icon: 'fa-user-tie', color: '#4f46e5' }
         ];
 
         const origin = getOriginCoord();
 
         CATEGORY_CONFIG.forEach(cat => {
+            if (activeSearchFilter !== 'all' && activeSearchFilter !== cat.key) return;
             const items = categorized[cat.key];
             if (!items || items.length === 0) return;
 
-            // Sticky Category Header
+            // Category Header
             const header = document.createElement('div');
             header.className = 'search-category-header';
             header.innerHTML = `
@@ -768,138 +942,39 @@ const SearchModule = (() => {
             `;
             searchResults.appendChild(header);
 
+            // Group Rooms by Floor if looking at rooms
+            let lastFloor = null;
+
             items.forEach(r => {
-                const el = document.createElement('div');
-                el.tabIndex = 0;
                 const b = r.building || (r.type === 'building' ? r.data : null);
                 const bDist = (b && b.lat && b.lng) ? haversineDist(origin.lat, origin.lng, b.lat, b.lng) : 0;
                 const dStr = bDist > 0 ? formatDist(bDist) : '';
 
-                if (r.type === 'staff') {
-                    const p = r.data;
-                    const bObj = b || getBuildingForCode(p.location?.building) || buildingsData[0];
-                    const pillText = r.locationPill || formatLocationPill(p, bObj);
-                    const breadcrumb = r.breadcrumb || formatBreadcrumb(p, bObj);
-                    const subtitle = formatStaffSubtitle(p);
-
-                    el.className = 'result-item staff-result';
-                    el.innerHTML = `
-                        <div class="result-dot" style="background:#4f46e5;margin-top:2px"><i class="fas fa-user-tie" style="font-size:10px;color:#fff"></i></div>
-                        <div class="result-name" style="width:100%;min-width:0">
-                            <!-- Line 1: Name + Position Badge -->
-                            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-                                <strong style="font-size:14px;color:var(--text, #0f172a);font-weight:700">${highlightMatch(p.name, query)}</strong>
-                                ${p.position ? `<span class="staff-pos-tag" style="color:#4f46e5;background:rgba(79,70,229,0.1)">${highlightMatch(p.position, query)}</span>` : ''}
-                            </div>
-                            <!-- Line 2: Department & Faculty -->
-                            <div style="font-size:12px;color:var(--muted, #64748b);margin-top:2px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${highlightMatch(subtitle, query)}</div>
-                            <!-- Line 3: Location pill + walking distance -->
-                            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:5px;gap:8px">
-                                <span class="location-pill">
-                                    <i class="fas fa-location-dot"></i>
-                                    ${pillText}
-                                </span>
-                                <span class="result-dist">${dStr}</span>
-                            </div>
-                        </div>
-                        <button class="quick-route-btn" title="Navigate to ${escapeHtml(p.name)}" aria-label="Navigate to ${escapeHtml(p.name)}">
-                            <i class="fas fa-diamond-turn-right"></i>
-                        </button>
-                    `;
-
-                    // Quick Route (1-tap direct navigation hand-off)
-                    const qBtn = el.querySelector('.quick-route-btn');
-                    qBtn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        closeSearchUI(p.name);
-                        triggerRoute(bObj.lat, bObj.lng, breadcrumb);
-                    });
-
-                    // Row tap
-                    el.addEventListener('click', () => {
-                        closeSearchUI(p.name);
-                        if (typeof window !== 'undefined' && window.ViewControllerModule && window.ViewControllerModule.getMode() === '3D') {
-                            window.CesiumViewerModule?.syncCameraFrom2D(bObj.lng, bObj.lat, 18);
-                        }
-                        if (typeof window !== 'undefined' && typeof window.showStaff === 'function') {
-                            if (window.map && bObj) window.map.flyTo({ center: [bObj.lng, bObj.lat], zoom: 19, duration: 800, essential: true });
-                            setTimeout(() => window.showStaff(p, bObj), 850);
-                        } else if (typeof BuildingModule !== 'undefined' && BuildingModule.displayStaff) {
-                            if (typeof MapModule !== 'undefined' && MapModule.centerOnBuilding) MapModule.centerOnBuilding(bObj);
-                            BuildingModule.displayStaff(bObj, p);
-                        }
-                    });
-
-                } else if (r.type === 'service') {
-                    const s = r.data;
-                    const bObj = b || buildingsData[0];
-                    const breadcrumb = formatServiceBreadcrumb(bObj, s);
-                    const pillText = `${bObj.shortName || bObj.name}${s.floor ? ' · ' + s.floor : ''}`;
-                    const subtitle = s.description || ('Service at ' + bObj.name);
-
-                    el.className = 'result-item service-result';
-                    el.innerHTML = `
-                        <div class="result-dot" style="background:#0284c7;margin-top:2px"><i class="fas fa-concierge-bell" style="font-size:10px;color:#fff"></i></div>
-                        <div class="result-name" style="width:100%;min-width:0">
-                            <!-- Line 1: Service Name + Category -->
-                            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-                                <strong style="font-size:14px;color:var(--text, #0f172a);font-weight:700">${highlightMatch(s.name, query)}</strong>
-                                <span class="staff-pos-tag" style="color:#0284c7;background:rgba(2,132,199,0.1)">${escapeHtml(s.category || 'Service')}</span>
-                            </div>
-                            <!-- Line 2: Description or details -->
-                            <div style="font-size:12px;color:var(--muted, #64748b);margin-top:2px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${highlightMatch(subtitle, query)}</div>
-                            <!-- Line 3: Location pill + walking distance -->
-                            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:5px;gap:8px">
-                                <span class="location-pill service-pill">
-                                    <i class="fas fa-location-dot"></i>
-                                    ${pillText}
-                                </span>
-                                <span class="result-dist">${dStr}</span>
-                            </div>
-                        </div>
-                        <button class="quick-route-btn" title="Navigate to ${escapeHtml(s.name)}" aria-label="Navigate to ${escapeHtml(s.name)}">
-                            <i class="fas fa-diamond-turn-right"></i>
-                        </button>
-                    `;
-
-                    // Quick Route
-                    const qBtn = el.querySelector('.quick-route-btn');
-                    qBtn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        closeSearchUI(s.name);
-                        triggerRoute(bObj.lat, bObj.lng, breadcrumb);
-                    });
-
-                    // Row tap
-                    el.addEventListener('click', () => {
-                        closeSearchUI(s.name);
-                        if (typeof window !== 'undefined' && window.ViewControllerModule && window.ViewControllerModule.getMode() === '3D') {
-                            window.CesiumViewerModule?.syncCameraFrom2D(bObj.lng, bObj.lat, 18);
-                        }
-                        if (typeof window !== 'undefined' && typeof window.showService === 'function') {
-                            if (window.map && bObj) window.map.flyTo({ center: [bObj.lng, bObj.lat], zoom: 19, duration: 800, essential: true });
-                            setTimeout(() => window.showService(s, bObj), 850);
-                        } else if (typeof BuildingModule !== 'undefined' && BuildingModule.displayServiceOrRoom) {
-                            if (typeof MapModule !== 'undefined' && MapModule.centerOnBuilding) MapModule.centerOnBuilding(bObj);
-                            BuildingModule.displayServiceOrRoom(bObj, s);
-                        }
-                    });
-
-                } else if (r.type === 'room') {
+                if (r.type === 'room') {
                     const rData = r.data;
                     const bObj = b || buildingsData[0];
                     const bPrefix = bObj.shortName || bObj.name;
-                    const floorStr = (rData.floor === 0 || rData.floor === '0') ? 'Ground Floor' : (rData.floor ? (String(rData.floor).match(/floor/i) ? rData.floor : `${rData.floor} Floor`) : 'Ground Floor');
+                    const currentFloor = (rData.floor === 0 || rData.floor === '0') ? 'Ground Floor' : (rData.floor ? (String(rData.floor).match(/floor/i) ? rData.floor : `${rData.floor} Floor`) : 'Ground Floor');
+
+                    // If floor changes and we have multiple rooms, show a subtle floor divider
+                    if (items.length > 2 && currentFloor !== lastFloor) {
+                        lastFloor = currentFloor;
+                        const floorSubHeader = document.createElement('div');
+                        floorSubHeader.className = 'floor-group-header';
+                        floorSubHeader.innerHTML = `<i class="fas fa-layer-group"></i> ${currentFloor}`;
+                        searchResults.appendChild(floorSubHeader);
+                    }
+
                     const roomStr = formatRoomNumber(rData.number);
                     const wing = rData.wing || rData.metadata?.wing;
                     const wingStr = wing ? (String(wing).match(/wing/i) ? wing : `${wing} Wing`) : '';
-                    const pillText = `${bPrefix} — ${floorStr}${wingStr ? ', ' + wingStr : ''}, ${roomStr}`;
+                    const pillText = `${bPrefix} — ${currentFloor}${wingStr ? ', ' + wingStr : ''}`;
                     const breadcrumb = formatRoomBreadcrumb(rData, bObj);
 
                     const purpose = rData.metadata?.purpose;
                     let tagText = 'Room';
                     if (purpose === 'service_desk' || purpose === 'admin_office') tagText = 'Admin Office';
-                    else if (purpose === 'lecture_room') tagText = 'Lecture / Lab';
+                    else if (purpose === 'lecture_room') tagText = 'Lecture Hall';
                     else if (purpose === 'lecturer_office') tagText = 'Staff Office';
                     else if (/Department|Dept\.?/i.test(roomStr)) tagText = 'Department';
                     else if (/Lab/i.test(roomStr)) tagText = 'Lab';
@@ -907,18 +982,20 @@ const SearchModule = (() => {
 
                     const titleText = (rData.description && !roomStr.toLowerCase().includes(rData.description.toLowerCase())) ? 
                         `${rData.description} (${roomStr})` : `${bPrefix} - ${roomStr}`;
-                    const occupants = rData.occupant ? `Occupant: ${rData.occupant}` : (rData.staff && rData.staff.length ? `Staff: ${rData.staff.join(', ')}` : (rData.description ? `${bObj.name} • ${floorStr}${wingStr ? ' • ' + wingStr : ''}` : `Located in ${bObj.name}`));
+                    const occupants = rData.occupant ? `Occupant: ${rData.occupant}` : (rData.staff && rData.staff.length ? `Staff: ${rData.staff.join(', ')}` : (rData.description ? `${bObj.name} • ${currentFloor}` : `Located in ${bObj.name}`));
 
+                    const el = document.createElement('div');
+                    el.tabIndex = 0;
                     el.className = 'result-item room-result';
                     el.innerHTML = `
                         <div class="result-dot" style="background:#10b981;margin-top:2px"><i class="fas fa-door-open" style="font-size:10px;color:#fff"></i></div>
                         <div class="result-name" style="width:100%;min-width:0">
-                            <!-- Line 1: Room code & name -->
+                            <!-- Line 1: Room code & tag -->
                             <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
                                 <strong style="font-size:14px;color:var(--text, #0f172a);font-weight:700">${highlightMatch(titleText, query)}</strong>
                                 <span class="staff-pos-tag" style="color:#059669;background:rgba(16,185,129,0.1)">${tagText}</span>
                             </div>
-                            <!-- Line 2: Occupant or Building -->
+                            <!-- Line 2: Occupant or building -->
                             <div style="font-size:12px;color:var(--muted, #64748b);margin-top:2px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${highlightMatch(occupants, query)}</div>
                             <!-- Line 3: Location pill + walking distance -->
                             <div style="display:flex;justify-content:space-between;align-items:center;margin-top:5px;gap:8px">
@@ -938,12 +1015,14 @@ const SearchModule = (() => {
                     const qBtn = el.querySelector('.quick-route-btn');
                     qBtn.addEventListener('click', (e) => {
                         e.stopPropagation();
+                        saveRecentSearch(titleText, query);
                         closeSearchUI(`${bPrefix} - ${roomStr}`);
                         triggerRoute(bObj.lat, bObj.lng, breadcrumb);
                     });
 
                     // Row tap
                     el.addEventListener('click', () => {
+                        saveRecentSearch(titleText, query);
                         closeSearchUI(`${bPrefix} - ${roomStr}`);
                         if (typeof window !== 'undefined' && window.ViewControllerModule && window.ViewControllerModule.getMode() === '3D') {
                             window.CesiumViewerModule?.syncCameraFrom2D(bObj.lng, bObj.lat, 18);
@@ -957,12 +1036,15 @@ const SearchModule = (() => {
                         }
                     });
 
-                } else {
-                    // Building
+                    searchResults.appendChild(el);
+
+                } else if (r.type === 'building') {
                     const bObj = r.building || r.data;
                     const name = bObj.name;
                     const subtitle = bObj.description || `${bObj.shortName ? bObj.shortName + ' · ' : ''}${typeLabels[bObj.type] || 'Building'}`;
 
+                    const el = document.createElement('div');
+                    el.tabIndex = 0;
                     el.className = 'result-item building-result';
                     el.innerHTML = `
                         <div class="result-dot" style="background:${typeColors[bObj.type] || '#2563eb'};margin-top:2px"><i class="fas fa-building" style="font-size:10px;color:#fff"></i></div>
@@ -992,12 +1074,14 @@ const SearchModule = (() => {
                     const qBtn = el.querySelector('.quick-route-btn');
                     qBtn.addEventListener('click', (e) => {
                         e.stopPropagation();
+                        saveRecentSearch(name, query);
                         closeSearchUI(name);
                         triggerRoute(bObj.lat, bObj.lng, name);
                     });
 
                     // Row tap
                     el.addEventListener('click', () => {
+                        saveRecentSearch(name, query);
                         closeSearchUI(name);
                         if (typeof window !== 'undefined' && window.ViewControllerModule && window.ViewControllerModule.getMode() === '3D') {
                             window.CesiumViewerModule?.syncCameraFrom2D(bObj.lng, bObj.lat, 18);
@@ -1010,9 +1094,131 @@ const SearchModule = (() => {
                             BuildingModule.displayInfo(bObj);
                         }
                     });
-                }
 
-                searchResults.appendChild(el);
+                    searchResults.appendChild(el);
+
+                } else if (r.type === 'staff') {
+                    const p = r.data;
+                    const bObj = b || getBuildingForCode(p.location?.building) || buildingsData[0];
+                    const pillText = r.locationPill || formatLocationPill(p, bObj);
+                    const breadcrumb = r.breadcrumb || formatBreadcrumb(p, bObj);
+                    const subtitle = formatStaffSubtitle(p);
+
+                    const el = document.createElement('div');
+                    el.tabIndex = 0;
+                    el.className = 'result-item staff-result';
+                    el.innerHTML = `
+                        <div class="result-dot" style="background:#4f46e5;margin-top:2px"><i class="fas fa-user-tie" style="font-size:10px;color:#fff"></i></div>
+                        <div class="result-name" style="width:100%;min-width:0">
+                            <!-- Line 1: Name + Position Badge -->
+                            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+                                <strong style="font-size:14px;color:var(--text, #0f172a);font-weight:700">${highlightMatch(p.name, query)}</strong>
+                                ${p.position ? `<span class="staff-pos-tag" style="color:#4f46e5;background:rgba(79,70,229,0.1)">${highlightMatch(p.position, query)}</span>` : ''}
+                            </div>
+                            <!-- Line 2: Department & Faculty -->
+                            <div style="font-size:12px;color:var(--muted, #64748b);margin-top:2px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${highlightMatch(subtitle, query)}</div>
+                            <!-- Line 3: Location pill + walking distance -->
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:5px;gap:8px">
+                                <span class="location-pill">
+                                    <i class="fas fa-location-dot"></i>
+                                    ${pillText}
+                                </span>
+                                <span class="result-dist">${dStr}</span>
+                            </div>
+                        </div>
+                        <button class="quick-route-btn" title="Navigate to ${escapeHtml(p.name)}" aria-label="Navigate to ${escapeHtml(p.name)}">
+                            <i class="fas fa-diamond-turn-right"></i>
+                        </button>
+                    `;
+
+                    // Quick Route
+                    const qBtn = el.querySelector('.quick-route-btn');
+                    qBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        saveRecentSearch(p.name, query);
+                        closeSearchUI(p.name);
+                        triggerRoute(bObj.lat, bObj.lng, breadcrumb);
+                    });
+
+                    // Row tap
+                    el.addEventListener('click', () => {
+                        saveRecentSearch(p.name, query);
+                        closeSearchUI(p.name);
+                        if (typeof window !== 'undefined' && window.ViewControllerModule && window.ViewControllerModule.getMode() === '3D') {
+                            window.CesiumViewerModule?.syncCameraFrom2D(bObj.lng, bObj.lat, 18);
+                        }
+                        if (typeof window !== 'undefined' && typeof window.showStaff === 'function') {
+                            if (window.map && bObj) window.map.flyTo({ center: [bObj.lng, bObj.lat], zoom: 19, duration: 800, essential: true });
+                            setTimeout(() => window.showStaff(p, bObj), 850);
+                        } else if (typeof BuildingModule !== 'undefined' && BuildingModule.displayStaff) {
+                            if (typeof MapModule !== 'undefined' && MapModule.centerOnBuilding) MapModule.centerOnBuilding(bObj);
+                            BuildingModule.displayStaff(bObj, p);
+                        }
+                    });
+
+                    searchResults.appendChild(el);
+
+                } else if (r.type === 'service') {
+                    const s = r.data;
+                    const bObj = b || buildingsData[0];
+                    const breadcrumb = formatServiceBreadcrumb(bObj, s);
+                    const pillText = `${bObj.shortName || bObj.name}${s.floor ? ' · ' + s.floor : ''}`;
+                    const subtitle = s.description || ('Service at ' + bObj.name);
+
+                    const el = document.createElement('div');
+                    el.tabIndex = 0;
+                    el.className = 'result-item service-result';
+                    el.innerHTML = `
+                        <div class="result-dot" style="background:#0284c7;margin-top:2px"><i class="fas fa-concierge-bell" style="font-size:10px;color:#fff"></i></div>
+                        <div class="result-name" style="width:100%;min-width:0">
+                            <!-- Line 1: Service Name + Category -->
+                            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+                                <strong style="font-size:14px;color:var(--text, #0f172a);font-weight:700">${highlightMatch(s.name, query)}</strong>
+                                <span class="staff-pos-tag" style="color:#0284c7;background:rgba(2,132,199,0.1)">${escapeHtml(s.category || 'Service')}</span>
+                            </div>
+                            <!-- Line 2: Description or details -->
+                            <div style="font-size:12px;color:var(--muted, #64748b);margin-top:2px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${highlightMatch(subtitle, query)}</div>
+                            <!-- Line 3: Location pill + walking distance -->
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:5px;gap:8px">
+                                <span class="location-pill service-pill">
+                                    <i class="fas fa-location-dot"></i>
+                                    ${pillText}
+                                </span>
+                                <span class="result-dist">${dStr}</span>
+                            </div>
+                        </div>
+                        <button class="quick-route-btn" title="Navigate to ${escapeHtml(s.name)}" aria-label="Navigate to ${escapeHtml(s.name)}">
+                            <i class="fas fa-diamond-turn-right"></i>
+                        </button>
+                    `;
+
+                    // Quick Route
+                    const qBtn = el.querySelector('.quick-route-btn');
+                    qBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        saveRecentSearch(s.name, query);
+                        closeSearchUI(s.name);
+                        triggerRoute(bObj.lat, bObj.lng, breadcrumb);
+                    });
+
+                    // Row tap
+                    el.addEventListener('click', () => {
+                        saveRecentSearch(s.name, query);
+                        closeSearchUI(s.name);
+                        if (typeof window !== 'undefined' && window.ViewControllerModule && window.ViewControllerModule.getMode() === '3D') {
+                            window.CesiumViewerModule?.syncCameraFrom2D(bObj.lng, bObj.lat, 18);
+                        }
+                        if (typeof window !== 'undefined' && typeof window.showService === 'function') {
+                            if (window.map && bObj) window.map.flyTo({ center: [bObj.lng, bObj.lat], zoom: 19, duration: 800, essential: true });
+                            setTimeout(() => window.showService(s, bObj), 850);
+                        } else if (typeof BuildingModule !== 'undefined' && BuildingModule.displayServiceOrRoom) {
+                            if (typeof MapModule !== 'undefined' && MapModule.centerOnBuilding) MapModule.centerOnBuilding(bObj);
+                            BuildingModule.displayServiceOrRoom(bObj, s);
+                        }
+                    });
+
+                    searchResults.appendChild(el);
+                }
             });
         });
 
