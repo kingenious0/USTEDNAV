@@ -2696,6 +2696,97 @@
             max-height: 75px !important;
             overflow: hidden !important;
         }
+
+        /* ── PWA INSTALL FLOATING TOAST ── */
+        .pwa-install-toast {
+            position: fixed;
+            bottom: calc(18px + env(safe-area-inset-bottom));
+            left: 50%;
+            transform: translateX(-50%) translateY(120%);
+            width: calc(100% - 24px);
+            max-width: 410px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+            padding: 10px 14px;
+            border-radius: 16px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+            z-index: 2800;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .pwa-install-toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .pwa-toast-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+        .pwa-toast-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+        .pwa-toast-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #f8fafc;
+            line-height: 1.2;
+        }
+        .pwa-toast-sub {
+            font-size: 11px;
+            color: #94a3b8;
+            margin-top: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .pwa-toast-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .pwa-toast-dismiss {
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 6px 8px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: color 0.15s;
+        }
+        .pwa-toast-dismiss:hover {
+            color: #e2e8f0;
+        }
+        .pwa-toast-install {
+            background: #f59e0b;
+            color: #090d16;
+            border: none;
+            font-size: 12px;
+            font-weight: 800;
+            padding: 7px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.15s, transform 0.15s;
+        }
+        .pwa-toast-install:active {
+            transform: scale(0.96);
+        }
     </style>
 </head>
 <body>
@@ -2877,6 +2968,21 @@
     <div class="sheet" id="sheet">
         <div class="sheet-handle"></div>
         <div class="sheet-content" id="sheetContent"></div>
+    </div>
+
+    <!-- PWA INSTALL FLOATING TOAST -->
+    <div id="pwaInstallToast" class="pwa-install-toast" role="dialog" aria-label="Install App Prompt">
+        <div class="pwa-toast-info">
+            <img src="/icons/icon-192.png" class="pwa-toast-icon" alt="USTEDNav">
+            <div>
+                <div class="pwa-toast-title">Install USTEDNav</div>
+                <div class="pwa-toast-sub">Instant offline campus navigation</div>
+            </div>
+        </div>
+        <div class="pwa-toast-actions">
+            <button class="pwa-toast-dismiss" onclick="dismissPwaToast()">Later</button>
+            <button class="pwa-toast-install" onclick="triggerPwaToastInstall()">Install</button>
+        </div>
     </div>
 
     <!-- NAVIGATION DRAWER -->
@@ -4482,6 +4588,9 @@
         try {
             (window.adsbygoogle = window.adsbygoogle || []).push({});
         } catch (_) {}
+        if (typeof promptInstallAfterAction === 'function') {
+            promptInstallAfterAction();
+        }
     }
 
     function closeSheet() {
@@ -5000,6 +5109,7 @@
         const modeLabel = travelMode === 'driving' ? 'driving' : 'walking';
         
         openSheet(`<div class="loading-state"><div class="spin"></div><p>Finding shortest ${modeLabel} route to <strong>${destName}</strong>…</p></div>`);
+        promptInstallAfterAction();
 
         // Check if destination matches a known building for entrance & landmark anchoring
         const destBuilding = buildingsData.find(b =>
@@ -5696,6 +5806,66 @@
             }).catch(() => {});
         });
     }
+
+    // ══════════════════════════════════════════
+    //  PWA INSTALL TOAST AFTER INTERACTION
+    // ══════════════════════════════════════════
+    let deferredPwaPrompt = null;
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPwaPrompt = e;
+        // Don't show immediately on screen load
+    });
+
+    window.addEventListener('appinstalled', () => {
+        if (window.CampusTelemetry) {
+            window.CampusTelemetry.track('pwa_installed');
+        }
+        localStorage.setItem('ustednav_installed', 'true');
+        localStorage.setItem('ustednav_app_installed', 'true');
+        dismissPwaToast();
+    });
+
+    function promptInstallAfterAction() {
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
+                             window.matchMedia('(display-mode: fullscreen)').matches ||
+                             window.navigator.standalone === true;
+        const hasInstalled = localStorage.getItem('ustednav_installed') === 'true' ||
+                             localStorage.getItem('ustednav_app_installed') === 'true';
+        const dismissed = sessionStorage.getItem('pwa_prompt_dismissed') === 'true';
+
+        if (deferredPwaPrompt && !isStandalone && !hasInstalled && !dismissed) {
+            const toast = document.getElementById('pwaInstallToast');
+            if (toast) {
+                // Slide up after a brief organic pause so the user has absorbed their route/location
+                setTimeout(() => {
+                    if (!sessionStorage.getItem('pwa_prompt_dismissed')) {
+                        toast.classList.add('show');
+                    }
+                }, 1200);
+            }
+        }
+    }
+
+    window.dismissPwaToast = function() {
+        sessionStorage.setItem('pwa_prompt_dismissed', 'true');
+        const toast = document.getElementById('pwaInstallToast');
+        if (toast) toast.classList.remove('show');
+    };
+
+    window.triggerPwaToastInstall = async function() {
+        if (!deferredPwaPrompt) return;
+        deferredPwaPrompt.prompt();
+        try {
+            const { outcome } = await deferredPwaPrompt.userChoice;
+            if (outcome === 'accepted') {
+                localStorage.setItem('ustednav_installed', 'true');
+            }
+        } catch (_) {}
+        deferredPwaPrompt = null;
+        dismissPwaToast();
+    };
     </script>
 </body>
 </html>

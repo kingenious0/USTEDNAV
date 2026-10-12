@@ -906,7 +906,8 @@
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
                 deferredPrompt = e;
-                if (!isIOS && pwaBanner) pwaBanner.style.display = 'flex';
+                // Keep the bottom sticky banner hidden on index.html by default to preserve clean card/footer
+                if (pwaBanner) pwaBanner.style.display = 'none';
                 if (navBtn) navBtn.style.display = 'inline-flex';
             });
 
