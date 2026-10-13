@@ -46,6 +46,9 @@ Thumbs.db
 *.swp
 *.swo
 
+# ── Personal / private files (never publish) ──
+print-posters.html
+
 # ── Raw Scraped Datasets, Ingestion Scripts & Scratches ──
 *.csv
 usted_kumasi_staff*
