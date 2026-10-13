@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Google AdSense Verification Publisher Tag Slot -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1958377156757358" crossorigin="anonymous"></script>
+    <!-- Adsterra Native Banner Script -->
+    <script async="async" data-cfasync="false" src="https://bauval.org/21/d4e68266dae7182fec784e124a7c3c5d"></script>
     <title>About USTEDNav — USTED Campus Navigation Initiative</title>
     <meta name="description" content="USTEDNav is an interactive digital campus directory and navigation platform designed for USTED Kumasi campus. Learn about our mission, open accessibility, and student initiative.">
     <meta name="author" content="KINGENIOUS">
@@ -321,9 +323,67 @@
         .footer-nav a:hover { color: #f8fafc; text-decoration: underline; }
         .legal { font-size: 12px; color: #64748b; line-height: 1.6; }
 
+        /* Themed Community Sponsor Section */
+        .page-sponsor-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 18px 22px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            overflow: hidden;
+        }
+        .page-sponsor-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 10px;
+        }
+        .page-sponsor-badge {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #fbbf24;
+            background: rgba(245, 158, 11, 0.12);
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            padding: 2px 9px;
+            border-radius: 9999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .page-sponsor-note {
+            font-size: 11.5px;
+            color: var(--muted);
+            font-weight: 500;
+        }
+        .page-sponsor-body {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            border-radius: 12px;
+            background: rgba(2, 6, 23, 0.4);
+            padding: 6px;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+        .page-sponsor-body #container-d4e68266dae7182fec784e124a7c3c5d {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
         @media (max-width: 640px) {
             .wrap { padding: 0 16px; }
             .content-card { padding: 20px; }
+            .page-sponsor-card { padding: 14px 16px; }
             .top-nav-links a.nav-link-sub { display: none; }
         }
     </style>
@@ -447,6 +507,17 @@
                         </div>
                     </li>
                 </ul>
+            </div>
+        </section>
+
+        <!-- Community Sponsor Section -->
+        <section class="page-sponsor-card" aria-label="Community Sponsor">
+            <div class="page-sponsor-header">
+                <span class="page-sponsor-badge"><i class="fas fa-heart" style="color:#f59e0b;"></i> Community Sponsor</span>
+                <span class="page-sponsor-note">Small ads help keep USTED NAV free &amp; maintained for students</span>
+            </div>
+            <div class="page-sponsor-body">
+                <div id="container-d4e68266dae7182fec784e124a7c3c5d"></div>
             </div>
         </section>
     </main>
