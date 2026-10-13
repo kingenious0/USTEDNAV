@@ -19,6 +19,8 @@
     </script>
     <!-- Google AdSense Verification Publisher Tag Slot -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1958377156757358" crossorigin="anonymous"></script>
+    <!-- Adsterra Native Banner Script -->
+    <script async="async" data-cfasync="false" src="https://bauval.org/21/d4e68266dae7182fec784e124a7c3c5d"></script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -2523,6 +2525,96 @@
             font-size: 14px;
         }
 
+        /* ── INDOOR NAVIGATION POLL TEASER CARD (ROB) ── */
+        .indoor-poll-card {
+            background: linear-gradient(135deg, rgba(238, 242, 255, 0.95) 0%, rgba(224, 231, 255, 0.95) 100%);
+            border: 1.5px solid #c7d2fe;
+            border-radius: 14px;
+            padding: 12px 14px;
+            margin: 10px 0 14px;
+            box-shadow: 0 4px 14px rgba(79, 70, 229, 0.08);
+            text-align: left;
+            position: relative;
+        }
+        .indoor-poll-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #4f46e5;
+            color: #ffffff;
+            font-size: 10.5px;
+            font-weight: 800;
+            padding: 2px 7px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+        .indoor-poll-title {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #1e1b4b;
+            line-height: 1.35;
+            margin-bottom: 4px;
+        }
+        .indoor-poll-desc {
+            font-size: 11.5px;
+            color: #4338ca;
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }
+        .indoor-poll-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .indoor-poll-btn {
+            flex: 1;
+            padding: 8px 10px;
+            border-radius: 9px;
+            border: none;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.15s ease;
+            font-family: inherit;
+        }
+        .indoor-poll-btn-yes {
+            background: #4f46e5;
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+        }
+        .indoor-poll-btn-yes:active {
+            transform: scale(0.97);
+            background: #4338ca;
+        }
+        .indoor-poll-btn-no {
+            background: #ffffff;
+            color: #64748b;
+            border: 1px solid #cbd5e1;
+        }
+        .indoor-poll-btn-no:active {
+            transform: scale(0.97);
+            background: #f8fafc;
+        }
+        .indoor-poll-thankyou {
+            background: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+            padding: 9px 12px;
+            border-radius: 10px;
+            font-size: 11.5px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0 12px;
+        }
+
         /* ── OFFLINE BANNER ───────────────────── */
         .offline-banner {
             position: fixed;
@@ -2918,11 +3010,32 @@
             box-sizing: border-box;
             clear: both;
         }
-        .nav-drawer .ad-card-container {
+        /* ── DEDICATED ADSTERRA NATIVE BANNER WRAPPER ── */
+        .adsterra-native-wrapper {
+            margin-top: 12px;
+            margin-bottom: 8px;
+            padding: 4px;
+            background: rgba(248, 250, 252, 0.7);
+            border: 1px solid rgba(226, 232, 240, 0.85);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            width: 100%;
+            overflow: hidden;
+            pointer-events: none; /* Accidental Click Guard: wrapper zones cannot be clicked */
+        }
+        .adsterra-native-wrapper #container-d4e68266dae7182fec784e124a7c3c5d {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            pointer-events: auto; /* Only allow clicks inside the active ad iframe/target */
+        }
+        .nav-drawer .adsterra-native-wrapper {
             background: rgba(15, 23, 42, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            margin: 20px 4px 10px;
-            max-height: 100px;
+            border-color: rgba(255, 255, 255, 0.08);
         }
         .ad-card-label {
             font-size: 9.5px;
@@ -2932,6 +3045,7 @@
             margin-bottom: 4px;
             font-weight: 600;
             user-select: none;
+            pointer-events: none;
         }
         .ad-card-container ins.adsbygoogle {
             max-height: 75px !important;
@@ -4992,14 +5106,9 @@
     const sidePanelContent = document.getElementById('sidePanelContent');
 
     const AD_SLOT_HTML = `
-        <div class="ad-card-container">
-            <span class="ad-card-label">Sponsored Links</span>
-            <ins class="adsbygoogle"
-                 style="display:block; width: 100%; height: 60px;"
-                 data-ad-client="ca-pub-1958377156757358"
-                 data-ad-slot=""
-                 data-ad-format="horizontal"
-                 data-full-width-responsive="false"></ins>
+        <div class="adsterra-native-wrapper">
+            <span class="ad-card-label">Sponsored</span>
+            <div id="container-d4e68266dae7182fec784e124a7c3c5d"></div>
         </div>
     `;
 
@@ -5111,6 +5220,7 @@
                 <button class="mode-btn ${travelMode === 'driving' ? '' : 'active'}" onclick="setMode('foot',this)"><i class="fas fa-person-walking"></i> Walk</button>
                 <button class="mode-btn ${travelMode === 'driving' ? 'active-car' : ''}" onclick="setMode('driving',this)"><i class="fas fa-car"></i> Drive</button>
             </div>
+            ${renderRobIndoorPoll(b)}
             <div class="sheet-actions">
                 <button class="action-btn btn-dir" onclick="startRoute(${b.lat}, ${b.lng}, '${b.name.replace(/'/g,"\\'")}')">
                     <i class="fas ${travelMode === 'driving' ? 'fa-car' : 'fa-person-walking'}"></i> ${travelMode === 'driving' ? 'Start Driving' : 'Start Walking'}
@@ -5339,6 +5449,7 @@
                 <button class="mode-btn ${travelMode === 'driving' ? '' : 'active'}" onclick="setMode('foot',this)"><i class="fas fa-person-walking"></i> Walk</button>
                 <button class="mode-btn ${travelMode === 'driving' ? 'active-car' : ''}" onclick="setMode('driving',this)"><i class="fas fa-car"></i> Drive</button>
             </div>
+            ${renderRobIndoorPoll(b)}
             <div class="sheet-actions">
                 <button class="action-btn btn-dir" onclick="startRoute(${b.lat}, ${b.lng}, '${breadcrumb.replace(/'/g, "\\'")}')">
                     <i class="fas ${travelMode === 'driving' ? 'fa-car' : 'fa-person-walking'}"></i> ${travelMode === 'driving' ? 'Start Driving' : 'Start Walking'}
@@ -5374,6 +5485,69 @@
     function metaRow(icon, val) {
         return `<div class="meta-row"><i class="fas ${icon}"></i><span>${val}</span></div>`;
     }
+
+    // ── ROB INDOOR NAVIGATION SURVEY / POLL ──
+    function isRobBuilding(b) {
+        if (!b) return false;
+        const name = (b.name || '') + ' ' + (b.shortName || '') + ' ' + (b.id || '');
+        return /\bROB\b/i.test(name);
+    }
+
+    function renderRobIndoorPoll(b) {
+        if (!isRobBuilding(b)) return '';
+        const voted = localStorage.getItem('voted_indoor_rob');
+        if (voted) {
+            return `
+                <div class="indoor-poll-thankyou">
+                    <i class="fas fa-check-circle" style="color:#10b981"></i>
+                    <span>Indoor survey recorded (${voted === 'yes' ? 'Voted Yes' : 'Voted No'}). Thanks!</span>
+                </div>
+            `;
+        }
+        return `
+            <div class="indoor-poll-card" id="indoorPollCard">
+                <div class="indoor-poll-badge">
+                    <i class="fas fa-flask"></i> Feature Preview
+                </div>
+                <div class="indoor-poll-title">Need Indoor Navigation for ROB?</div>
+                <div class="indoor-poll-desc">Turn-by-turn indoor corridor & room floor plans are in testing. Would you use this?</div>
+                <div class="indoor-poll-actions">
+                    <button class="indoor-poll-btn indoor-poll-btn-yes" onclick="window.voteIndoorNav('yes')">
+                        <i class="fas fa-thumbs-up"></i> Yes, need this!
+                    </button>
+                    <button class="indoor-poll-btn indoor-poll-btn-no" onclick="window.voteIndoorNav('no')">
+                        <i class="fas fa-thumbs-down"></i> Not really
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
+    window.voteIndoorNav = function(vote) {
+        localStorage.setItem('voted_indoor_rob', vote);
+        if (window.CampusTelemetry && typeof window.CampusTelemetry.track === 'function') {
+            window.CampusTelemetry.track('indoor_nav_vote', {
+                building: 'ROB',
+                vote: vote,
+                source: 'map_sheet'
+            });
+        } else if (typeof gtag === 'function') {
+            gtag('event', 'indoor_nav_vote', {
+                building: 'ROB',
+                vote: vote,
+                source: 'map_sheet'
+            });
+        }
+        const card = document.getElementById('indoorPollCard');
+        if (card) {
+            card.outerHTML = `
+                <div class="indoor-poll-thankyou">
+                    <i class="fas fa-check-circle" style="color:#10b981"></i>
+                    <span>Thanks! Your feedback was saved.</span>
+                </div>
+            `;
+        }
+    };
 
     // ══════════════════════════════════════════
     //  GPS LOCATION & TRACKING
