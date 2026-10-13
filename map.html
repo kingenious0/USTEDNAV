@@ -1972,6 +1972,21 @@
             gap: 8px;
             padding: 6px 0 2px; /* Super tight margin to save space */
         }
+        /* Sponsored slot below sheet actions (Adsterra) */
+        .sheet-ad-wrap {
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(15, 23, 42, 0.08);
+        }
+        .sheet-ad-label {
+            display: block;
+            font-size: 9.5px;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
         .action-btn {
             min-height: 48px;
             padding: 12px 14px;
@@ -5075,6 +5090,7 @@
     const sheetContent = document.getElementById('sheetContent');
     function openSheet(html) {
         const isDesktop = window.innerWidth >= 768;
+        let adRoot = null;
 
         if (isDesktop && sidePanel && sidePanelContent) {
             // Desktop: Side panel is the ONLY card shown
@@ -5082,6 +5098,7 @@
             sidePanel.style.display = 'flex';
             sidePanel.classList.add('open');
             sidePanel.style.opacity = '1';
+            adRoot = sidePanelContent;
 
             // Keep bottom sheet closed on desktop so it never overlaps or duplicates!
             sheet.classList.remove('open');
@@ -5091,6 +5108,7 @@
             sheetContent.innerHTML = html;
             sheet.classList.add('open');
             document.body.classList.add('sheet-active');
+            adRoot = sheetContent;
 
             if (sidePanel) {
                 sidePanel.classList.remove('open');
@@ -5098,9 +5116,43 @@
             }
         }
 
+        injectSheetAd(adRoot);
+
         if (typeof promptInstallAfterAction === 'function') {
             promptInstallAfterAction();
         }
+    }
+
+    // Sponsored slot (Adsterra) — injected below the action buttons of place-detail
+    // sheets only (search results / building taps). Never shown on the map itself.
+    function injectSheetAd(root) {
+        try {
+            if (!root) return;
+            // Place-detail sheets only: they have both a place header and action buttons
+            if (!root.querySelector('.place-header')) return;
+            const actions = root.querySelector('.sheet-actions');
+            if (!actions) return;
+
+            const AD_HASH = 'd4e68266dae7182fec784e124a7c3c5d';
+            const wrap = document.createElement('div');
+            wrap.className = 'sheet-ad-wrap';
+            wrap.innerHTML = `<span class="sheet-ad-label">Sponsored</span><div id="container-${AD_HASH}"></div>`;
+            actions.insertAdjacentElement('afterend', wrap);
+
+            // Re-run the placement tag so it fills the freshly created container
+            document.querySelectorAll('script[data-sheet-ad]').forEach(el => el.remove());
+            const s = document.createElement('script');
+            s.src = `https://bauval.org/21/${AD_HASH}`;
+            s.async = true;
+            s.setAttribute('data-sheet-ad', '1');
+            document.body.appendChild(s);
+
+            // If nothing filled (adblock / no inventory), hide the whole block
+            const container = wrap.querySelector(`#container-${AD_HASH}`);
+            setTimeout(() => {
+                if (container && !container.children.length) wrap.remove();
+            }, 4000);
+        } catch (e) { /* ad failures must never break the sheet */ }
     }
 
     function closeSheet() {
