@@ -19,8 +19,6 @@
     </script>
     <!-- Google AdSense Verification Publisher Tag Slot -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1958377156757358" crossorigin="anonymous"></script>
-    <!-- Adsterra Native Banner Script -->
-    <script async="async" data-cfasync="false" src="https://bauval.org/21/d4e68266dae7182fec784e124a7c3c5d"></script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -3010,33 +3008,6 @@
             box-sizing: border-box;
             clear: both;
         }
-        /* ── DEDICATED ADSTERRA NATIVE BANNER WRAPPER ── */
-        .adsterra-native-wrapper {
-            margin-top: 12px;
-            margin-bottom: 8px;
-            padding: 4px;
-            background: rgba(248, 250, 252, 0.7);
-            border: 1px solid rgba(226, 232, 240, 0.85);
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            box-sizing: border-box;
-            width: 100%;
-            overflow: hidden;
-            pointer-events: none; /* Accidental Click Guard: wrapper zones cannot be clicked */
-        }
-        .adsterra-native-wrapper #container-d4e68266dae7182fec784e124a7c3c5d {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            pointer-events: auto; /* Only allow clicks inside the active ad iframe/target */
-        }
-        .nav-drawer .adsterra-native-wrapper {
-            background: rgba(15, 23, 42, 0.5);
-            border-color: rgba(255, 255, 255, 0.08);
-        }
         .ad-card-label {
             font-size: 9.5px;
             text-transform: uppercase;
@@ -5102,33 +5073,31 @@
     // ══════════════════════════════════════════
     const sheet        = document.getElementById('sheet');
     const sheetContent = document.getElementById('sheetContent');
-    const sidePanel    = document.getElementById('sidePanel');
-    const sidePanelContent = document.getElementById('sidePanelContent');
-
-    const AD_SLOT_HTML = `
-        <div class="adsterra-native-wrapper">
-            <span class="ad-card-label">Sponsored</span>
-            <div id="container-d4e68266dae7182fec784e124a7c3c5d"></div>
-        </div>
-    `;
-
     function openSheet(html) {
-        const fullHtml = html + AD_SLOT_HTML;
-        // Always populate and open the mobile/compact floating sheet
-        sheetContent.innerHTML = fullHtml;
-        sheet.classList.add('open');
-        document.body.classList.add('sheet-active');
+        const isDesktop = window.innerWidth >= 768;
 
-        // On desktop screens, also populate and open sidePanel
-        if (window.innerWidth >= 768 && sidePanel && sidePanelContent) {
-            sidePanelContent.innerHTML = `<div class="panel-card">${fullHtml}</div>`;
+        if (isDesktop && sidePanel && sidePanelContent) {
+            // Desktop: Side panel is the ONLY card shown
+            sidePanelContent.innerHTML = `<div class="panel-card">${html}</div>`;
             sidePanel.style.display = 'flex';
             sidePanel.classList.add('open');
             sidePanel.style.opacity = '1';
+
+            // Keep bottom sheet closed on desktop so it never overlaps or duplicates!
+            sheet.classList.remove('open');
+            document.body.classList.remove('sheet-active');
+        } else {
+            // Mobile: Bottom sheet only (without duplicate sidePanel)
+            sheetContent.innerHTML = html;
+            sheet.classList.add('open');
+            document.body.classList.add('sheet-active');
+
+            if (sidePanel) {
+                sidePanel.classList.remove('open');
+                sidePanel.style.display = 'none';
+            }
         }
-        try {
-            (window.adsbygoogle = window.adsbygoogle || []).push({});
-        } catch (_) {}
+
         if (typeof promptInstallAfterAction === 'function') {
             promptInstallAfterAction();
         }

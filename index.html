@@ -11,6 +11,8 @@
     </script>
     <!-- Google AdSense Verification Publisher Tag Slot -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1958377156757358" crossorigin="anonymous"></script>
+    <!-- Adsterra Native Banner Script -->
+    <script async="async" data-cfasync="false" src="https://bauval.org/21/d4e68266dae7182fec784e124a7c3c5d"></script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -926,6 +928,82 @@
             transform: translateY(-1px);
         }
 
+        /* ── Themed Community Sponsor Ad Section ── */
+        .landing-sponsor-section {
+            max-width: var(--content-max);
+            width: 100%;
+            margin: 1.5rem auto 2.5rem;
+            padding: 0 1.5rem;
+            box-sizing: border-box;
+        }
+
+        .landing-sponsor-card {
+            background: rgba(15, 23, 42, 0.65);
+            border: 1px solid rgba(51, 65, 85, 0.55);
+            border-radius: 18px;
+            padding: 1rem 1.25rem;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .landing-sponsor-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            border-bottom: 1px solid rgba(51, 65, 85, 0.35);
+            padding-bottom: 0.6rem;
+        }
+
+        .landing-sponsor-label-wrap {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .landing-sponsor-badge {
+            font-size: 9.5px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #fbbf24;
+            background: rgba(245, 158, 11, 0.12);
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            padding: 2px 8px;
+            border-radius: 9999px;
+        }
+
+        .landing-sponsor-note {
+            font-size: 11px;
+            color: #94a3b8;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .landing-sponsor-body {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 12px;
+            background: rgba(2, 6, 23, 0.35);
+            padding: 4px;
+            box-sizing: border-box;
+        }
+
+        .landing-sponsor-body #container-d4e68266dae7182fec784e124a7c3c5d {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
         /* ── Footer ─────────────────────────────────────── */
         .site-footer {
             margin-top: auto;
@@ -1330,6 +1408,22 @@
                             <i class="fab fa-whatsapp"></i>
                             Share with a Friend
                         </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Themed Community Sponsor Section -->
+            <section class="landing-sponsor-section" aria-label="Community Sponsor">
+                <div class="landing-sponsor-card">
+                    <div class="landing-sponsor-header">
+                        <div class="landing-sponsor-label-wrap">
+                            <span class="landing-sponsor-badge"><i class="fas fa-heart" style="margin-right:4px;color:#f59e0b;"></i> Community Sponsor</span>
+                            <span class="landing-sponsor-note">Small ads help keep USTED NAV 100% free &amp; maintained for students</span>
+                        </div>
+                    </div>
+                    <div class="landing-sponsor-body">
+                        <!-- Adsterra Native Banner Container -->
+                        <div id="container-d4e68266dae7182fec784e124a7c3c5d"></div>
                     </div>
                 </div>
             </section>
