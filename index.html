@@ -930,26 +930,32 @@
 
         /* ── Themed Community Sponsor Ad Section ── */
         .landing-sponsor-section {
-            max-width: var(--content-max);
+            max-width: 860px;
             width: 100%;
-            margin: 1.5rem auto 2.5rem;
-            padding: 0 1.5rem;
+            margin: 0 auto 2rem;
+            padding: 0 1.25rem;
             box-sizing: border-box;
+            animation: hero-appear 0.7s 0.08s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
 
         .landing-sponsor-card {
-            background: rgba(15, 23, 42, 0.65);
-            border: 1px solid rgba(51, 65, 85, 0.55);
-            border-radius: 18px;
-            padding: 1rem 1.25rem;
+            background: rgba(15, 23, 42, 0.72);
+            border: 1px solid rgba(51, 65, 85, 0.6);
+            border-radius: var(--radius-card);
+            padding: 0.85rem 1.15rem;
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.5);
             display: flex;
             flex-direction: column;
-            gap: 0.75rem;
+            gap: 0.65rem;
             box-sizing: border-box;
             overflow: hidden;
+            transition: border-color 0.2s ease;
+        }
+
+        .landing-sponsor-card:hover {
+            border-color: rgba(245, 158, 11, 0.35);
         }
 
         .landing-sponsor-header {
@@ -959,7 +965,7 @@
             flex-wrap: wrap;
             gap: 0.5rem;
             border-bottom: 1px solid rgba(51, 65, 85, 0.35);
-            padding-bottom: 0.6rem;
+            padding-bottom: 0.55rem;
         }
 
         .landing-sponsor-label-wrap {
@@ -978,6 +984,8 @@
             border: 1px solid rgba(245, 158, 11, 0.25);
             padding: 2px 8px;
             border-radius: 9999px;
+            display: inline-flex;
+            align-items: center;
         }
 
         .landing-sponsor-note {
@@ -991,6 +999,8 @@
             width: 100%;
             display: flex;
             justify-content: center;
+            align-items: center;
+            min-height: 80px;
             overflow: hidden;
             border-radius: 12px;
             background: rgba(2, 6, 23, 0.35);
@@ -1168,6 +1178,10 @@
             .hero-viewport {
                 padding: 2rem 1.1rem 1.75rem;
             }
+            .landing-sponsor-section {
+                margin: 0 auto 1.5rem;
+                padding: 0 1.1rem;
+            }
             .stats-strip {
                 grid-template-columns: repeat(2, 1fr);
                 margin-bottom: 0;
@@ -1316,6 +1330,22 @@
                 </div>
             </section>
 
+            <!-- Themed Community Sponsor Section -->
+            <section class="landing-sponsor-section" aria-label="Community Sponsor">
+                <div class="landing-sponsor-card">
+                    <div class="landing-sponsor-header">
+                        <div class="landing-sponsor-label-wrap">
+                            <span class="landing-sponsor-badge"><i class="fas fa-heart" style="margin-right:4px;color:#f59e0b;"></i> Community Sponsor</span>
+                            <span class="landing-sponsor-note">Small ads help keep USTED NAV 100% free &amp; maintained for students</span>
+                        </div>
+                    </div>
+                    <div class="landing-sponsor-body">
+                        <!-- Adsterra Native Banner Container -->
+                        <div id="container-d4e68266dae7182fec784e124a7c3c5d"></div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Stats Strip -->
             <section class="stats-strip" aria-label="Campus coverage statistics">
                 <div class="stat-cell">
@@ -1408,22 +1438,6 @@
                             <i class="fab fa-whatsapp"></i>
                             Share with a Friend
                         </a>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Themed Community Sponsor Section -->
-            <section class="landing-sponsor-section" aria-label="Community Sponsor">
-                <div class="landing-sponsor-card">
-                    <div class="landing-sponsor-header">
-                        <div class="landing-sponsor-label-wrap">
-                            <span class="landing-sponsor-badge"><i class="fas fa-heart" style="margin-right:4px;color:#f59e0b;"></i> Community Sponsor</span>
-                            <span class="landing-sponsor-note">Small ads help keep USTED NAV 100% free &amp; maintained for students</span>
-                        </div>
-                    </div>
-                    <div class="landing-sponsor-body">
-                        <!-- Adsterra Native Banner Container -->
-                        <div id="container-d4e68266dae7182fec784e124a7c3c5d"></div>
                     </div>
                 </div>
             </section>
