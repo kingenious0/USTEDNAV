@@ -3,7 +3,7 @@
  * Caches app shell + tile images for offline use
  */
 
-const CACHE_NAME  = 'ustednav-v1.3.9';
+const CACHE_NAME  = 'ustednav-v1.4.0';
 const TILE_CACHE  = 'ustednav-tiles-v1';
 
 // App shell and Studio admin files to precache on install

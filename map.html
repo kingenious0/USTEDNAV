@@ -1675,12 +1675,64 @@
             box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45), 0 0 0 2px rgba(37, 99, 235, 0.2) !important;
         }
 
+        .fab-locate-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
         .fab-locate {
             color: #1e293b;
+            position: relative;
         }
         .fab-locate.tracking {
-            color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25), 0 4px 16px rgba(37, 99, 235, 0.35);
+            color: #1a73e8 !important;
+            box-shadow: 0 0 0 4px rgba(26, 115, 232, 0.25), 0 0 20px rgba(26, 115, 232, 0.45) !important;
+            animation: locate-glow 1.5s infinite ease-in-out;
+        }
+        @keyframes locate-glow {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.25), 0 0 16px rgba(26, 115, 232, 0.35); }
+            50% { transform: scale(1.06); box-shadow: 0 0 0 6px rgba(26, 115, 232, 0.35), 0 0 24px rgba(26, 115, 232, 0.55); }
+        }
+        /* Bouncing locating tooltip attached to button */
+        .locate-hint-tooltip {
+            position: absolute;
+            right: calc(100% + 12px);
+            top: 50%;
+            transform: translateY(-50%);
+            background: #0f172a;
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 20px;
+            white-space: nowrap;
+            pointer-events: none;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1005;
+        }
+        .locate-hint-tooltip::after {
+            content: '';
+            position: absolute;
+            left: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 5px solid transparent;
+            border-left-color: #0f172a;
+        }
+        .locate-hint-tooltip.visible {
+            opacity: 1;
+            visibility: visible;
+            animation: bounce-horizontal 1.2s infinite ease-in-out;
+        }
+        @keyframes bounce-horizontal {
+            0%, 100% { transform: translateY(-50%) translateX(0); }
+            50% { transform: translateY(-50%) translateX(-4px); }
         }
 
         .zoom-ctrl {
@@ -2297,11 +2349,60 @@
         .user-dot {
             position: absolute;
             inset: 7px;
-            background: var(--sky);
+            background: #1a73e8;
             border-radius: 50%;
-            border: 3px solid #fff;
-            box-shadow: 0 0 0 6px rgba(14,165,233,.25);
-            animation: gps-pulse 2s ease-in-out infinite;
+            border: 2px solid #ffffff;
+            box-shadow: 0 0 8px rgba(26, 115, 232, 0.6);
+            cursor: pointer;
+        }
+        /* Radar pulse ring — expands & fades behind the dot */
+        .user-pulse {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 32px; height: 32px;
+            margin: -16px 0 0 -16px;
+            border-radius: 50%;
+            border: 2px solid rgba(26, 115, 232, 0.7);
+            animation: pulse-ring 2s infinite ease-out;
+            pointer-events: none;
+        }
+        @keyframes pulse-ring {
+            0%   { transform: scale(0.5); opacity: 1; }
+            100% { transform: scale(2.2); opacity: 0; }
+        }
+        /* Floating "You are here" pill above the dot */
+        .here-badge {
+            position: absolute;
+            bottom: calc(100% + 10px);
+            left: 50%;
+            transform: translate(-50%, 6px);
+            background: #ffffff;
+            color: #0f172a;
+            font-size: 11.5px;
+            font-weight: 700;
+            line-height: 1;
+            padding: 7px 11px;
+            border-radius: 20px;
+            white-space: nowrap;
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.28);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s;
+            z-index: 6;
+        }
+        .here-badge::after {
+            content: '';
+            position: absolute;
+            top: 100%; left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: #ffffff;
+        }
+        .here-badge.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, 0);
         }
         .user-arrow {
             position: absolute;
@@ -2310,7 +2411,7 @@
             width: 0; height: 0;
             border-left: 6px solid transparent;
             border-right: 6px solid transparent;
-            border-bottom: 10px solid var(--sky);
+            border-bottom: 10px solid #1a73e8;
             display: none;
         }
         .user-pin-wrap.has-bearing .user-arrow { display: block; }
@@ -3096,9 +3197,12 @@
         <button class="fab fab-dim-toggle" id="btnDimToggle" title="Switch to 3D Campus View" aria-label="Toggle 2D or 3D View">
             <span id="dimToggleLabel">3D</span>
         </button>
-        <button class="fab fab-locate" id="btnLocate" title="Use My Location" aria-label="Find My Current Location">
-            <i class="fas fa-location-crosshairs"></i>
-        </button>
+        <div class="fab-locate-wrap">
+            <div class="locate-hint-tooltip" id="locateHint">📍 Finding you…</div>
+            <button class="fab fab-locate" id="btnLocate" title="Use My Location" aria-label="Find My Current Location">
+                <i class="fas fa-location-crosshairs"></i>
+            </button>
+        </div>
         <div class="zoom-ctrl">
             <button class="zoom-btn" onclick="handleZoomIn()" title="Zoom In" aria-label="Zoom In"><i class="fas fa-plus"></i></button>
             <button class="zoom-btn" onclick="handleZoomOut()" title="Zoom Out" aria-label="Zoom Out"><i class="fas fa-minus"></i></button>
@@ -4068,15 +4172,18 @@
                     searchSearchBtn.style.display = 'none';
                     // Trigger search immediately
                     doSearch(qVal);
-                    // If results were populated, simulate immediate selection or open dropdown with focus
-                    setTimeout(() => {
-                        const firstItem = searchResults.querySelector('.result-item');
-                        if (firstItem) {
-                            firstItem.click();
-                        } else {
-                            searchResults.classList.add('open');
-                        }
-                    }, 50);
+                    // Select first result item immediately if present
+                    const firstItem = searchResults.querySelector('.result-item');
+                    if (firstItem) {
+                        firstItem.click();
+                    } else {
+                        // In case of slight render cycle, poll once
+                        requestAnimationFrame(() => {
+                            const item = searchResults.querySelector('.result-item');
+                            if (item) item.click();
+                            else searchResults.classList.add('open');
+                        });
+                    }
                 }
             });
         });
@@ -4560,7 +4667,7 @@
                         startRoute(b.lat, b.lng, breadcrumb);
                     });
 
-                    // Row tap -> Fly to building entrance & open details sheet
+                    // Row tap -> Fly to building entrance & open details sheet immediately
                     el.addEventListener('click', () => {
                         saveMapRecentSearch(p.name, q);
                         searchResults.classList.remove('open');
@@ -4570,11 +4677,15 @@
                         searchClear.style.display = 'block';
                         searchSearchBtn.style.display = 'none';
                         if (b) {
+                            const lng = Number(b.lng);
+                            const lat = Number(b.lat);
                             if (window.ViewControllerModule && window.ViewControllerModule.getMode() === '3D') {
-                                window.CesiumViewerModule?.syncCameraFrom2D(b.lng, b.lat, 18);
+                                window.CesiumViewerModule?.syncCameraFrom2D(lng, lat, 18);
                             }
-                            map.flyTo({ center: [b.lng, b.lat], zoom: 19, duration: 800, essential: true });
-                            setTimeout(() => showStaff(p, b), 850);
+                            if (!isNaN(lng) && !isNaN(lat) && map && typeof map.flyTo === 'function') {
+                                map.flyTo({ center: [lng, lat], zoom: 19, duration: 600, essential: true });
+                            }
+                            showStaff(p, b);
                         } else {
                             showToast('Office building coordinates unresolved');
                         }
@@ -4640,11 +4751,15 @@
                         searchInput.value = s.name;
                         searchClear.style.display = 'block';
                         searchSearchBtn.style.display = 'none';
+                        const lng = Number(b.lng);
+                        const lat = Number(b.lat);
                         if (window.ViewControllerModule && window.ViewControllerModule.getMode() === '3D') {
-                            window.CesiumViewerModule?.syncCameraFrom2D(b.lng, b.lat, 18);
+                            window.CesiumViewerModule?.syncCameraFrom2D(lng, lat, 18);
                         }
-                        map.flyTo({ center: [b.lng, b.lat], zoom: 19, duration: 800, essential: true });
-                        setTimeout(() => showService(s, b), 850);
+                        if (!isNaN(lng) && !isNaN(lat) && map && typeof map.flyTo === 'function') {
+                            map.flyTo({ center: [lng, lat], zoom: 19, duration: 600, essential: true });
+                        }
+                        showService(s, b);
                     });
 
                 } else if (type === 'room') {
@@ -4721,11 +4836,15 @@
                         searchInput.value = `${bPrefix} - ${roomStr}`;
                         searchClear.style.display = 'block';
                         searchSearchBtn.style.display = 'none';
+                        const lng = Number(b.lng);
+                        const lat = Number(b.lat);
                         if (window.ViewControllerModule && window.ViewControllerModule.getMode() === '3D') {
-                            window.CesiumViewerModule?.syncCameraFrom2D(b.lng, b.lat, 18);
+                            window.CesiumViewerModule?.syncCameraFrom2D(lng, lat, 18);
                         }
-                        map.flyTo({ center: [b.lng, b.lat], zoom: 19, duration: 800, essential: true });
-                        setTimeout(() => showRoom(r, b), 850);
+                        if (!isNaN(lng) && !isNaN(lat) && map && typeof map.flyTo === 'function') {
+                            map.flyTo({ center: [lng, lat], zoom: 19, duration: 600, essential: true });
+                        }
+                        showRoom(r, b);
                     });
 
                 } else {
@@ -4786,11 +4905,15 @@
                         searchInput.value = name;
                         searchClear.style.display = 'block';
                         searchSearchBtn.style.display = 'none';
+                        const lng = Number(b.lng);
+                        const lat = Number(b.lat);
                         if (window.ViewControllerModule && window.ViewControllerModule.getMode() === '3D') {
-                            window.CesiumViewerModule?.syncCameraFrom2D(b.lng, b.lat, 18);
+                            window.CesiumViewerModule?.syncCameraFrom2D(lng, lat, 18);
                         }
-                        map.flyTo({ center: [b.lng, b.lat], zoom: 19, duration: 800, essential: true });
-                        setTimeout(() => showBuilding(b), 850);
+                        if (!isNaN(lng) && !isNaN(lat) && map && typeof map.flyTo === 'function') {
+                            map.flyTo({ center: [lng, lat], zoom: 19, duration: 600, essential: true });
+                        }
+                        showBuilding(b);
                     });
                 }
 
@@ -5264,14 +5387,36 @@
     // in Chrome/Edge/Safari on Android/iOS since 2016.
     const isHttp = location.protocol === 'http:';
 
+    // ── "You are here" floating badge ──
+    let hereBadgeTimer = null;
+    function showHereBadge(ms = 4000) {
+        const badge = document.querySelector('.here-badge');
+        if (!badge) return;
+        badge.classList.add('show');
+        clearTimeout(hereBadgeTimer);
+        if (ms > 0) hereBadgeTimer = setTimeout(() => badge.classList.remove('show'), ms);
+    }
+    function hideHereBadge() {
+        clearTimeout(hereBadgeTimer);
+        const badge = document.querySelector('.here-badge');
+        if (badge) badge.classList.remove('show');
+    }
+
+    // ── Locate button glow + bouncing "Finding you…" tooltip ──
+    function setLocating(active) {
+        const btn = document.getElementById('btnLocate');
+        const hint = document.getElementById('locateHint');
+        if (btn) btn.classList.toggle('tracking', !!active);
+        if (hint) hint.classList.toggle('visible', !!active);
+    }
+
     function tryGeolocation(isRetry = false) {
         if (!navigator.geolocation) {
             showLocationUnavailable();
             return;
         }
 
-        const locateBtn = document.getElementById('btnLocate');
-        if (locateBtn) locateBtn.classList.add('tracking');
+        setLocating(true);
 
         // Fast resolution: first try high accuracy with an 8-second ceiling
         navigator.geolocation.getCurrentPosition(
@@ -5281,11 +5426,12 @@
                 placeUserMarker(lat, lng, pos.coords.heading);
                 map.flyTo({ center: [lng, lat], zoom: 18, duration: 800 });
                 startWatching();
-                if (locateBtn) locateBtn.classList.remove('tracking');
+                setLocating(false);
+                showHereBadge(4000);
             },
             err => {
                 if (err.code === 1 /* PERMISSION_DENIED */ && isHttp) {
-                    if (locateBtn) locateBtn.classList.remove('tracking');
+                    setLocating(false);
                     showLocationBlockedSheet();
                     return;
                 }
@@ -5299,10 +5445,11 @@
                             placeUserMarker(lat, lng, fallbackPos.coords.heading);
                             map.flyTo({ center: [lng, lat], zoom: 18, duration: 800 });
                             startWatching();
-                            if (locateBtn) locateBtn.classList.remove('tracking');
+                            setLocating(false);
+                            showHereBadge(4000);
                         },
                         () => {
-                            if (locateBtn) locateBtn.classList.remove('tracking');
+                            setLocating(false);
                             if (err.code === 2) showToast('GPS signal lost — try again outside');
                             else if (err.code === 3) showToast('Location timed out — tap 📍 to retry');
                             else showLocationUnavailable();
@@ -5312,7 +5459,7 @@
                     return;
                 }
 
-                if (locateBtn) locateBtn.classList.remove('tracking');
+                setLocating(false);
                 if (err.code === 2) {
                     showToast('GPS signal lost — try again outside');
                 } else if (err.code === 3) {
@@ -5384,6 +5531,7 @@
         userLatLng = { lat, lng };
         placeUserMarker(lat, lng, null);
         map.flyTo({ center: [lng, lat], zoom: 18, duration: 800 });
+        showHereBadge(4000);
         showToast('Your location is set ✔');
         // If there is a pending navigation, resume it automatically
         if (_route.steps.length && _route.destName) {
@@ -5395,6 +5543,9 @@
         document.getElementById('btnLocate').addEventListener('click', () => {
             tryGeolocation();
         });
+
+        // Hide the "You are here" badge as soon as the user drags the map
+        map.on('dragstart', hideHereBadge);
 
         // Auto-try GPS on load (works on localhost)
         tryGeolocation();
@@ -5408,10 +5559,17 @@
             const el = document.createElement('div');
             el.className = 'user-marker-container';
             el.innerHTML = `<div class="user-pin-wrap${hasBearing ? ' has-bearing' : ''}">
+                <div class="here-badge">📍 You are here</div>
+                <div class="user-pulse"></div>
                 <div class="user-arrow" style="transform:translateX(-50%) ${rot}"></div>
                 <div class="user-dot"></div>
             </div>`;
-            
+            // Tapping the blue dot re-shows the badge for 2 seconds
+            el.addEventListener('click', e => {
+                e.stopPropagation();
+                showHereBadge(2000);
+            });
+
             userMarker = new mapboxgl.Marker({ element: el, zIndexOffset: 2000 })
                 .setLngLat([lng, lat])
                 .addTo(map);
