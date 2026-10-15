@@ -2360,39 +2360,90 @@
             50% { box-shadow: 0 0 0 8px rgba(99,102,241,0); }
         }
 
-        /* User bearing arrow */
+        /* Google Maps-style Flashlight Compass Cone & Pulse Ring */
         .user-pin-wrap {
             position: relative;
-            width: 34px; height: 34px;
+            width: 44px; height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
+        /* Google Maps Blue Dot */
         .user-dot {
             position: absolute;
-            inset: 7px;
+            width: 18px;
+            height: 18px;
             background: #1a73e8;
             border-radius: 50%;
-            border: 2px solid #ffffff;
-            box-shadow: 0 0 8px rgba(26, 115, 232, 0.6);
+            border: 2.5px solid #ffffff;
+            box-shadow: 0 0 10px rgba(26, 115, 232, 0.7), 0 2px 6px rgba(0,0,0,0.3);
             cursor: pointer;
+            z-index: 5;
+            transition: transform 0.15s ease;
+        }
+        .user-dot:active {
+            transform: scale(0.92);
         }
         /* Radar pulse ring — expands & fades behind the dot */
         .user-pulse {
             position: absolute;
-            top: 50%; left: 50%;
-            width: 32px; height: 32px;
-            margin: -16px 0 0 -16px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
-            border: 2px solid rgba(26, 115, 232, 0.7);
-            animation: pulse-ring 2s infinite ease-out;
+            border: 1.5px solid rgba(66, 133, 244, 0.65);
+            background: rgba(66, 133, 244, 0.12);
+            animation: pulse-ring 2.2s infinite ease-out;
             pointer-events: none;
+            z-index: 2;
         }
         @keyframes pulse-ring {
-            0%   { transform: scale(0.5); opacity: 1; }
-            100% { transform: scale(2.2); opacity: 0; }
+            0%   { transform: scale(0.6); opacity: 0.9; }
+            100% { transform: scale(2.4); opacity: 0; }
+        }
+
+        /* Google Maps Soft Flashlight Beam (Orientation Cone) */
+        .user-beam {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            width: 140px;
+            height: 140px;
+            margin-left: -70px;
+            margin-bottom: -10px;
+            pointer-events: none;
+            transform-origin: 50% calc(100% - 10px);
+            z-index: 1;
+            display: none;
+            transition: transform 0.1s linear;
+        }
+        .user-pin-wrap.has-bearing .user-beam {
+            display: block;
+        }
+        /* Gradient arc mimicking Google Maps flashlight angle */
+        .user-beam svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+            filter: drop-shadow(0 0 6px rgba(66, 133, 244, 0.35));
+        }
+
+        /* Directional arrow tip on the blue dot */
+        .user-arrow {
+            position: absolute;
+            top: 2px; left: 50%;
+            transform: translateX(-50%);
+            width: 0; height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-bottom: 9px solid #1a73e8;
+            filter: drop-shadow(0 -1px 2px rgba(0,0,0,0.3));
+            display: none;
+            z-index: 6;
         }
         /* Floating "You are here" pill above the dot */
         .here-badge {
             position: absolute;
-            bottom: calc(100% + 10px);
+            bottom: calc(100% + 14px);
             left: 50%;
             transform: translate(-50%, 6px);
             background: #ffffff;
@@ -2408,7 +2459,7 @@
             visibility: hidden;
             pointer-events: none;
             transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s;
-            z-index: 6;
+            z-index: 10;
         }
         .here-badge::after {
             content: '';
@@ -2423,17 +2474,6 @@
             visibility: visible;
             transform: translate(-50%, 0);
         }
-        .user-arrow {
-            position: absolute;
-            top: 0; left: 50%;
-            transform: translateX(-50%);
-            width: 0; height: 0;
-            border-left: 6px solid transparent;
-            border-right: 6px solid transparent;
-            border-bottom: 10px solid #1a73e8;
-            display: none;
-        }
-        .user-pin-wrap.has-bearing .user-arrow { display: block; }
 
         /* ── CUSTOM MARKERS ───────────────────── */
         .pin {
@@ -4009,7 +4049,7 @@
             if (layer.type === 'symbol') { firstSymbolId = layer.id; break; }
         }
 
-        // Standard composite Mapbox 3D buildings
+        // Standard composite Mapbox 3D buildings - Google Maps Warm Aesthetic
         if (!map.getLayer('campus-3d-buildings')) {
             map.addLayer({
                 id: 'campus-3d-buildings',
@@ -4019,7 +4059,13 @@
                 type: 'fill-extrusion',
                 minzoom: 15,
                 paint: {
-                    'fill-extrusion-color': ['interpolate', ['linear'], ['get', 'height'], 0, '#e2e8f0', 10, '#cbd5e1', 30, '#94a3b8'],
+                    // Google Maps style warm architectural beige/ivory gradient
+                    'fill-extrusion-color': [
+                        'interpolate', ['linear'], ['get', 'height'],
+                        0, '#f0eee8',
+                        10, '#e5e3db',
+                        30, '#d8d5cb'
+                    ],
                     'fill-extrusion-height': [
                         'coalesce',
                         ['get', 'height'],
@@ -4032,9 +4078,44 @@
                         ['get', 'min_height'],
                         0
                     ],
-                    'fill-extrusion-opacity': (typeof isSatellite !== 'undefined' && isSatellite) ? 0.35 : 0.65
+                    'fill-extrusion-opacity': (typeof isSatellite !== 'undefined' && isSatellite) ? 0.35 : 0.82
                 }
             }, firstSymbolId);
+        }
+
+        // Apply Google Maps vector palette enhancements to existing vector layers if present
+        applyGoogleMapsPalette();
+    }
+
+    // Google Maps Aesthetic: Soft pastel landuse, subtle road borders & crisp typography
+    function applyGoogleMapsPalette() {
+        if (!map || typeof isSatellite !== 'undefined' && isSatellite) return;
+        try {
+            // Soft Google Maps grass / park green
+            ['landuse', 'landcover', 'natural'].forEach(layerId => {
+                if (map.getLayer(layerId)) {
+                    map.setPaintProperty(layerId, 'fill-color', [
+                        'case',
+                        ['match', ['get', 'class'], ['park', 'pitch', 'grass', 'garden', 'recreation_ground'], true, false],
+                        '#dcf1d8',
+                        map.getPaintProperty(layerId, 'fill-color') || '#e8ece9'
+                    ]);
+                }
+            });
+
+            // Google Maps clean water blue
+            if (map.getLayer('water')) {
+                map.setPaintProperty('water', 'fill-color', '#c4e3fb');
+            }
+
+            // Google Maps road network tinting (clean crisp white with subtle warm border)
+            ['road-street', 'road-primary', 'road-secondary', 'road-minor'].forEach(rId => {
+                if (map.getLayer(rId)) {
+                    map.setPaintProperty(rId, 'line-color', '#ffffff');
+                }
+            });
+        } catch (e) {
+            console.log('[CampusOS] Palette tuner info:', e?.message || e);
         }
     }
 
@@ -6084,23 +6165,106 @@
         tryGeolocation();
     }
 
+    // Device Orientation (Compass Heading) state
+    let deviceHeading = null;
+    let compassListenerAttached = false;
+
+    function initCompassSensor() {
+        if (compassListenerAttached) return;
+        compassListenerAttached = true;
+
+        const handleOrientation = (e) => {
+            let heading = null;
+            if (e.webkitCompassHeading !== undefined) {
+                // iOS Safari native compass
+                heading = e.webkitCompassHeading;
+            } else if (e.alpha !== null && e.absolute) {
+                // Android standard absolute orientation
+                heading = 360 - e.alpha;
+            } else if (e.alpha !== null) {
+                heading = 360 - e.alpha;
+            }
+            if (heading !== null && !isNaN(heading)) {
+                deviceHeading = (heading + 360) % 360;
+                updateUserBeamOrientation(deviceHeading);
+            }
+        };
+
+        if (window.DeviceOrientationEvent) {
+            // Check if iOS 13+ permission request is needed
+            if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                // Will be triggered on first user touch/tap
+                const requestIOSPermission = () => {
+                    DeviceOrientationEvent.requestPermission()
+                        .then(res => {
+                            if (res === 'granted') {
+                                window.addEventListener('deviceorientation', handleOrientation, true);
+                            }
+                        })
+                        .catch(() => {})
+                        .finally(() => {
+                            window.removeEventListener('click', requestIOSPermission);
+                            window.removeEventListener('touchend', requestIOSPermission);
+                        });
+                };
+                window.addEventListener('click', requestIOSPermission, { once: true });
+                window.addEventListener('touchend', requestIOSPermission, { once: true });
+            } else {
+                // Android & modern mobile browsers
+                window.addEventListener('deviceorientationabsolute', handleOrientation, true);
+                window.addEventListener('deviceorientation', handleOrientation, true);
+            }
+        }
+    }
+
+    function updateUserBeamOrientation(angle) {
+        if (!userMarker) return;
+        const el = userMarker.getElement();
+        const beam = el?.querySelector('.user-beam');
+        const arrow = el?.querySelector('.user-arrow');
+        const rot = `rotate(${Math.round(angle)}deg)`;
+        if (beam) beam.style.transform = rot;
+        if (arrow) arrow.style.transform = `translateX(-50%) ${rot}`;
+        const wrap = el?.querySelector('.user-pin-wrap');
+        if (wrap && !wrap.classList.contains('has-bearing')) {
+            wrap.classList.add('has-bearing');
+        }
+    }
+
     function placeUserMarker(lat, lng, bearing) {
-        const hasBearing = bearing !== null && bearing !== undefined;
-        const rot = hasBearing ? `rotate(${Math.round(bearing)}deg)` : 'none';
+        initCompassSensor();
+        const activeHeading = (bearing !== null && bearing !== undefined) ? bearing : deviceHeading;
+        const hasBearing = activeHeading !== null && activeHeading !== undefined;
+        const rot = hasBearing ? `rotate(${Math.round(activeHeading)}deg)` : 'none';
         
         if (!userMarker) {
             const el = document.createElement('div');
             el.className = 'user-marker-container';
-            el.innerHTML = `<div class="user-pin-wrap${hasBearing ? ' has-bearing' : ''}">
-                <div class="here-badge">📍 You are here</div>
-                <div class="user-pulse"></div>
-                <div class="user-arrow" style="transform:translateX(-50%) ${rot}"></div>
-                <div class="user-dot"></div>
-            </div>`;
+            el.innerHTML = `
+                <div class="user-pin-wrap${hasBearing ? ' has-bearing' : ''}">
+                    <div class="here-badge">📍 You are here</div>
+                    <div class="user-beam" style="transform:${rot}">
+                        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <radialGradient id="gmapsBeamGrad" cx="50%" cy="100%" r="90%">
+                                    <stop offset="0%" stop-color="#4285F4" stop-opacity="0.55" />
+                                    <stop offset="45%" stop-color="#4285F4" stop-opacity="0.22" />
+                                    <stop offset="100%" stop-color="#4285F4" stop-opacity="0" />
+                                </radialGradient>
+                            </defs>
+                            <!-- 65° Google Maps-style light arc -->
+                            <path d="M50 100 L12 18 A 60 60 0 0 1 88 18 Z" fill="url(#gmapsBeamGrad)" />
+                        </svg>
+                    </div>
+                    <div class="user-pulse"></div>
+                    <div class="user-arrow" style="transform:translateX(-50%) ${rot}"></div>
+                    <div class="user-dot" title="Your current location"></div>
+                </div>
+            `;
             // Tapping the blue dot re-shows the badge for 2 seconds
             el.addEventListener('click', e => {
                 e.stopPropagation();
-                showHereBadge(2000);
+                showHereBadge(2500);
             });
 
             userMarker = new mapboxgl.Marker({ element: el, zIndexOffset: 2000 })
@@ -6108,9 +6272,9 @@
                 .addTo(map);
         } else {
             userMarker.setLngLat([lng, lat]);
-            const el = userMarker.getElement();
-            const arrow = el.querySelector('.user-arrow');
-            if (arrow) arrow.style.transform = `translateX(-50%) ${rot}`;
+            if (hasBearing) {
+                updateUserBeamOrientation(activeHeading);
+            }
         }
     }
 
@@ -6424,8 +6588,16 @@
         if (distRemEl) distRemEl.textContent = formatDist(navState.totalDist);
         if (destTitleEl) destTitleEl.textContent = destName || 'Destination';
 
-        // Camera follow
-        map.flyTo({ center: [userLatLng.lng, userLatLng.lat], zoom: 18, pitch: 45, duration: 1000 });
+        // Google Maps 3D Navigation Camera: 58° perspective pitch, zoom 18.5, auto-heading
+        const initialBearing = (userBearing !== null && userBearing !== undefined) ? userBearing : (deviceHeading || 0);
+        map.easeTo({
+            center: [userLatLng.lng, userLatLng.lat],
+            zoom: 18.5,
+            pitch: 58,
+            bearing: initialBearing,
+            duration: 1200,
+            essential: true
+        });
 
         // Start High Accuracy Tracking via watchPosition
         if (navigator.geolocation) {
@@ -6511,9 +6683,16 @@
             }
         }
 
-        // Smooth camera follow
+        // Smooth Google Maps camera easing (tracks heading and location at 58° tilt)
         if (map) {
-            map.panTo([lng, lat], { duration: 800 });
+            const activeBearing = (userBearing !== null && userBearing !== undefined) ? userBearing : (deviceHeading || map.getBearing() || 0);
+            map.easeTo({
+                center: [lng, lat],
+                pitch: 58,
+                bearing: activeBearing,
+                duration: 900,
+                easing: t => t * (2 - t)
+            });
         }
     }
 
@@ -6572,6 +6751,15 @@
         const fill = document.getElementById('navProgressFill');
         if (fill) fill.style.width = '0%';
         setUIState(UI_STATE.IDLE);
+
+        // Smoothly tilt camera back to standard top-down overview
+        if (map) {
+            map.easeTo({
+                pitch: 0,
+                bearing: 0,
+                duration: 1000
+            });
+        }
     }
 
     // Single entry-point for stopping navigation from ANY control
