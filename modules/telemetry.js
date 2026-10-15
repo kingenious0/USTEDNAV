@@ -108,15 +108,22 @@
 
       // 1. Send to Supabase analytics_events table
       if (supabaseUrl && supabaseKey && typeof fetch !== 'undefined') {
+        const schema = (env.schema || appCfg.DEFAULT_SCHEMA || '').trim();
         const endpoint = `${supabaseUrl}/rest/v1/analytics_events`;
+        const headers = {
+          'apikey': supabaseKey,
+          'Authorization': `Bearer ${supabaseKey}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        };
+        if (schema) {
+          headers['Accept-Profile'] = schema;
+          headers['Content-Profile'] = schema;
+        }
+
         fetch(endpoint, {
           method: 'POST',
-          headers: {
-            'apikey': supabaseKey,
-            'Authorization': `Bearer ${supabaseKey}`,
-            'Content-Type': 'application/json',
-            'Prefer': 'return=minimal'
-          },
+          headers: headers,
           body: JSON.stringify(payload),
           keepalive: true
         }).catch(function() {

@@ -90,19 +90,24 @@
         }
 
         :root {
-            --bg-color: #090d16;
-            --surface-card: rgba(15, 23, 42, 0.72);
-            --surface-card-border: rgba(51, 65, 85, 0.75);
+            --bg-color: #070a12;
+            --surface-card: rgba(15, 23, 42, 0.7);
+            --surface-glass: rgba(17, 24, 39, 0.65);
+            --surface-glass-border: rgba(255, 255, 255, 0.08);
+            --surface-glass-hover: rgba(30, 41, 59, 0.85);
             --amber-primary: #f59e0b;
-            --amber-hover: #d97706;
-            --amber-glow: rgba(245, 158, 11, 0.22);
-            --blue-ambient: rgba(30, 58, 138, 0.28);
+            --amber-hover: #fbbf24;
+            --amber-glow: rgba(245, 158, 11, 0.28);
+            --cyan-accent: #06b6d4;
+            --cyan-glow: rgba(6, 182, 212, 0.25);
+            --emerald-accent: #10b981;
+            --indigo-accent: #6366f1;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --text-sub: #64748b;
-            --hairline: rgba(51, 65, 85, 0.55);
-            --radius-card: 18px;
-            --content-max: 1080px;
+            --radius-card: 20px;
+            --radius-pill: 9999px;
+            --content-max: 1120px;
         }
 
         html, body {
@@ -118,24 +123,26 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Spatial grid background with high-altitude blue ambient glow */
+        /* ── Dynamic Ambient Spatial Canvas with Light Orbs ── */
         .ambient-canvas {
             position: fixed;
             inset: 0;
             pointer-events: none;
             z-index: 0;
-            background-color: #090d16;
+            background-color: var(--bg-color);
             background-image:
-                radial-gradient(ellipse 90% 60% at 50% -15%, var(--blue-ambient) 0%, transparent 72%),
-                radial-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px);
-            background-size: 100% 100%, 30px 30px;
+                radial-gradient(circle at 18% 12%, rgba(245, 158, 11, 0.14) 0%, transparent 48%),
+                radial-gradient(circle at 82% 24%, rgba(6, 182, 212, 0.12) 0%, transparent 52%),
+                radial-gradient(circle at 50% 68%, rgba(99, 102, 241, 0.1) 0%, transparent 60%),
+                radial-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 100% 100%, 36px 36px;
         }
 
         .ambient-canvas::after {
             content: '';
             position: absolute;
             inset: 0;
-            background: radial-gradient(circle at 50% 50%, transparent 20%, rgba(9, 13, 22, 0.8) 100%);
+            background: radial-gradient(circle at 50% 40%, transparent 15%, rgba(7, 10, 18, 0.88) 100%);
         }
 
         .app-shell {
@@ -149,22 +156,35 @@
             padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
         }
 
-        /* ── Top Navigation ─────────────────────────────── */
+        /* ── Top Navigation (Floating Liquid Glass Pill) ── */
+        .top-navbar-wrap {
+            position: sticky;
+            top: 12px;
+            z-index: 100;
+            padding: 0 1rem;
+            width: 100%;
+            max-width: var(--content-max);
+            margin: 0 auto;
+        }
+
         .top-navbar {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0.9rem 1.5rem;
-            max-width: var(--content-max);
-            width: 100%;
-            margin: 0 auto;
-            border-bottom: 1px solid rgba(51, 65, 85, 0.35);
+            padding: 0.65rem 1.15rem;
+            background: rgba(11, 17, 32, 0.78);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--surface-glass-border);
+            border-radius: 9999px;
+            box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.04);
+            transition: all 0.25s ease;
         }
 
         .brand-link {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 0.7rem;
             text-decoration: none;
             color: inherit;
         }
@@ -173,31 +193,31 @@
             width: 34px;
             height: 34px;
             border-radius: 10px;
-            border: 1px solid rgba(245, 158, 11, 0.35);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
             object-fit: cover;
         }
 
         .nav-brand-text {
             font-size: 0.95rem;
             font-weight: 800;
-            letter-spacing: -0.01em;
+            letter-spacing: -0.015em;
             color: #ffffff;
             display: flex;
             align-items: center;
             gap: 0.45rem;
         }
 
-        .nav-tag {
+        .nav-version-badge {
             font-size: 10px;
-            font-weight: 600;
-            color: #fbbf24;
-            background: rgba(245, 158, 11, 0.12);
-            border: 1px solid rgba(245, 158, 11, 0.25);
-            padding: 1px 7px;
+            font-weight: 700;
+            color: #0b1120;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            padding: 2px 7px;
             border-radius: 9999px;
             letter-spacing: 0.05em;
             text-transform: uppercase;
+            box-shadow: 0 2px 6px rgba(245, 158, 11, 0.35);
         }
 
         .nav-actions {
@@ -212,26 +232,25 @@
             gap: 0.45rem;
             padding: 0.35rem 0.75rem;
             border-radius: 9999px;
-            background: rgba(15, 23, 42, 0.8);
+            background: rgba(15, 23, 42, 0.65);
             border: 1px solid rgba(255, 255, 255, 0.08);
             font-size: 11px;
-            font-weight: 500;
+            font-weight: 550;
             color: #94a3b8;
-            backdrop-filter: blur(8px);
         }
 
         .status-dot {
-            width: 6px;
-            height: 6px;
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
             background: #10b981;
-            box-shadow: 0 0 8px #10b981;
-            animation: pulse-dot 2.2s infinite;
+            box-shadow: 0 0 10px #10b981;
+            animation: pulse-dot 2s infinite ease-in-out;
         }
 
         @keyframes pulse-dot {
             0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.55; transform: scale(0.85); }
+            50% { opacity: 0.4; transform: scale(0.85); }
         }
 
         .ghost-install-btn {
@@ -240,7 +259,7 @@
             gap: 0.45rem;
             padding: 0.4rem 0.9rem;
             border-radius: 9999px;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(255, 255, 255, 0.12);
             color: #f1f5f9;
             font-size: 11.5px;
@@ -249,93 +268,187 @@
             transition: all 0.2s ease;
         }
         .ghost-install-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.25);
+            color: #ffffff;
         }
 
         .nav-map-btn {
             display: inline-flex;
             align-items: center;
             gap: 0.45rem;
-            padding: 0.42rem 0.95rem;
+            padding: 0.45rem 1.05rem;
             border-radius: 9999px;
             background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-            color: #0b1120;
-            font-size: 11.5px;
-            font-weight: 700;
+            color: #070a12;
+            font-size: 12px;
+            font-weight: 750;
             text-decoration: none;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 14px -4px rgba(245, 158, 11, 0.45);
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 16px -2px rgba(245, 158, 11, 0.5);
         }
         .nav-map-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 18px -4px rgba(245, 158, 11, 0.6);
+            transform: translateY(-1.5px) scale(1.02);
+            box-shadow: 0 6px 20px -2px rgba(245, 158, 11, 0.65);
         }
 
-        /* ── Hero ───────────────────────────────────────── */
+        /* ── Hero Viewport ── */
         .hero-viewport {
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: clamp(2.5rem, 7vh, 4.5rem) 1.25rem 2.25rem;
+            padding: clamp(2rem, 5vh, 4rem) 1.25rem 2rem;
+            position: relative;
         }
 
         .hero-inner {
-            max-width: 720px;
+            max-width: 780px;
             width: 100%;
             text-align: center;
             animation: hero-appear 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+            position: relative;
+            z-index: 2;
         }
 
         @keyframes hero-appear {
-            from { opacity: 0; transform: translateY(22px); }
+            from { opacity: 0; transform: translateY(24px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .campus-pill-badge {
             display: inline-flex;
             align-items: center;
-            gap: 0.4rem;
-            padding: 0.32rem 0.9rem;
+            gap: 0.55rem;
+            padding: 0.38rem 0.95rem;
             border-radius: 9999px;
-            font-size: 11px;
+            font-size: 11.5px;
             font-weight: 600;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            background: rgba(245, 158, 11, 0.1);
-            color: #fcd34d;
-            border: 1px solid rgba(245, 158, 11, 0.28);
-            margin-bottom: 1.35rem;
+            letter-spacing: 0.04em;
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            color: #f1f5f9;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            margin-bottom: 1.4rem;
+            box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+        .campus-pill-badge i {
+            color: #f59e0b;
+            font-size: 12px;
+        }
+        .campus-pill-badge .version-tag {
+            color: #f59e0b;
+            font-weight: 700;
         }
 
         .hero-title {
-            font-size: clamp(2.1rem, 6vw, 3.4rem);
-            font-weight: 800;
-            letter-spacing: -0.035em;
+            font-size: clamp(2.3rem, 6.2vw, 3.8rem);
+            font-weight: 900;
+            letter-spacing: -0.04em;
             color: #ffffff;
-            line-height: 1.08;
-            margin-bottom: 1rem;
+            line-height: 1.06;
+            margin-bottom: 1.15rem;
         }
 
         .title-gradient {
-            background: linear-gradient(135deg, #fef08a 0%, #f59e0b 55%, #d97706 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #fde68a 35%, #f59e0b 70%, #d97706 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .title-gradient-cyan {
+            background: linear-gradient(135deg, #67e8f9 0%, #06b6d4 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .hero-subtitle {
-            font-size: clamp(0.95rem, 2.5vw, 1.05rem);
+            font-size: clamp(0.98rem, 2.5vw, 1.12rem);
             color: #94a3b8;
-            max-width: 560px;
-            margin: 0 auto 2rem;
+            max-width: 600px;
+            margin: 0 auto 2.25rem;
             line-height: 1.65;
+            font-weight: 450;
         }
 
-        /* ── Search ─────────────────────────────────────── */
-        .search-container {
-            max-width: 560px;
-            margin: 0 auto 1rem;
+        /* ── Role Fast-Tracks (Role Selector Pill Row) ── */
+        .role-selector-wrap {
+            max-width: 600px;
+            margin: 0 auto 1.3rem;
             text-align: left;
+        }
+
+        .role-selector-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-sub);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .role-pills-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            overflow-x: auto;
+            scrollbar-width: none;
+            padding-bottom: 4px;
+        }
+        .role-pills-row::-webkit-scrollbar {
+            display: none;
+        }
+
+        .role-pill-btn {
+            background: rgba(15, 23, 42, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 6px 14px;
+            color: #cbd5e1;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            white-space: nowrap;
+        }
+
+        .role-pill-btn i {
+            font-size: 11px;
+            opacity: 0.75;
+        }
+
+        .role-pill-btn:hover {
+            background: rgba(30, 41, 59, 0.85);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        .role-pill-btn.active {
+            background: rgba(245, 158, 11, 0.16);
+            border-color: rgba(245, 158, 11, 0.45);
+            color: #fcd34d;
+            box-shadow: 0 4px 12px -2px rgba(245, 158, 11, 0.25);
+        }
+
+        .role-pill-btn.active i {
+            color: #fbbf24;
+            opacity: 1;
+        }
+
+        /* ── Spotlight Search Experience ── */
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 1.25rem;
+            text-align: left;
+            position: relative;
         }
 
         .search-form {
@@ -345,37 +458,47 @@
             width: 100%;
         }
 
+        .search-input-wrap {
+            position: relative;
+            width: 100%;
+            display: flex;
+            align-items: center;
+        }
+
         .search-input {
             width: 100%;
-            height: 54px;
-            padding: 0 54px 0 46px;
-            border-radius: 16px;
-            background: rgba(3, 7, 18, 0.72);
+            height: 58px;
+            padding: 0 54px 0 48px;
+            border-radius: 18px;
+            background: rgba(11, 16, 30, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1.5px solid rgba(71, 85, 105, 0.55);
             color: #f8fafc;
-            font-size: 0.925rem;
+            font-size: 0.95rem;
             font-family: inherit;
             outline: none;
             transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             -webkit-appearance: none;
+            box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.05);
         }
 
         .search-input:focus {
-            background: rgba(3, 7, 18, 0.92);
+            background: rgba(7, 11, 22, 0.96);
             border-color: #f59e0b;
-            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.16), 0 8px 24px rgba(0, 0, 0, 0.45);
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2), 0 16px 40px -8px rgba(0, 0, 0, 0.65);
         }
 
         .search-input::placeholder {
             color: #64748b;
-            font-size: 0.885rem;
+            font-size: 0.9rem;
         }
 
         .search-icon-left {
             position: absolute;
-            left: 15px;
-            width: 18px;
-            height: 18px;
+            left: 17px;
+            width: 19px;
+            height: 19px;
             color: #94a3b8;
             pointer-events: none;
             display: flex;
@@ -385,41 +508,140 @@
 
         .search-submit-btn {
             position: absolute;
-            right: 7px;
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            background: rgba(245, 158, 11, 0.16);
-            border: 1px solid rgba(245, 158, 11, 0.35);
-            color: #fbbf24;
+            right: 8px;
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            border: none;
+            color: #070a12;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
         }
         .search-submit-btn:hover {
-            background: #f59e0b;
-            color: #090d16;
-            transform: scale(1.05);
+            transform: scale(1.06);
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.5);
         }
         .search-submit-btn:active {
-            transform: scale(0.94);
+            transform: scale(0.95);
         }
         .search-submit-btn svg {
-            width: 16px;
-            height: 16px;
+            width: 17px;
+            height: 17px;
         }
 
+        /* ── Realtime Search Suggestions Dropdown ── */
+        .search-suggestions-palette {
+            display: none;
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            right: 0;
+            background: rgba(13, 19, 35, 0.94);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 18px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(245, 158, 11, 0.2);
+            z-index: 100;
+            overflow: hidden;
+            animation: appear-dropdown 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .search-suggestions-palette.show {
+            display: block;
+        }
+
+        @keyframes appear-dropdown {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .suggestions-header {
+            padding: 8px 14px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #64748b;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .suggestion-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            text-decoration: none;
+            color: #f1f5f9;
+            transition: background 0.15s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+        .suggestion-item:hover, .suggestion-item.highlighted {
+            background: rgba(245, 158, 11, 0.12);
+        }
+
+        .suggestion-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            color: #fbbf24;
+            flex-shrink: 0;
+        }
+
+        .suggestion-meta {
+            flex: 1;
+            min-width: 0;
+        }
+        .suggestion-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .suggestion-sub {
+            font-size: 11px;
+            color: #94a3b8;
+            margin-top: 1px;
+        }
+
+        .suggestion-pill {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 6px;
+            background: rgba(6, 182, 212, 0.14);
+            color: #67e8f9;
+            border: 1px solid rgba(6, 182, 212, 0.25);
+            text-transform: uppercase;
+        }
+
+        /* ── Dynamic Category Quick Chips Row ── */
         .quick-chips-row {
             display: flex;
             align-items: center;
-            gap: 0.45rem;
-            margin-top: 0.8rem;
+            gap: 0.5rem;
+            margin-top: 0.85rem;
             overflow-x: auto;
             padding: 4px 2px 6px;
             scrollbar-width: none;
-            -ms-overflow-style: none;
             -webkit-overflow-scrolling: touch;
         }
         .quick-chips-row::-webkit-scrollbar {
@@ -429,64 +651,63 @@
         .quick-chip {
             display: inline-flex;
             align-items: center;
-            gap: 0.35rem;
+            gap: 0.4rem;
             white-space: nowrap;
             font-size: 11.5px;
-            font-weight: 500;
+            font-weight: 550;
             color: #cbd5e1;
-            background: rgba(30, 41, 59, 0.55);
+            background: rgba(22, 30, 49, 0.65);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 6px 12px;
-            border-radius: 10px;
+            padding: 7px 13px;
+            border-radius: 12px;
             text-decoration: none;
             transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
             user-select: none;
-            -webkit-user-select: none;
         }
         .quick-chip i {
-            font-size: 10px;
+            font-size: 11px;
             color: #f59e0b;
-            opacity: 0.85;
+            opacity: 0.9;
         }
-        .quick-chip:hover,
-        .quick-chip:focus-visible {
-            color: #fef3c7;
+        .quick-chip:hover {
+            color: #ffffff;
             background: rgba(245, 158, 11, 0.16);
-            border-color: rgba(245, 158, 11, 0.38);
-            transform: translateY(-1px);
+            border-color: rgba(245, 158, 11, 0.4);
+            transform: translateY(-1.5px);
+            box-shadow: 0 4px 12px -2px rgba(245, 158, 11, 0.25);
         }
         .quick-chip:active {
-            transform: scale(0.95);
+            transform: scale(0.96);
         }
 
-        /* ── Action Buttons ─────────────────────────────── */
+        /* ── Primary Launch Actions ── */
         .btn-row {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 0.75rem;
-            max-width: 560px;
-            margin: 1.75rem auto 0;
+            gap: 0.85rem;
+            max-width: 600px;
+            margin: 1.85rem auto 0;
         }
 
         .primary-launch-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 0.6rem;
-            min-width: 240px;
-            height: 54px;
-            padding: 0 1.75rem;
-            border-radius: 16px;
+            gap: 0.65rem;
+            min-width: 250px;
+            height: 56px;
+            padding: 0 2rem;
+            border-radius: 18px;
             background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
-            color: #0b1120;
-            font-weight: 750;
-            font-size: 0.975rem;
-            letter-spacing: 0.01em;
+            color: #070a12;
+            font-weight: 800;
+            font-size: 1rem;
+            letter-spacing: -0.01em;
             text-decoration: none;
             box-shadow:
-                0 10px 24px -4px rgba(245, 158, 11, 0.42),
-                0 0 0 1px rgba(255, 255, 255, 0.18) inset;
+                0 12px 28px -4px rgba(245, 158, 11, 0.48),
+                0 0 0 1px rgba(255, 255, 255, 0.25) inset;
             transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             border: none;
             cursor: pointer;
@@ -500,7 +721,7 @@
             left: -100%;
             width: 50%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
             transform: skewX(-20deg);
             transition: left 0.75s ease;
         }
@@ -508,39 +729,117 @@
             left: 150%;
         }
         .primary-launch-btn:hover {
-            background: linear-gradient(135deg, #fcd34d 0%, #fbbf24 50%, #f59e0b 100%);
-            transform: translateY(-1.5px);
-            box-shadow: 0 14px 28px -4px rgba(245, 158, 11, 0.52);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 16px 32px -4px rgba(245, 158, 11, 0.6);
         }
         .primary-launch-btn:active {
             transform: scale(0.97);
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
         }
 
         .apk-download-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 0.55rem;
-            height: 54px;
-            padding: 0 1.5rem;
-            border-radius: 16px;
+            gap: 0.6rem;
+            height: 56px;
+            padding: 0 1.6rem;
+            border-radius: 18px;
             background: rgba(15, 23, 42, 0.7);
             border: 1px solid rgba(71, 85, 105, 0.55);
-            color: #cbd5e1;
-            font-weight: 600;
-            font-size: 0.875rem;
+            color: #f1f5f9;
+            font-weight: 650;
+            font-size: 0.9rem;
             text-decoration: none;
             transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .apk-download-btn:hover {
-            background: rgba(30, 41, 59, 0.85);
+            background: rgba(30, 41, 59, 0.9);
             color: #ffffff;
-            border-color: rgba(100, 116, 139, 0.8);
-            transform: translateY(-1px);
+            border-color: rgba(100, 116, 139, 0.85);
+            transform: translateY(-1.5px);
+            box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.4);
         }
         .apk-download-btn:active {
             transform: scale(0.97);
+        }
+
+        /* ── 2.0 Feature Showcase Grid (Glass Cards with Glow) ── */
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+        }
+
+        .showcase-card {
+            background: rgba(15, 23, 42, 0.65);
+            border: 1px solid var(--surface-glass-border);
+            border-radius: var(--radius-card);
+            padding: 1.5rem;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .showcase-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 80% 20%, rgba(245, 158, 11, 0.08), transparent 60%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .showcase-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(245, 158, 11, 0.35);
+            box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.6);
+        }
+        .showcase-card:hover::before {
+            opacity: 1;
+        }
+
+        .showcase-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+            font-weight: 750;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            padding: 2px 7px;
+            border-radius: 6px;
+            margin-bottom: 0.85rem;
+        }
+
+        .showcase-icon-box {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background: rgba(245, 158, 11, 0.12);
+            border: 1px solid rgba(245, 158, 11, 0.28);
+            color: #fbbf24;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            margin-bottom: 1rem;
+        }
+
+        .showcase-card h3 {
+            font-size: 1.05rem;
+            font-weight: 750;
+            color: #ffffff;
+            margin-bottom: 0.45rem;
+            letter-spacing: -0.015em;
+        }
+
+        .showcase-card p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.6;
         }
 
         /* Automatically hide APK download button and install banners in standalone / installed app mode */
@@ -678,38 +977,43 @@
 
         /* ── Stats Strip ────────────────────────────────── */
         .stats-strip {
-            max-width: 860px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 0 1.25rem 3rem;
+            padding: 0 1.25rem 2.5rem;
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 1px;
-            background: var(--hairline);
-            border: 1px solid var(--hairline);
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: var(--radius-card);
             overflow: hidden;
-            animation: hero-appear 0.7s 0.12s cubic-bezier(0.16, 1, 0.3, 1) both;
+            box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.5);
         }
 
         .stat-cell {
-            background: rgba(15, 23, 42, 0.85);
-            padding: 1.15rem 0.75rem;
+            background: rgba(13, 20, 36, 0.85);
+            padding: 1.25rem 0.85rem;
             text-align: center;
+            backdrop-filter: blur(12px);
+            transition: background 0.2s ease;
+        }
+        .stat-cell:hover {
+            background: rgba(20, 30, 54, 0.95);
         }
 
         .stat-num {
             font-family: 'JetBrains Mono', monospace;
-            font-size: clamp(1.25rem, 3.5vw, 1.7rem);
-            font-weight: 500;
+            font-size: clamp(1.35rem, 3.5vw, 1.85rem);
+            font-weight: 700;
             color: #fbbf24;
             line-height: 1.2;
         }
 
         .stat-label {
             display: block;
-            margin-top: 0.3rem;
-            font-size: 10px;
-            font-weight: 600;
+            margin-top: 0.35rem;
+            font-size: 10.5px;
+            font-weight: 700;
             letter-spacing: 0.09em;
             text-transform: uppercase;
             color: #64748b;
@@ -720,84 +1024,37 @@
             max-width: var(--content-max);
             width: 100%;
             margin: 0 auto;
-            padding: 3rem 1.5rem;
-            border-top: 1px solid rgba(51, 65, 85, 0.35);
+            padding: 3.5rem 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .section-head {
             text-align: center;
-            max-width: 560px;
-            margin: 0 auto 2.25rem;
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
         }
 
         .section-eyebrow {
             display: inline-block;
             font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 0.1em;
+            font-weight: 800;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
             color: #f59e0b;
             margin-bottom: 0.6rem;
         }
 
         .section-title {
-            font-size: clamp(1.4rem, 3.5vw, 1.85rem);
-            font-weight: 800;
-            letter-spacing: -0.02em;
+            font-size: clamp(1.6rem, 3.8vw, 2.2rem);
+            font-weight: 850;
+            letter-spacing: -0.025em;
             color: #ffffff;
-            line-height: 1.2;
+            line-height: 1.15;
         }
 
         .section-sub {
-            margin-top: 0.6rem;
-            font-size: 0.925rem;
-            color: #94a3b8;
-            line-height: 1.6;
-        }
-
-        /* ── Feature Cards ──────────────────────────────── */
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-            gap: 14px;
-        }
-
-        .feature-card {
-            background: rgba(15, 23, 42, 0.72);
-            border: 1px solid rgba(51, 65, 85, 0.6);
-            border-radius: var(--radius-card);
-            padding: 1.4rem 1.3rem;
-            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s;
-        }
-        .feature-card:hover {
-            transform: translateY(-3px);
-            border-color: rgba(245, 158, 11, 0.4);
-        }
-
-        .feature-icon {
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            background: rgba(245, 158, 11, 0.12);
-            border: 1px solid rgba(245, 158, 11, 0.25);
-            color: #fbbf24;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            margin-bottom: 0.95rem;
-        }
-
-        .feature-card h3 {
-            font-size: 0.975rem;
-            font-weight: 700;
-            color: #f1f5f9;
-            margin-bottom: 0.4rem;
-            letter-spacing: -0.01em;
-        }
-
-        .feature-card p {
-            font-size: 0.835rem;
+            margin-top: 0.65rem;
+            font-size: 0.95rem;
             color: #94a3b8;
             line-height: 1.6;
         }
@@ -806,39 +1063,45 @@
         .steps-row {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 14px;
+            gap: 16px;
         }
 
         .step-card {
             position: relative;
             background: rgba(15, 23, 42, 0.55);
-            border: 1px solid rgba(51, 65, 85, 0.5);
+            border: 1px solid var(--surface-glass-border);
             border-radius: var(--radius-card);
-            padding: 1.3rem 1.25rem;
+            padding: 1.5rem 1.35rem;
+            backdrop-filter: blur(12px);
+            transition: all 0.25s ease;
+        }
+        .step-card:hover {
+            border-color: rgba(245, 158, 11, 0.4);
+            transform: translateY(-2px);
         }
 
         .step-num {
             font-family: 'JetBrains Mono', monospace;
             font-size: 12px;
-            font-weight: 500;
+            font-weight: 700;
             color: #f59e0b;
-            background: rgba(245, 158, 11, 0.1);
-            border: 1px solid rgba(245, 158, 11, 0.3);
+            background: rgba(245, 158, 11, 0.12);
+            border: 1px solid rgba(245, 158, 11, 0.35);
             border-radius: 8px;
-            padding: 2px 8px;
+            padding: 3px 9px;
             display: inline-block;
-            margin-bottom: 0.8rem;
+            margin-bottom: 0.9rem;
         }
 
         .step-card h3 {
-            font-size: 0.95rem;
-            font-weight: 700;
+            font-size: 1rem;
+            font-weight: 750;
             color: #f1f5f9;
-            margin-bottom: 0.35rem;
+            margin-bottom: 0.4rem;
         }
 
         .step-card p {
-            font-size: 0.835rem;
+            font-size: 0.85rem;
             color: #94a3b8;
             line-height: 1.6;
         }
@@ -848,89 +1111,90 @@
             max-width: var(--content-max);
             width: 100%;
             margin: 0 auto;
-            padding: 0 1.5rem 3.5rem;
+            padding: 0 1.5rem 4rem;
         }
 
         .cta-inner {
-            background: linear-gradient(135deg, rgba(29, 36, 80, 0.75) 0%, rgba(15, 21, 36, 0.9) 100%);
-            border: 1px solid rgba(99, 102, 241, 0.25);
-            border-radius: 22px;
-            padding: clamp(1.75rem, 5vw, 2.75rem);
+            background: linear-gradient(135deg, rgba(30, 27, 75, 0.75) 0%, rgba(15, 23, 42, 0.95) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.35);
+            border-radius: 24px;
+            padding: clamp(2rem, 5vw, 3rem);
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
-            gap: 1.25rem;
+            gap: 1.5rem;
+            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.65);
         }
 
         .cta-inner .cta-copy {
             flex: 1;
-            min-width: 240px;
+            min-width: 250px;
         }
 
         .cta-inner h2 {
-            font-size: clamp(1.2rem, 3vw, 1.5rem);
-            font-weight: 800;
+            font-size: clamp(1.35rem, 3.2vw, 1.75rem);
+            font-weight: 850;
             letter-spacing: -0.02em;
             color: #ffffff;
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.45rem;
         }
 
         .cta-inner p {
-            font-size: 0.885rem;
-            color: #a5b4fc;
-            line-height: 1.55;
+            font-size: 0.92rem;
+            color: #cbd5e1;
+            line-height: 1.6;
         }
 
         .cta-actions {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.7rem;
+            gap: 0.75rem;
         }
 
         .cta-btn-solid {
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            height: 46px;
-            padding: 0 1.4rem;
-            border-radius: 13px;
+            gap: 0.55rem;
+            height: 48px;
+            padding: 0 1.5rem;
+            border-radius: 14px;
             background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-            color: #0b1120;
-            font-weight: 700;
-            font-size: 0.875rem;
+            color: #070a12;
+            font-weight: 750;
+            font-size: 0.9rem;
             text-decoration: none;
             transition: all 0.2s ease;
-            box-shadow: 0 8px 20px -6px rgba(245, 158, 11, 0.5);
+            box-shadow: 0 8px 24px -6px rgba(245, 158, 11, 0.55);
         }
         .cta-btn-solid:hover {
-            transform: translateY(-1.5px);
-            box-shadow: 0 12px 24px -6px rgba(245, 158, 11, 0.65);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px -6px rgba(245, 158, 11, 0.7);
         }
 
         .cta-btn-ghost {
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            height: 46px;
-            padding: 0 1.4rem;
-            border-radius: 13px;
-            background: rgba(255, 255, 255, 0.05);
+            gap: 0.55rem;
+            height: 48px;
+            padding: 0 1.5rem;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(255, 255, 255, 0.14);
-            color: #e2e8f0;
-            font-weight: 600;
-            font-size: 0.875rem;
+            color: #f1f5f9;
+            font-weight: 650;
+            font-size: 0.9rem;
             text-decoration: none;
             transition: all 0.2s ease;
         }
         .cta-btn-ghost:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-1px);
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-1.5px);
         }
 
         /* ── Themed Community Sponsor Ad Section ── */
         .landing-sponsor-section {
-            max-width: 860px;
+            max-width: 900px;
             width: 100%;
             margin: 0 auto 2rem;
             padding: 0 1.25rem;
@@ -939,12 +1203,12 @@
         }
 
         .landing-sponsor-card {
-            background: rgba(15, 23, 42, 0.72);
+            background: rgba(15, 23, 42, 0.7);
             border: 1px solid rgba(51, 65, 85, 0.6);
             border-radius: var(--radius-card);
             padding: 0.85rem 1.15rem;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
             box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.5);
             display: flex;
             flex-direction: column;
@@ -1172,15 +1436,16 @@
             .install-prompt-banner {
                 display: none !important;
             }
-            .top-navbar {
-                padding: 0.8rem 1.1rem;
+            .top-navbar-wrap {
+                padding: 0 0.65rem;
+                top: 8px;
             }
             .hero-viewport {
-                padding: 2rem 1.1rem 1.75rem;
+                padding: 1.75rem 1rem 1.5rem;
             }
             .landing-sponsor-section {
                 margin: 0 auto 1.5rem;
-                padding: 0 1.1rem;
+                padding: 0 1rem;
             }
             .stats-strip {
                 grid-template-columns: repeat(2, 1fr);
@@ -1213,17 +1478,222 @@
             .status-badge {
                 display: none;
             }
-            .nav-tag {
-                display: none;
-            }
+        }
+
+        /* ── Student Feedback Modal ────────────────────── */
+        .feedback-trigger-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #e2e8f0;
+            padding: 0.42rem 0.85rem;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .feedback-trigger-btn i {
+            color: #f59e0b;
+            font-size: 13px;
+        }
+        .feedback-trigger-btn:hover {
+            background: rgba(245, 158, 11, 0.12);
+            border-color: rgba(245, 158, 11, 0.35);
+            color: #fbbf24;
+            transform: translateY(-1px);
+        }
+
+        .feedback-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(6, 10, 20, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 5000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+        .feedback-modal-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .feedback-modal-card {
+            background: #0d1527;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            overflow: hidden;
+            transform: scale(0.95);
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .feedback-modal-overlay.open .feedback-modal-card {
+            transform: scale(1);
+        }
+        .feedback-modal-header {
+            padding: 18px 20px 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .feedback-modal-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .feedback-modal-title i {
+            color: #f59e0b;
+        }
+        .feedback-modal-close {
+            background: rgba(255, 255, 255, 0.08);
+            border: none;
+            color: #94a3b8;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            transition: all 0.2s;
+        }
+        .feedback-modal-close:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        .feedback-modal-body {
+            padding: 18px 20px 22px;
+        }
+        .feedback-modal-desc {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 16px;
+            line-height: 1.45;
+        }
+        .feedback-type-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .feedback-type-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #cbd5e1;
+            padding: 10px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+        .feedback-type-btn i {
+            font-size: 14px;
+        }
+        .feedback-type-btn.active {
+            background: rgba(245, 158, 11, 0.15);
+            border-color: #f59e0b;
+            color: #fbbf24;
+        }
+        .feedback-textarea {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            padding: 12px 14px;
+            color: #fff;
+            font-size: 13.5px;
+            font-family: inherit;
+            outline: none;
+            resize: none;
+            height: 96px;
+            margin-bottom: 12px;
+            transition: border-color 0.2s;
+        }
+        .feedback-textarea:focus {
+            border-color: #f59e0b;
+        }
+        .feedback-contact-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            padding: 10px 14px;
+            color: #fff;
+            font-size: 13px;
+            font-family: inherit;
+            outline: none;
+            margin-bottom: 16px;
+        }
+        .feedback-contact-input:focus {
+            border-color: #f59e0b;
+        }
+        .feedback-submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: #090d16;
+            border: none;
+            padding: 13px;
+            border-radius: 12px;
+            font-size: 14.5px;
+            font-weight: 800;
+            font-family: inherit;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35);
+            transition: all 0.2s;
+        }
+        .feedback-submit-btn:hover {
+            background: #fbbf24;
+            transform: translateY(-1px);
+        }
+        .feedback-success-msg {
+            display: none;
+            text-align: center;
+            padding: 24px 12px;
+        }
+        .feedback-success-msg i {
+            font-size: 38px;
+            color: #10b981;
+            margin-bottom: 12px;
+        }
+        .feedback-success-msg h4 {
+            font-size: 16px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+        .feedback-success-msg p {
+            font-size: 13px;
+            color: #94a3b8;
         }
 
         @media (prefers-reduced-motion: reduce) {
-            .hero-inner, .stats-strip {
+            .hero-inner, .stats-strip, .pulse-item {
                 animation: none;
-            }
-            * {
-                transition-duration: 0.01ms !important;
+                transition: none;
             }
         }
     </style>
@@ -1234,29 +1704,35 @@
 
     <div class="app-shell">
         <!-- Top Navigation Bar -->
-        <header class="top-navbar">
-            <a href="/index.html" class="brand-link" aria-label="USTED NAV Home">
-                <img src="/logo.png" alt="USTED Crest" class="nav-logo-icon">
-                <span class="nav-brand-text">
-                    USTED NAV
-                    <span class="nav-tag">Kumasi</span>
-                </span>
-            </a>
-            <div class="nav-actions">
-                <div class="status-badge" title="Offline vector data cached and ready">
-                    <span class="status-dot"></span>
-                    <span>Offline Ready</span>
-                </div>
-                <button id="navInstallBtn" class="ghost-install-btn" aria-label="Install USTED NAV PWA">
-                    <i class="fas fa-download"></i>
-                    <span>Install</span>
-                </button>
-                <a href="/map.html" class="nav-map-btn">
-                    <i class="fas fa-map-location-dot"></i>
-                    Open Map
+        <div class="top-navbar-wrap">
+            <header class="top-navbar">
+                <a href="/index.html" class="brand-link" aria-label="USTED NAV Home">
+                    <img src="/logo.png" alt="USTED Crest" class="nav-logo-icon">
+                    <span class="nav-brand-text">
+                        USTED NAV
+                        <span class="nav-version-badge">2.0</span>
+                    </span>
                 </a>
-            </div>
-        </header>
+                <div class="nav-actions">
+                    <div class="status-badge" title="Offline vector data cached and ready">
+                        <span class="status-dot"></span>
+                        <span>Campus OS Active</span>
+                    </div>
+                    <button class="feedback-trigger-btn" onclick="openStudentFeedbackModal()" aria-label="Give feedback">
+                        <i class="fas fa-comment-dots"></i>
+                        <span>Feedback</span>
+                    </button>
+                    <button id="navInstallBtn" class="ghost-install-btn" aria-label="Install USTED NAV PWA">
+                        <i class="fas fa-download"></i>
+                        <span>Install</span>
+                    </button>
+                    <a href="/map.html" class="nav-map-btn">
+                        <i class="fas fa-map-location-dot"></i>
+                        Open Map
+                    </a>
+                </div>
+            </header>
+        </div>
 
         <!-- Hero -->
         <main>
@@ -1264,67 +1740,102 @@
                 <div class="hero-inner">
                     <span class="campus-pill-badge">
                         <i class="fas fa-location-dot"></i>
-                        USTED Kumasi Campus
+                        USTED Kumasi Campus Map <span class="version-tag">&bull; v2.0</span>
                     </span>
                     <h1 class="hero-title">
-                        Find any room on<br>
-                        <span class="title-gradient">USTED Kumasi</span> campus
+                        Find your way around <span class="title-gradient">USTED Kumasi</span>
                     </h1>
                     <p class="hero-subtitle">
-                        The free campus map, lecture-hall finder and walking-directions app for
-                        USTED Kumasi &mdash; built to work completely offline.
+                        Find lecture rooms, halls, offices, and get easy walking directions &mdash; works completely offline without mobile data.
                     </p>
 
-                    <!-- Quick-Launch Search -->
-                    <div class="search-container">
-                        <form action="map.html" method="GET" class="search-form">
-                            <span class="search-icon-left">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="11" cy="11" r="8"></circle>
-                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                                </svg>
-                            </span>
-                            <input
-                                type="text"
-                                name="q"
-                                id="landingQuickSearch"
-                                placeholder="Search lecture hall, block, office..."
-                                autocomplete="off"
-                                class="search-input"
-                                aria-label="Search campus location or hall"
-                            >
-                            <button type="submit" class="search-submit-btn" aria-label="Launch search">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                                    <polyline points="12 5 19 12 12 19"></polyline>
-                                </svg>
+                    <!-- Role-Based Fast Tracks -->
+                    <div class="role-selector-wrap">
+                        <div class="role-selector-label">
+                            <i class="fas fa-user-circle" style="color:#f59e0b;"></i> Who are you?
+                        </div>
+                        <div class="role-pills-row" id="rolePillsRow">
+                            <button type="button" class="role-pill-btn active" data-role="all" data-placeholder="Search lecture hall, block, office...">
+                                <i class="fas fa-compass"></i> Explore All
                             </button>
+                            <button type="button" class="role-pill-btn" data-role="freshman" data-placeholder="Search Hostels, Admin, Auditorium...">
+                                <i class="fas fa-graduation-cap"></i> Freshman
+                            </button>
+                            <button type="button" class="role-pill-btn" data-role="continuing" data-placeholder="Search ROB Block, NLB, NFB...">
+                                <i class="fas fa-user-graduate"></i> Continuing Student
+                            </button>
+                            <button type="button" class="role-pill-btn" data-role="visitor" data-placeholder="Search Visitor parking, Admin, Main Gate...">
+                                <i class="fas fa-car"></i> Visitor / Parent
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Spotlight Quick Search Container -->
+                    <div class="search-container" id="searchContainer">
+                        <form action="map.html" method="GET" class="search-form" id="landingSearchForm">
+                            <div class="search-input-wrap">
+                                <span class="search-icon-left">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="11" cy="11" r="8"></circle>
+                                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                    </svg>
+                                </span>
+                                <input
+                                    type="text"
+                                    name="q"
+                                    id="landingQuickSearch"
+                                    placeholder="Search lecture hall, block, office..."
+                                    autocomplete="off"
+                                    class="search-input"
+                                    aria-label="Search campus location or hall"
+                                >
+                                <button type="submit" class="search-submit-btn" aria-label="Launch search">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        <polyline points="12 5 19 12 12 19"></polyline>
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <!-- Realtime Suggestions Palette -->
+                            <div class="search-suggestions-palette" id="searchSuggestions">
+                                <div class="suggestions-header">
+                                    <span>Popular Campus Destinations</span>
+                                    <span style="font-size:10px;color:#94a3b8;"><kbd style="background:rgba(255,255,255,0.08);padding:1px 5px;border-radius:4px;">Enter</kbd> to launch</span>
+                                </div>
+                                <div id="suggestionsList">
+                                    <!-- Populated by JavaScript -->
+                                </div>
+                            </div>
                         </form>
-                        <div class="quick-chips-row">
+
+                        <div class="quick-chips-row" id="quickChipsRow">
                             <a href="map.html?q=Lecture%20Hall" class="quick-chip"><i class="fas fa-graduation-cap"></i> Lecture Halls</a>
-                            <a href="map.html?q=Hall" class="quick-chip"><i class="fas fa-hotel"></i> Halls & Hostels</a>
-                            <a href="map.html?q=Library" class="quick-chip"><i class="fas fa-book"></i> Library</a>
+                            <a href="map.html?q=Hall" class="quick-chip"><i class="fas fa-hotel"></i> Halls &amp; Hostels</a>
+                            <a href="map.html?q=Library" class="quick-chip"><i class="fas fa-book"></i> Main Library</a>
                             <a href="map.html?q=ROB" class="quick-chip"><i class="fas fa-building-columns"></i> ROB Block</a>
+                            <a href="map.html?q=Canteen" class="quick-chip"><i class="fas fa-utensils"></i> Food &amp; Canteens</a>
                             <a href="map.html?q=Clinic" class="quick-chip"><i class="fas fa-notes-medical"></i> Clinic</a>
+                            <a href="map.html?q=ATM" class="quick-chip"><i class="fas fa-money-bill-wave"></i> ATMs</a>
                         </div>
                     </div>
 
                     <!-- Primary & Secondary Actions -->
                     <div class="btn-row">
                         <a href="/map.html" class="primary-launch-btn">
-                            <svg style="width:16px;height:16px;" viewBox="0 0 24 24">
+                            <svg style="width:17px;height:17px;" viewBox="0 0 24 24">
                                 <path fill="currentColor" d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/>
                             </svg>
-                            Launch Campus Map
+                            Launch 2.0 Campus Map
                         </a>
 
                         <a href="/download/ustednav.apk" download="ustednav.apk" id="apk-download-btn" class="apk-download-btn">
-                            <svg style="width:15px;height:15px;color:#34d399;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg style="width:16px;height:16px;color:#34d399;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                                 <polyline points="7 10 12 15 17 10"/>
                                 <line x1="12" y1="15" x2="12" y2="3"/>
                             </svg>
-                            <span>Download Android App</span>
+                            <span>Download Android APK</span>
                         </a>
                     </div>
                 </div>
@@ -1350,49 +1861,53 @@
             <section class="stats-strip" aria-label="Campus coverage statistics">
                 <div class="stat-cell">
                     <span class="stat-num">47</span>
-                    <span class="stat-label">Buildings</span>
+                    <span class="stat-label">Campus Buildings</span>
                 </div>
                 <div class="stat-cell">
                     <span class="stat-num">96</span>
-                    <span class="stat-label">Staff Offices</span>
-                </div>
-                <div class="stat-cell">
-                    <span class="stat-num">146</span>
-                    <span class="stat-label">Campus Pages</span>
+                    <span class="stat-label">Offices &amp; Rooms</span>
                 </div>
                 <div class="stat-cell">
                     <span class="stat-num">100%</span>
-                    <span class="stat-label">Offline Capable</span>
+                    <span class="stat-label">Works Offline</span>
+                </div>
+                <div class="stat-cell">
+                    <span class="stat-num">&lt; 1s</span>
+                    <span class="stat-label">Instant Directions</span>
                 </div>
             </section>
 
-            <!-- Features -->
+            <!-- 2.0 Flagship Capabilities Grid -->
             <section class="section" aria-labelledby="features-title">
                 <div class="section-head">
-                    <span class="section-eyebrow">Why USTED NAV</span>
-                    <h2 class="section-title" id="features-title">Built for real campus days</h2>
-                    <p class="section-sub">No data needed. No queues. Open the map and go.</p>
+                    <span class="section-eyebrow">USTED NAV 2.0</span>
+                    <h2 class="section-title" id="features-title">Built for easy walking on campus</h2>
+                    <p class="section-sub">No internet needed. Find any hall, room, or office with simple walking steps.</p>
                 </div>
-                <div class="feature-grid">
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="fas fa-cloud-arrow-down"></i></div>
-                        <h3>Works 100% Offline</h3>
-                        <p>Map data saves to your device on first load. Search and walking routes keep working with zero mobile data.</p>
+                <div class="showcase-grid">
+                    <div class="showcase-card">
+                        <span class="showcase-badge"><i class="fas fa-bolt"></i> Offline</span>
+                        <div class="showcase-icon-box"><i class="fas fa-cloud-arrow-down"></i></div>
+                        <h3>Works Without Data</h3>
+                        <p>The whole map saves to your phone on your first visit. Use it anywhere on campus, even when network is bad.</p>
                     </div>
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="fas fa-route"></i></div>
-                        <h3>Turn-by-Turn Directions</h3>
-                        <p>Pick any building and follow walking or driving directions from exactly where you stand.</p>
+                    <div class="showcase-card">
+                        <span class="showcase-badge"><i class="fas fa-person-walking"></i> Directions</span>
+                        <div class="showcase-icon-box"><i class="fas fa-route"></i></div>
+                        <h3>Step-by-Step Walking</h3>
+                        <p>See clear walking paths, helpful landmarks along the way, and your remaining walking time.</p>
                     </div>
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="fas fa-magnifying-glass"></i></div>
-                        <h3>Find People &amp; Rooms</h3>
-                        <p>Search any lecturer, department, lecture hall or room number &mdash; results show the exact office.</p>
+                    <div class="showcase-card">
+                        <span class="showcase-badge"><i class="fas fa-wheelchair"></i> Easy Paths</span>
+                        <div class="showcase-icon-box"><i class="fas fa-universal-access"></i></div>
+                        <h3>Stair-Free Routes</h3>
+                        <p>Easily avoid stairs when carrying heavy bags or looking for wheelchair-friendly walkways.</p>
                     </div>
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="fas fa-mobile-screen-button"></i></div>
-                        <h3>Install in One Tap</h3>
-                        <p>Add it to your home screen as an app, or download the Android APK directly &mdash; no Play Store needed.</p>
+                    <div class="showcase-card">
+                        <span class="showcase-badge"><i class="fas fa-users-viewfinder"></i> Directory</span>
+                        <div class="showcase-icon-box"><i class="fas fa-address-book"></i></div>
+                        <h3>Find Lecturers &amp; Offices</h3>
+                        <p>Search lecturer names, departments, and offices to see their exact room and floor.</p>
                     </div>
                 </div>
             </section>
@@ -1400,24 +1915,24 @@
             <!-- How It Works -->
             <section class="section" aria-labelledby="how-title">
                 <div class="section-head">
-                    <span class="section-eyebrow">How it works</span>
-                    <h2 class="section-title" id="how-title">Three taps to your lecture hall</h2>
+                    <span class="section-eyebrow">How It Works</span>
+                    <h2 class="section-title" id="how-title">Get there in 3 simple steps</h2>
                 </div>
                 <div class="steps-row">
                     <div class="step-card">
                         <span class="step-num">01</span>
                         <h3>Search</h3>
-                        <p>Type a block, room number or lecturer's name into the search bar.</p>
+                        <p>Type any hall, office, or lecturer name into the search bar.</p>
                     </div>
                     <div class="step-card">
                         <span class="step-num">02</span>
-                        <h3>Locate</h3>
-                        <p>The map centres on the exact building, floor and room of your result.</p>
+                        <h3>See It on the Map</h3>
+                        <p>The map shows you the building, entrance, and how far away it is.</p>
                     </div>
                     <div class="step-card">
                         <span class="step-num">03</span>
-                        <h3>Navigate</h3>
-                        <p>Tap Start Walking and follow turn-by-turn directions across campus.</p>
+                        <h3>Start Walking</h3>
+                        <p>Tap Start Walking and follow the footpath directly to the door.</p>
                     </div>
                 </div>
             </section>
@@ -1426,15 +1941,15 @@
             <section class="cta-band">
                 <div class="cta-inner">
                     <div class="cta-copy">
-                        <h2>Get USTED NAV on your phone</h2>
-                        <p>Install the app for instant offline access, or share it with a coursemate who is always getting lost.</p>
+                        <h2>Try USTED NAV 2.0 on Your Phone</h2>
+                        <p>Add it to your home screen or download the Android app for quick 1-tap navigation anytime.</p>
                     </div>
                     <div class="cta-actions">
                         <a href="/map.html" class="cta-btn-solid">
                             <i class="fas fa-map-location-dot"></i>
-                            Open Live Map
+                            Open Map
                         </a>
-                        <a href="https://wa.me/?text=Check%20out%20USTED%20NAV%20%E2%80%94%20free%20offline%20campus%20map%20%26%20room%20finder%20for%20USTED%20Kumasi%3A%20https%3A%2F%2Fwww.ustednav.app%2F%3Futm_source%3Dwhatsapp%26utm_medium%3Dshare%26utm_campaign%3Dshare_loop" target="_blank" rel="noopener" class="cta-btn-ghost">
+                        <a href="https://wa.me/?text=Check%20out%20USTED%20NAV%202.0%20%E2%80%94%20the%20campus%20map%20%26%20room%20finder%20for%20USTED%20Kumasi%3A%20https%3A%2F%2Fwww.ustednav.app%2F%3Futm_source%3Dwhatsapp%26utm_medium%3Dshare%26utm_campaign%3Dshare_loop" target="_blank" rel="noopener" class="cta-btn-ghost">
                             <i class="fab fa-whatsapp"></i>
                             Share with a Friend
                         </a>
@@ -1451,27 +1966,28 @@
                         <img src="/logo.png" alt="">
                         <span class="footer-name">USTED NAV</span>
                     </div>
-                    <p>Free offline campus navigation and room finder for USTED Kumasi. Powered by CampusOS&trade;.</p>
+                    <p>Free offline campus map and room finder for USTED Kumasi.</p>
                 </div>
                 <div class="footer-col">
-                    <h4>Product</h4>
+                    <h4>Map &amp; Info</h4>
                     <ul>
-                        <li><a href="/map.html">Live Map</a></li>
+                        <li><a href="/map.html">Open Map</a></li>
                         <li><a href="/about.html">About</a></li>
                         <li><a href="/guide.html">Campus Guide</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
-                    <h4>Support</h4>
+                    <h4>Help &amp; App</h4>
                     <ul>
+                        <li><a href="javascript:void(0)" onclick="openStudentFeedbackModal()">Give Feedback / Request Place</a></li>
                         <li><a href="/privacy/">Privacy Policy</a></li>
-                        <li><a href="https://wa.me/?text=Check%20out%20USTED%20NAV%20%E2%80%94%20free%20offline%20campus%20map%20%26%20room%20finder%20for%20USTED%20Kumasi%3A%20https%3A%2F%2Fwww.ustednav.app%2F%3Futm_source%3Dwhatsapp%26utm_medium%3Dshare%26utm_campaign%3Dshare_loop" target="_blank" rel="noopener">Share USTED NAV</a></li>
-                        <li><a href="/download/ustednav.apk" download="ustednav.apk">Download APK</a></li>
+                        <li><a href="https://wa.me/?text=Check%20out%20USTED%20NAV%20%E2%80%94%20free%20offline%20campus%20map%20%26%20room%20finder%20for%20USTED%20Kumasi%3A%20https%3A%2F%2Fwww.ustednav.app%2F%3Futm_source%3Dwhatsapp%26utm_medium%3Dshare%26utm_campaign%3Dshare_loop" target="_blank" rel="noopener">Share with Friends</a></li>
+                        <li><a href="/download/ustednav.apk" download="ustednav.apk">Download Android App</a></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <span>&copy; 2026 KINGENIOUS. All Rights Reserved. Proprietary Campus Spatial Operating System.</span>
+                <span>&copy; 2026 KINGENIOUS. USTED Kumasi Campus Navigation.</span>
                 <span class="offline-note"><span class="status-dot"></span> Works offline</span>
             </div>
         </footer>
@@ -1503,6 +2019,56 @@
             <button class="floating-poll-btn floating-poll-btn-no" onclick="submitIndoorPoll('no')">
                 <i class="fas fa-thumbs-down"></i> Outdoor is enough
             </button>
+        </div>
+    </div>
+
+    <!-- Student Feedback Modal Dialog -->
+    <div id="studentFeedbackModal" class="feedback-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="feedbackTitle">
+        <div class="feedback-modal-card">
+            <div class="feedback-modal-header">
+                <div class="feedback-modal-title" id="feedbackTitle">
+                    <i class="fas fa-heart"></i>
+                    <span>Student Feedback</span>
+                </div>
+                <button class="feedback-modal-close" onclick="closeStudentFeedbackModal()" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="feedback-modal-body">
+                <div id="feedbackFormContent">
+                    <p class="feedback-modal-desc">
+                        Help us improve USTED NAV 2.0! Tell us what building, lecture room, or feature you want added or changed.
+                    </p>
+                    
+                    <div class="feedback-type-selector">
+                        <button type="button" class="feedback-type-btn active" data-type="add_place" onclick="selectFeedbackType(this, 'add_place')">
+                            <i class="fas fa-map-pin"></i>
+                            <span>Add Place</span>
+                        </button>
+                        <button type="button" class="feedback-type-btn" data-type="fix_issue" onclick="selectFeedbackType(this, 'fix_issue')">
+                            <i class="fas fa-wrench"></i>
+                            <span>Fix Map</span>
+                        </button>
+                        <button type="button" class="feedback-type-btn" data-type="feature_idea" onclick="selectFeedbackType(this, 'feature_idea')">
+                            <i class="fas fa-lightbulb"></i>
+                            <span>New Idea</span>
+                        </button>
+                    </div>
+
+                    <textarea id="feedbackMessageInput" class="feedback-textarea" placeholder="Tell us what needs to be added, fixed, or removed..."></textarea>
+                    
+                    <input type="text" id="feedbackContactInput" class="feedback-contact-input" placeholder="Your WhatsApp / Phone (Optional, so we update you)">
+
+                    <button type="button" class="feedback-submit-btn" onclick="submitStudentFeedback()">
+                        <i class="fas fa-paper-plane"></i>
+                        <span>Send Feedback</span>
+                    </button>
+                </div>
+
+                <div id="feedbackSuccessMsg" class="feedback-success-msg">
+                    <i class="fas fa-circle-check"></i>
+                    <h4>Thanks for your feedback!</h4>
+                    <p>We review every student submission to keep USTED NAV accurate and up to date.</p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1692,6 +2258,239 @@
                 setTimeout(() => pollEl.remove(), 400);
             };
         })();
+
+        // --- 4. USTEDNAV 2.0 INTERACTIVE ENGINE ---
+        (function initUstedNav2Engine() {
+            // A. Role-Based Quick Profile Selector
+            const roleButtons = document.querySelectorAll('.role-pill-btn');
+            const searchInput = document.getElementById('landingQuickSearch');
+            const quickChipsRow = document.getElementById('quickChipsRow');
+
+            const roleChipsData = {
+                all: [
+                    { label: "Lecture Halls", query: "Lecture Hall", icon: "fa-graduation-cap" },
+                    { label: "Halls & Hostels", query: "Hall", icon: "fa-hotel" },
+                    { label: "Main Library", query: "Library", icon: "fa-book" },
+                    { label: "ROB Block", query: "ROB", icon: "fa-building-columns" },
+                    { label: "Food & Canteens", query: "Canteen", icon: "fa-utensils" },
+                    { label: "Clinic", query: "Clinic", icon: "fa-notes-medical" },
+                    { label: "ATMs", query: "ATM", icon: "fa-money-bill-wave" }
+                ],
+                freshman: [
+                    { label: "Student Hostels", query: "Hostel", icon: "fa-hotel" },
+                    { label: "Administration Block", query: "Administration", icon: "fa-landmark" },
+                    { label: "Auditorium", query: "Auditorium", icon: "fa-id-card" },
+                    { label: "Main Library", query: "Library", icon: "fa-book" },
+                    { label: "Campus Clinic", query: "Clinic", icon: "fa-notes-medical" }
+                ],
+                continuing: [
+                    { label: "ROB Block", query: "ROB", icon: "fa-building-columns" },
+                    { label: "NLB", query: "NLB", icon: "fa-chalkboard-user" },
+                    { label: "NFB", query: "NFB", icon: "fa-landmark" },
+                    { label: "Food & Canteen", query: "Canteen", icon: "fa-utensils" },
+                    { label: "Sports Field", query: "Field", icon: "fa-volleyball" }
+                ],
+                visitor: [
+                    { label: "Gate 1 (Main Entrance)", query: "Gate", icon: "fa-door-open" },
+                    { label: "Visitor Parking", query: "Parking", icon: "fa-square-parking" },
+                    { label: "Administration Block", query: "Administration", icon: "fa-building-shield" },
+                    { label: "Auditorium", query: "Auditorium", icon: "fa-building-user" },
+                    { label: "ATMs & Banks", query: "ATM", icon: "fa-building-columns" }
+                ]
+            };
+
+            function updateQuickChips(roleKey) {
+                if (!quickChipsRow) return;
+                const items = roleChipsData[roleKey] || roleChipsData.all;
+                quickChipsRow.innerHTML = items.map(item => `
+                    <a href="map.html?q=${encodeURIComponent(item.query)}" class="quick-chip">
+                        <i class="fas ${item.icon}"></i> ${item.label}
+                    </a>
+                `).join('');
+            }
+
+            roleButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    roleButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    const role = btn.dataset.role || 'all';
+                    const placeholder = btn.dataset.placeholder;
+                    if (searchInput && placeholder) {
+                        searchInput.placeholder = placeholder;
+                    }
+                    updateQuickChips(role);
+                });
+            });
+
+            // B. Quick Search Suggestions
+            const suggestionsPalette = document.getElementById('searchSuggestions');
+            const suggestionsList = document.getElementById('suggestionsList');
+
+            const destinationDirectory = [
+                { title: "ROB Block (Reynolds Okine Building)", sub: "Lecture rooms, Dean offices, computer labs", category: "Academic", icon: "fa-building-columns", query: "ROB" },
+                { title: "NLB (New Lecture Building)", sub: "Modern lecture halls and study rooms", category: "Academic", icon: "fa-chalkboard-user", query: "NLB" },
+                { title: "NFB (New Faculty Building)", sub: "Faculty offices and lecture halls", category: "Academic", icon: "fa-landmark", query: "NFB" },
+                { title: "Main Library", sub: "Reading rooms, study spaces, book lending", category: "Facility", icon: "fa-book", query: "Library" },
+                { title: "Auditorium", sub: "Events, exams, and student gatherings", category: "Hall", icon: "fa-chalkboard-user", query: "Auditorium" },
+                { title: "Campus Clinic", sub: "Nurse station and first aid", category: "Health", icon: "fa-notes-medical", query: "Clinic" },
+                { title: "Student Hostels", sub: "Halls of residence and student rooms", category: "Hostel", icon: "fa-hotel", query: "Hall" },
+                { title: "University Canteen", sub: "Food, drinks, and snacks", category: "Dining", icon: "fa-utensils", query: "Canteen" },
+                { title: "ATMs & Banking", sub: "Cash withdrawal and mobile money", category: "Finance", icon: "fa-money-bill-wave", query: "ATM" }
+            ];
+
+            function renderSuggestions(filterText = '') {
+                if (!suggestionsList) return;
+                const q = filterText.trim().toLowerCase();
+                const matches = q === '' 
+                    ? destinationDirectory.slice(0, 5) 
+                    : destinationDirectory.filter(d => 
+                        d.title.toLowerCase().includes(q) || 
+                        d.sub.toLowerCase().includes(q) || 
+                        d.category.toLowerCase().includes(q)
+                      ).slice(0, 5);
+
+                if (matches.length === 0) {
+                    suggestionsList.innerHTML = `
+                        <div style="padding:14px;font-size:12px;color:#94a3b8;text-align:center;">
+                            Press <strong style="color:#fbbf24;">Enter</strong> to search the map for "${filterText}"
+                        </div>
+                    `;
+                    return;
+                }
+
+                suggestionsList.innerHTML = matches.map(m => `
+                    <a href="map.html?q=${encodeURIComponent(m.query)}" class="suggestion-item">
+                        <div class="suggestion-icon">
+                            <i class="fas ${m.icon}"></i>
+                        </div>
+                        <div class="suggestion-meta">
+                            <div class="suggestion-title">${m.title}</div>
+                            <div class="suggestion-sub">${m.sub}</div>
+                        </div>
+                        <span class="suggestion-pill">${m.category}</span>
+                    </a>
+                `).join('');
+            }
+
+            if (searchInput && suggestionsPalette) {
+                searchInput.addEventListener('focus', () => {
+                    renderSuggestions(searchInput.value);
+                    suggestionsPalette.classList.add('show');
+                });
+
+                searchInput.addEventListener('input', (e) => {
+                    renderSuggestions(e.target.value);
+                    suggestionsPalette.classList.add('show');
+                });
+
+                // Close suggestions when clicking outside
+                document.addEventListener('click', (e) => {
+                    const searchContainer = document.getElementById('searchContainer');
+                    if (searchContainer && !searchContainer.contains(e.target)) {
+                        suggestionsPalette.classList.remove('show');
+                    }
+                });
+
+                // ESC key closes
+                searchInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        suggestionsPalette.classList.remove('show');
+                        searchInput.blur();
+                    }
+                });
+            }
+        })();
+
+        // --- 5. STUDENT FEEDBACK & REQUEST SYSTEM ---
+        let selectedFeedbackType = 'add_place';
+
+        window.openStudentFeedbackModal = function() {
+            const modal = document.getElementById('studentFeedbackModal');
+            if (!modal) return;
+            const formContent = document.getElementById('feedbackFormContent');
+            const successMsg = document.getElementById('feedbackSuccessMsg');
+            if (formContent) formContent.style.display = 'block';
+            if (successMsg) successMsg.style.display = 'none';
+            modal.classList.add('open');
+            setTimeout(() => {
+                const textarea = document.getElementById('feedbackMessageInput');
+                if (textarea) textarea.focus();
+            }, 150);
+        };
+
+        window.closeStudentFeedbackModal = function() {
+            const modal = document.getElementById('studentFeedbackModal');
+            if (modal) modal.classList.remove('open');
+        };
+
+        window.selectFeedbackType = function(btn, type) {
+            selectedFeedbackType = type;
+            document.querySelectorAll('.feedback-type-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+        };
+
+        window.submitStudentFeedback = function() {
+            const msgInput = document.getElementById('feedbackMessageInput');
+            const contactInput = document.getElementById('feedbackContactInput');
+            const message = msgInput ? msgInput.value.trim() : '';
+            const contact = contactInput ? contactInput.value.trim() : '';
+
+            if (!message) {
+                if (msgInput) {
+                    msgInput.style.borderColor = '#ef4444';
+                    msgInput.focus();
+                }
+                return;
+            }
+
+            const feedbackData = {
+                feedback_type: selectedFeedbackType,
+                message: message,
+                contact: contact || null,
+                page: 'landing_page',
+                submitted_at: new Date().toISOString()
+            };
+
+            // 1. Send to Google Analytics (GA4)
+            if (typeof gtag === 'function') {
+                gtag('event', 'student_feedback', {
+                    feedback_type: selectedFeedbackType,
+                    feedback_message: message.slice(0, 100),
+                    has_contact: !!contact
+                });
+            }
+
+            // 2. Send via CampusOS Telemetry into Supabase for /admin
+            if (window.CampusTelemetry && typeof window.CampusTelemetry.track === 'function') {
+                window.CampusTelemetry.track('student_feedback', feedbackData);
+            }
+
+            // 3. UI Transition to Thank You state
+            const formContent = document.getElementById('feedbackFormContent');
+            const successMsg = document.getElementById('feedbackSuccessMsg');
+            if (formContent) formContent.style.display = 'none';
+            if (successMsg) successMsg.style.display = 'block';
+
+            if (msgInput) msgInput.value = '';
+            if (contactInput) contactInput.value = '';
+
+            setTimeout(() => {
+                closeStudentFeedbackModal();
+            }, 2400);
+        };
+
+        // Close on clicking modal backdrop or Escape key
+        document.addEventListener('click', (e) => {
+            const modal = document.getElementById('studentFeedbackModal');
+            if (modal && e.target === modal) {
+                closeStudentFeedbackModal();
+            }
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeStudentFeedbackModal();
+            }
+        });
     </script>
 </body>
 </html>

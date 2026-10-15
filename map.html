@@ -1868,80 +1868,84 @@
             bottom: 0; left: 0; right: 0;
             z-index: 1001;
             background: var(--surface);
-            border-radius: var(--radius) var(--radius) 0 0;
-            box-shadow: 0 -4px 32px rgba(0,0,0,.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px 24px 0 0;
+            box-shadow: 0 -8px 36px rgba(0, 0, 0, 0.16);
+            border-top: 1px solid var(--border);
             transform: translateY(100%);
-            transition: transform .35s cubic-bezier(.4,0,.2,1);
-            /* Squished peek so map stays highly visible, fully revealing "Start Navigation" */
-            max-height: 40dvh;
+            transition: transform .35s cubic-bezier(.16, 1, 0.3, 1);
+            max-height: 48dvh;
             display: flex;
             flex-direction: column;
         }
         .sheet.open { transform: translateY(0); }
-        /* Expanded state — user pulls up for full directions */
-        .sheet.expanded { max-height: 75dvh; }
-        /* Handle tap to expand */
+        .sheet.expanded { max-height: 80dvh; }
         .sheet-handle { cursor: pointer; }
 
         .sheet-handle {
-            width: 36px; height: 4px;
+            width: 44px; height: 5px;
             background: var(--border);
-            border-radius: 2px;
-            margin: 10px auto 6px;
+            border-radius: 4px;
+            margin: 10px auto 8px;
             flex-shrink: 0;
+            opacity: 0.7;
         }
 
         .sheet-content {
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
             flex: 1;
-            /* Extra bottom padding accounts for safe-area + prevents ad clipping at bottom edge */
-            padding: 0 16px calc(44px + env(safe-area-inset-bottom));
+            padding: 0 18px calc(48px + env(safe-area-inset-bottom));
         }
 
         /* Building info inside sheet */
         .place-header {
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             gap: 12px;
-            padding: 8px 0 10px; /* Tighter vertical padding */
+            padding: 8px 0 12px;
             border-bottom: 1px solid var(--border);
             position: sticky;
             top: 0;
             background: var(--surface);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             z-index: 1;
         }
         .place-icon {
-            width: 46px; height: 46px;
-            border-radius: var(--radius-sm);
+            width: 48px; height: 48px;
+            border-radius: 14px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 18px;
+            font-size: 20px;
             flex-shrink: 0;
         }
-        .place-header h2 { font-size: 15px; font-weight: 700; line-height: 1.3; }
-        .place-header .type { font-size: 11px; font-weight: 600; margin-top: 3px; display: block; }
+        .place-header h2 { font-size: 16px; font-weight: 700; line-height: 1.3; }
+        .place-header .type { font-size: 12px; font-weight: 600; margin-top: 3px; display: block; }
 
         .close-sheet {
             position: absolute;
-            top: 12px; right: 0;
+            top: 10px; right: 0;
             background: var(--bg);
-            border: none;
-            width: 38px; height: 38px;
+            border: 1px solid var(--border);
+            width: 36px; height: 36px;
             border-radius: 50%;
             cursor: pointer;
             color: var(--muted);
-            font-size: 16px;
+            font-size: 14px;
             display: flex; align-items: center; justify-content: center;
-            transition: background 0.2s;
+            transition: all 0.2s ease;
         }
         .close-sheet:active {
+            transform: scale(0.92);
             background: var(--border);
         }
 
         .place-desc {
-            font-size: 13px;
+            font-size: 13.5px;
             color: var(--muted);
-            line-height: 1.4; /* Slightly tighter text line height */
-            padding: 8px 0; /* Reduced vertical padding */
+            line-height: 1.5;
+            padding: 10px 0;
             border-bottom: 1px solid var(--border);
         }
 
@@ -1950,13 +1954,13 @@
             flex-direction: column;
             gap: 0;
             padding: 4px 0;
-            margin-bottom: -4px; /* offset extra row padding */
+            margin-bottom: -4px;
         }
         .meta-row {
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 10px 0; /* Keeps thumb gap */
+            padding: 10px 0;
             border-bottom: 1px solid var(--border);
             font-size: 13px;
         }
@@ -1968,15 +1972,15 @@
         /* Action buttons in sheet */
         .sheet-actions {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            padding: 6px 0 2px; /* Super tight margin to save space */
+            grid-template-columns: 2fr 1fr;
+            gap: 10px;
+            padding: 10px 0 6px;
         }
         /* Sponsored slot below sheet actions (Adsterra) */
         .sheet-ad-wrap {
             margin-top: 14px;
             padding-top: 12px;
-            border-top: 1px solid rgba(15, 23, 42, 0.08);
+            border-top: 1px solid var(--border);
         }
         .sheet-ad-label {
             display: block;
@@ -1988,11 +1992,11 @@
             margin-bottom: 8px;
         }
         .action-btn {
-            min-height: 48px;
-            padding: 12px 14px;
+            min-height: 50px;
+            padding: 12px 18px;
             border: none;
-            border-radius: var(--radius-sm);
-            font-size: 14px;
+            border-radius: 14px;
+            font-size: 14.5px;
             font-weight: 700;
             font-family: inherit;
             cursor: pointer;
@@ -2000,17 +2004,17 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            transition: opacity .2s, transform .15s, background .2s, box-shadow .2s;
+            transition: transform .15s ease, background .2s ease, box-shadow .2s ease;
             -webkit-tap-highlight-color: transparent;
         }
-        .action-btn:active { opacity: .8; transform: scale(.97); }
+        .action-btn:active { transform: scale(.96); opacity: .9; }
         .btn-dir {
-            background: var(--primary);
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
             color: #fff;
-            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4);
         }
         .btn-dir:hover {
-            background: #1d4ed8;
+            background: #1e40af;
         }
         .btn-share {
             background: var(--bg);
@@ -2478,6 +2482,260 @@
             pointer-events: none;
             white-space: nowrap;
         }
+
+        /* ── MAP STUDENT FEEDBACK FAB & MODAL ── */
+        .fab-feedback-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .fab-feedback-btn {
+            color: #d97706 !important;
+            background: rgba(255, 255, 255, 0.94) !important;
+            box-shadow: 0 4px 16px rgba(245, 158, 11, 0.25) !important;
+        }
+        .fab-feedback-btn:hover {
+            color: #b45309 !important;
+            transform: scale(1.08) !important;
+        }
+        body.dark-theme .fab-feedback-btn {
+            background: rgba(15, 23, 42, 0.9) !important;
+            color: #fbbf24 !important;
+        }
+
+        /* 4-second subtle callout tooltips for Feedback & Navi Orb */
+        .fab-hint-callout {
+            position: absolute;
+            right: calc(100% + 12px);
+            top: 50%;
+            transform: translateY(-50%) translateX(6px);
+            background: rgba(15, 23, 42, 0.92);
+            color: #f8fafc;
+            font-size: 11.5px;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 9999px;
+            white-space: nowrap;
+            pointer-events: none;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            backdrop-filter: blur(12px);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s;
+            z-index: 1005;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .fab-hint-callout i {
+            color: #f59e0b;
+        }
+        .fab-hint-callout.show-callout {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(-50%) translateX(0);
+        }
+
+        .map-feedback-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(4, 9, 20, 0.72);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            z-index: 5000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.22s ease;
+        }
+        .map-feedback-modal-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .map-feedback-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            transform: scale(0.94);
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .map-feedback-modal-overlay.open .map-feedback-card {
+            transform: scale(1);
+        }
+        .map-feedback-header {
+            padding: 18px 20px 14px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .map-feedback-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .map-feedback-title i {
+            color: #f59e0b;
+        }
+        .map-feedback-close {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            transition: all 0.2s;
+        }
+        .map-feedback-close:hover {
+            color: var(--text);
+            background: var(--border);
+        }
+        .map-feedback-body {
+            padding: 18px 20px 22px;
+        }
+        .map-feedback-desc {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 14px;
+            line-height: 1.45;
+        }
+        .map-feedback-label {
+            display: block;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+        .map-feedback-types {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        .map-feedback-type-btn,
+        .map-type-chip {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            padding: 10px 6px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .map-feedback-type-btn i,
+        .map-type-chip i { font-size: 15px; }
+        .map-feedback-type-btn.active,
+        .map-type-chip.active {
+            background: rgba(245, 158, 11, 0.15);
+            border-color: #f59e0b;
+            color: #d97706;
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2);
+        }
+        body.dark-theme .map-feedback-type-btn.active,
+        body.dark-theme .map-type-chip.active {
+            color: #fbbf24;
+            background: rgba(245, 158, 11, 0.2);
+        }
+        .map-feedback-textarea {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 14px;
+            color: var(--text);
+            font-size: 13.5px;
+            font-family: inherit;
+            outline: none;
+            resize: none;
+            height: 94px;
+            margin-bottom: 10px;
+            transition: border-color 0.2s;
+        }
+        .map-feedback-textarea:focus {
+            border-color: #f59e0b;
+        }
+        .map-feedback-contact {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 10px 14px;
+            color: var(--text);
+            font-size: 13px;
+            font-family: inherit;
+            outline: none;
+            margin-bottom: 16px;
+        }
+        .map-feedback-contact:focus {
+            border-color: #f59e0b;
+        }
+        .map-feedback-submit {
+            width: 100%;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: #0b1120;
+            border: none;
+            padding: 13px;
+            border-radius: 12px;
+            font-size: 14.5px;
+            font-weight: 800;
+            font-family: inherit;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35);
+            transition: all 0.2s;
+        }
+        .map-feedback-submit:hover {
+            background: #fbbf24;
+        }
+        .map-feedback-success {
+            display: none;
+            text-align: center;
+            padding: 20px 10px;
+        }
+        .map-feedback-success i {
+            font-size: 36px;
+            color: #10b981;
+            margin-bottom: 10px;
+        }
+        .map-feedback-success h4 {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+        .map-feedback-success p {
+            font-size: 13px;
+            color: var(--muted);
+        }
         .reroute-bar.show {
             opacity: 1;
             transform: translateX(-50%) translateY(0);
@@ -2687,8 +2945,9 @@
             z-index: 1001;
             display: flex;
             gap: 8px;
-            padding: 8px 12px;
+            padding: 8px 14px;
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
             pointer-events: auto;
             transition: transform 0.4s cubic-bezier(.4,1,0.2,1);
@@ -2697,24 +2956,46 @@
 
         .chip {
             white-space: nowrap;
-            padding: 7px 14px;
-            background: #fff;
-            border: 1px solid #dadce0;
-            border-radius: 18px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            border-radius: 22px;
             font-size: 13px;
-            font-weight: 500;
-            color: #3c4043;
+            font-weight: 600;
+            color: #334155;
             cursor: pointer;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
             display: flex;
             align-items: center;
             gap: 6px;
             flex-shrink: 0;
-            transition: background 0.2s, box-shadow 0.2s;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            -webkit-tap-highlight-color: transparent;
+        }
+        .chip:active {
+            transform: scale(0.96);
         }
         .chip.active {
-            background: #e8f0fe;
-            color: #1967d2;
+            background: #1e3a8a;
+            color: #ffffff;
+            border-color: transparent;
+            box-shadow: 0 4px 14px rgba(30, 58, 138, 0.35);
+        }
+        .chip.active i {
+            color: #fbbf24;
+        }
+
+        body.dark-theme .chip {
+            background: rgba(15, 23, 42, 0.85);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: #cbd5e1;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+        }
+        body.dark-theme .chip.active {
+            background: #2563eb;
+            color: #ffffff;
             border-color: transparent;
         }
 
@@ -3224,7 +3505,7 @@
             <button class="search-menu-btn" aria-label="Menu">
                 <i class="fas fa-bars"></i>
             </button>
-            <input type="text" id="searchInput" placeholder="Search USTED NAV" autocomplete="off" spellcheck="false">
+            <input type="text" id="searchInput" placeholder="Search buildings, halls, or rooms..." autocomplete="off" spellcheck="false">
             <div class="search-action-btns">
                 <button class="search-voice-btn search-orb-btn" id="searchVoiceBtn" title="Speak to Navi (Voice Navigation)" aria-label="Voice Search">
                     <div class="search-orb-dot" id="searchOrbDot"></div>
@@ -3267,11 +3548,11 @@
     <!-- FILTER CHIPS -->
     <div class="filter-chips" id="filterChips">
         <div class="chip active" data-type="all"><i class="fas fa-layer-group"></i> All</div>
-        <div class="chip" data-type="academic"><i class="fas fa-book-open"></i> Academic</div>
-        <div class="chip" data-type="faculty"><i class="fas fa-university"></i> Faculty</div>
-        <div class="chip" data-type="hostel"><i class="fas fa-bed"></i> Halls</div>
-        <div class="chip" data-type="administration"><i class="fas fa-building-columns"></i> Admin</div>
-        <div class="chip" data-type="facility"><i class="fas fa-circle-info"></i> Facilities</div>
+        <div class="chip" data-type="academic"><i class="fas fa-graduation-cap"></i> Lecture Blocks</div>
+        <div class="chip" data-type="hostel"><i class="fas fa-hotel"></i> Halls &amp; Hostels</div>
+        <div class="chip" data-type="administration"><i class="fas fa-landmark"></i> Admin &amp; Offices</div>
+        <div class="chip" data-type="faculty"><i class="fas fa-building-columns"></i> Faculties</div>
+        <div class="chip" data-type="facility"><i class="fas fa-utensils"></i> Food &amp; Facilities</div>
     </div>
 
     <!-- DYNAMIC SIDE PANEL (DESKTOP) -->
@@ -3285,6 +3566,9 @@
     <div class="fabs">
         <!-- FLOATING NAVI AI ORB (ON SCREEN TRIGGER) -->
         <div class="navi-orb-container" id="naviOrbContainer">
+            <div class="fab-hint-callout" id="naviOrbHintCallout">
+                <i class="fas fa-sparkles"></i> Tap to speak to Navi
+            </div>
             <button class="navi-screen-orb state-idle" id="naviOrbTrigger" title="Tap to talk to Navi AI" aria-label="Activate Navi Voice Assistant">
                 <div class="orb-ring"></div>
                 <div class="orb-core"></div>
@@ -3301,6 +3585,14 @@
             <div class="locate-hint-tooltip" id="locateHint">📍 Finding you…</div>
             <button class="fab fab-locate" id="btnLocate" title="Use My Location" aria-label="Find My Current Location">
                 <i class="fas fa-location-crosshairs"></i>
+            </button>
+        </div>
+        <div class="fab-feedback-wrap">
+            <div class="fab-hint-callout" id="mapFeedbackHintCallout">
+                <i class="fas fa-comment-dots"></i> Feedback & Places
+            </div>
+            <button class="fab fab-feedback-btn" id="btnMapFeedback" onclick="openMapFeedbackModal()" title="Feedback & Suggestions" aria-label="Give feedback or request place">
+                <i class="fas fa-comment-dots"></i>
             </button>
         </div>
         <div class="zoom-ctrl">
@@ -3485,6 +3777,52 @@
                     <i class="fas fa-magnifying-glass"></i>
                     <span>Explore Map</span>
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAP FEEDBACK & PLACE REQUEST MODAL -->
+    <div class="map-feedback-modal-overlay" id="mapFeedbackModal">
+        <div class="map-feedback-card">
+            <div class="map-feedback-header">
+                <div class="map-feedback-title">
+                    <i class="fas fa-comment-dots"></i> Help Improve USTEDNAV
+                </div>
+                <button type="button" class="map-feedback-close" onclick="closeMapFeedbackModal()" aria-label="Close modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="map-feedback-body">
+                <div id="mapFeedbackForm">
+                    <label class="map-feedback-label">What is on your mind?</label>
+                    <div class="map-feedback-types">
+                        <button type="button" class="map-feedback-type-btn active" data-type="request_place" onclick="selectMapFeedbackType(this, 'request_place')">
+                            <i class="fas fa-map-pin"></i> Add Place
+                        </button>
+                        <button type="button" class="map-feedback-type-btn" data-type="fix_route" onclick="selectMapFeedbackType(this, 'fix_route')">
+                            <i class="fas fa-triangle-exclamation"></i> Fix Map
+                        </button>
+                        <button type="button" class="map-feedback-type-btn" data-type="suggestion" onclick="selectMapFeedbackType(this, 'suggestion')">
+                            <i class="fas fa-lightbulb"></i> New Idea
+                        </button>
+                    </div>
+
+                    <label class="map-feedback-label" for="mapFeedbackText">Details</label>
+                    <textarea class="map-feedback-textarea" id="mapFeedbackText" placeholder="Tell us the building name, wrong path, or what we should add/improve..."></textarea>
+
+                    <label class="map-feedback-label" for="mapFeedbackContact">Your WhatsApp or Phone (Optional)</label>
+                    <input type="text" class="map-feedback-contact" id="mapFeedbackContact" placeholder="050... or 024... (so we can update you)">
+
+                    <button type="button" class="map-feedback-submit" id="mapFeedbackSubmitBtn" onclick="submitMapFeedback()">
+                        <i class="fas fa-paper-plane"></i> Send Feedback
+                    </button>
+                </div>
+
+                <div class="map-feedback-success" id="mapFeedbackSuccess">
+                    <i class="fas fa-check-circle"></i>
+                    <h4>Thank You!</h4>
+                    <p>Your feedback was sent directly to the USTEDNAV team. We will review it shortly!</p>
+                </div>
             </div>
         </div>
     </div>
@@ -6001,14 +6339,14 @@
         openSheet(`
             <div class="route-info">
                 <div class="route-dest-header">
-                    <div style="font-size:11px;font-weight:600;color:var(--primary);text-transform:uppercase;letter-spacing:0.5px">
-                        <i class="fas fa-location-dot" style="margin-right:4px"></i> Destination & Indoor Breadcrumbs
+                    <div style="font-size:12px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:0.5px">
+                        <i class="fas fa-location-dot" style="margin-right:4px"></i> Walking Route
                     </div>
-                    <div style="font-size:13.5px;font-weight:700;color:var(--text);margin-top:3px">${destName}</div>
+                    <div style="font-size:15px;font-weight:800;color:var(--text);margin-top:3px">${destName}</div>
                 </div>
                 ${isOffline ? `
-                <p style="background:#eef2ff; color:#4338ca; padding:8px 10px; border-radius:8px; font-size:12px; margin-bottom:10px; border:1px solid #c7d2fe; display:flex; align-items:center; gap:6px">
-                    <i class="fas fa-person-walking-arrow-right"></i> <strong>Campus Walkway:</strong> Direct to entrance
+                <p style="background:#eef2ff; color:#312e81; padding:9px 12px; border-radius:12px; font-size:12px; margin:8px 0 10px; border:1px solid #c7d2fe; display:flex; align-items:center; gap:8px">
+                    <i class="fas fa-person-walking-arrow-right" style="color:#4f46e5"></i> Direct footpath to entrance &bull; Works offline
                 </p>` : ''}
                 <div class="route-cards">
                     <div class="route-card">
@@ -6022,8 +6360,8 @@
                 </div>
                 ${steps.length ? `<div class="steps-list" id="stepsList" style="max-height: 180px; overflow-y: auto;">${stepsHtml}</div>` : ''}
                 <div class="sheet-actions">
-                    <button class="action-btn btn-nav-live" onclick="beginLiveNav()">
-                        <i class="fas fa-location-arrow"></i> Go
+                    <button class="action-btn btn-dir" onclick="beginLiveNav()">
+                        <i class="fas fa-location-arrow"></i> Start Walking
                     </button>
                     <button class="action-btn btn-share" onclick="clearRoute()">
                         <i class="fas fa-xmark"></i> Clear
@@ -6557,6 +6895,128 @@
         deferredPwaPrompt = null;
         dismissPwaToast();
     };
+
+    // ──────────────────────────────────────────────
+    // MAP FEEDBACK & PLACE REQUEST HANDLERS
+    // ──────────────────────────────────────────────
+    let currentMapFeedbackType = 'request_place';
+
+    window.openMapFeedbackModal = function() {
+        const modal = document.getElementById('mapFeedbackModal');
+        if (modal) modal.classList.add('open');
+        const form = document.getElementById('mapFeedbackForm');
+        const success = document.getElementById('mapFeedbackSuccess');
+        if (form) form.style.display = 'block';
+        if (success) success.style.display = 'none';
+        const txt = document.getElementById('mapFeedbackText');
+        if (txt) { txt.value = ''; txt.focus(); }
+        const contact = document.getElementById('mapFeedbackContact');
+        if (contact) contact.value = '';
+
+        if (typeof gtag === 'function') {
+            gtag('event', 'open_feedback_modal', { page_location: 'map_2.0' });
+        }
+    };
+
+    window.closeMapFeedbackModal = function() {
+        const modal = document.getElementById('mapFeedbackModal');
+        if (modal) modal.classList.remove('open');
+    };
+
+    window.selectMapFeedbackType = function(btn, type) {
+        currentMapFeedbackType = type;
+        document.querySelectorAll('.map-feedback-type-btn').forEach(b => b.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+    };
+
+    window.submitMapFeedback = async function() {
+        const messageEl = document.getElementById('mapFeedbackText');
+        const contactEl = document.getElementById('mapFeedbackContact');
+        const submitBtn = document.getElementById('mapFeedbackSubmitBtn');
+        const formEl = document.getElementById('mapFeedbackForm');
+        const successEl = document.getElementById('mapFeedbackSuccess');
+
+        const message = messageEl ? messageEl.value.trim() : '';
+        const contact = contactEl ? contactEl.value.trim() : '';
+
+        if (!message) {
+            alert('Please type a brief note or place name before sending.');
+            if (messageEl) messageEl.focus();
+            return;
+        }
+
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+        }
+
+        const payload = {
+            feedback_type: currentMapFeedbackType,
+            message: message,
+            contact: contact || 'Anonymous',
+            page: 'map_view',
+            current_zoom: (typeof map !== 'undefined' && map.getZoom) ? map.getZoom() : null,
+            center_coords: (typeof map !== 'undefined' && map.getCenter) ? [map.getCenter().lat, map.getCenter().lng] : null,
+            timestamp: new Date().toISOString()
+        };
+
+        // 1. Send to Google Analytics 4
+        if (typeof gtag === 'function') {
+            gtag('event', 'student_feedback', {
+                feedback_type: payload.feedback_type,
+                feedback_message: payload.message.substring(0, 100),
+                feedback_page: payload.page
+            });
+        }
+
+        // 2. Send to Supabase Analytics pipeline (Viewable in /admin)
+        if (window.CampusTelemetry && typeof window.CampusTelemetry.track === 'function') {
+            try {
+                await window.CampusTelemetry.track('student_feedback', payload);
+            } catch (err) {
+                console.warn('[MapFeedback] Telemetry error:', err);
+            }
+        }
+
+        // Display Success State
+        if (formEl) formEl.style.display = 'none';
+        if (successEl) successEl.style.display = 'block';
+
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Feedback';
+        }
+
+        setTimeout(() => {
+            closeMapFeedbackModal();
+        }, 2200);
+    };
+
+    // Close on backdrop click
+    document.addEventListener('click', function(e) {
+        const modal = document.getElementById('mapFeedbackModal');
+        if (modal && e.target === modal) {
+            closeMapFeedbackModal();
+        }
+    });
+
+    // 4-second subtle callout on load to inform users about Feedback & Navi AI
+    window.addEventListener('DOMContentLoaded', function() {
+        const naviCallout = document.getElementById('naviOrbHintCallout');
+        const feedbackCallout = document.getElementById('mapFeedbackHintCallout');
+
+        // Show after map initial settle (1.5s)
+        setTimeout(() => {
+            if (naviCallout) naviCallout.classList.add('show-callout');
+            if (feedbackCallout) feedbackCallout.classList.add('show-callout');
+
+            // Automatically hide after exactly 4 seconds
+            setTimeout(() => {
+                if (naviCallout) naviCallout.classList.remove('show-callout');
+                if (feedbackCallout) feedbackCallout.classList.remove('show-callout');
+            }, 4000);
+        }, 1500);
+    });
     </script>
 </body>
 </html>

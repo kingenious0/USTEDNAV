@@ -2463,13 +2463,20 @@ async function renderAnalyticsDashboard(notifySuccess = false) {
     const supabaseUrl = (window.ENV?.supabaseUrl || window.APP_CONFIG?.SUPABASE_URL || 'https://mzxmbkulgrehujpvwadt.supabase.co').replace(/\/+$/, '');
     const supabaseKey = window.ENV?.supabaseKey || window.APP_CONFIG?.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im16eG1ia3VsZ3JlaHVqcHZ3YWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ1Njk5NjQsImV4cCI6MjEwMDE0NTk2NH0.PQMuAN1Hr82re8sgIJCbwwU09u6594UC3oIdTGoJfaE';
 
+    const schema = (window.ENV?.schema || window.APP_CONFIG?.DEFAULT_SCHEMA || '').trim();
+    const headers = {
+        'apikey': supabaseKey,
+        'Authorization': `Bearer ${supabaseKey}`,
+        'Content-Type': 'application/json'
+    };
+    if (schema) {
+        headers['Accept-Profile'] = schema;
+        headers['Content-Profile'] = schema;
+    }
+
     try {
         const res = await fetch(`${supabaseUrl}/rest/v1/analytics_events?select=*&order=created_at.desc&limit=500`, {
-            headers: {
-                'apikey': supabaseKey,
-                'Authorization': `Bearer ${supabaseKey}`,
-                'Content-Type': 'application/json'
-            }
+            headers: headers
         });
 
         if (!res.ok) {
@@ -2553,6 +2560,7 @@ async function renderAnalyticsDashboard(notifySuccess = false) {
                     if (e.event_name === 'apk_download') { badge = 'bg-emerald-950/80 text-emerald-400 border border-emerald-500/30'; icon = '📥 APK'; }
                     else if (e.event_name === 'pwa_installed') { badge = 'bg-amber-950/80 text-amber-400 border border-amber-500/30'; icon = '📱 PWA'; }
                     else if (e.event_name === 'page_view') { badge = 'bg-indigo-950/80 text-indigo-300 border border-indigo-500/30'; icon = '👀 View'; }
+                    else if (e.event_name === 'student_feedback') { badge = 'bg-amber-500/20 text-amber-300 border border-amber-500/40'; icon = '💬 Feedback'; }
                     else { badge = 'bg-sky-950/80 text-sky-400 border border-sky-500/30'; icon = '🗺️ Action'; }
 
                     const timeAgo = formatTimeAgo(new Date(e.created_at));
@@ -2564,6 +2572,66 @@ async function renderAnalyticsDashboard(notifySuccess = false) {
                             <td class="py-2.5 text-slate-400 font-mono text-[11px]">${e.device_os || 'Unknown'}</td>
                             <td class="py-2.5 text-slate-400 text-[11px] truncate max-w-[120px]">${e.path || '/'}</td>
                             <td class="py-2.5 text-right text-slate-500 text-[11px] whitespace-nowrap">${timeAgo}</td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+        }
+
+        // Render Dedicated Student Feedback & Place Requests
+        const feedbackTableBody = document.getElementById('student-feedback-table');
+        const feedbackCountEl = document.getElementById('student-feedback-count');
+        const feedbackEvents = events.filter(e => e.event_name === 'student_feedback');
+
+        if (feedbackCountEl) {
+            feedbackCountEl.textContent = `${feedbackEvents.length} submission${feedbackEvents.length === 1 ? '' : 's'}`;
+        }
+
+        if (feedbackTableBody) {
+            if (feedbackEvents.length === 0) {
+                feedbackTableBody.innerHTML = '<tr><td colspan="5" class="py-6 text-center text-slate-500">No student feedback received yet. Suggestions submitted on the landing page or map will appear here.</td></tr>';
+            } else {
+                feedbackTableBody.innerHTML = feedbackEvents.map(f => {
+                    const meta = f.metadata || {};
+                    let typeBadge = 'bg-slate-800 text-slate-300';
+                    let typeLabel = meta.feedback_type || 'General';
+
+                    if (typeLabel === 'request_place') {
+                        typeBadge = 'bg-emerald-950 text-emerald-400 border border-emerald-500/30';
+                        typeLabel = '📍 Add Place';
+                    } else if (typeLabel === 'fix_route') {
+                        typeBadge = 'bg-rose-950 text-rose-400 border border-rose-500/30';
+                        typeLabel = '⚠️ Fix Map';
+                    } else if (typeLabel === 'suggestion') {
+                        typeBadge = 'bg-amber-950 text-amber-400 border border-amber-500/30';
+                        typeLabel = '💡 New Idea';
+                    }
+
+                    const message = meta.message || f.path || 'No message provided';
+                    const contact = meta.contact || 'Anonymous';
+                    const page = meta.page || 'Web App';
+                    const timeAgo = formatTimeAgo(new Date(f.created_at));
+                    const fullDate = new Date(f.created_at).toLocaleString();
+
+                    return `
+                        <tr class="hover:bg-slate-800/40 transition">
+                            <td class="py-3 align-top">
+                                <span class="px-2 py-0.5 rounded-md text-[10px] font-semibold whitespace-nowrap ${typeBadge}">
+                                    ${typeLabel}
+                                </span>
+                            </td>
+                            <td class="py-3 text-slate-200 text-xs font-medium max-w-sm break-words align-top">
+                                ${escapeHtml(message)}
+                            </td>
+                            <td class="py-3 text-amber-400 font-mono text-[11px] align-top whitespace-nowrap">
+                                ${escapeHtml(contact)}
+                            </td>
+                            <td class="py-3 text-slate-400 text-[11px] align-top whitespace-nowrap">
+                                <span class="bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700/50">${escapeHtml(page)}</span>
+                            </td>
+                            <td class="py-3 text-right text-slate-400 text-[11px] align-top whitespace-nowrap" title="${fullDate}">
+                                ${timeAgo}
+                            </td>
                         </tr>
                     `;
                 }).join('');

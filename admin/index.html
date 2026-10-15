@@ -626,7 +626,7 @@
                 </div>
 
                 <!-- Operating System Breakdown & Live Stream -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
                     <div class="p-5 rounded-2xl bg-slate-900/60 border border-slate-800">
                         <h2 class="text-sm font-bold text-white mb-3">Platforms & Devices</h2>
                         <div id="analytics-os-breakdown" class="space-y-3">
@@ -656,6 +656,40 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Student Feedback & Place Requests -->
+                <div class="p-5 rounded-2xl bg-slate-900/60 border border-amber-500/20 bg-gradient-to-br from-amber-950/10 to-transparent">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold text-sm">
+                                💬
+                            </div>
+                            <div>
+                                <h2 class="text-sm font-bold text-white">Student Feedback & Place Requests</h2>
+                                <p class="text-xs text-slate-400">Direct suggestions, missing buildings, and map corrections from mobile users</p>
+                            </div>
+                        </div>
+                        <span id="student-feedback-count" class="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-semibold">0 submissions</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead>
+                                <tr class="text-slate-400 border-b border-slate-800/80 pb-2">
+                                    <th class="pb-2 font-semibold">Type</th>
+                                    <th class="pb-2 font-semibold">Message / Request</th>
+                                    <th class="pb-2 font-semibold">Contact</th>
+                                    <th class="pb-2 font-semibold">Page</th>
+                                    <th class="pb-2 font-semibold text-right">Date & Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="student-feedback-table" class="divide-y divide-slate-800/50 text-slate-300">
+                                <tr>
+                                    <td colspan="5" class="py-5 text-center text-slate-500">No student feedback received yet.</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </section>
