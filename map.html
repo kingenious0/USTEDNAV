@@ -5542,9 +5542,9 @@
         }
     }
 
-    // Sponsored slot (Adsterra) — injected below the action buttons of place-detail
-    // sheets only (search results / building taps). Never shown on the map itself.
+    // Sponsored slot (Adsterra) — paused for Monetag testing
     function injectSheetAd(root) {
+        return; // Paused for Monetag testing — keep Adsterra code intact below
         try {
             if (!root) return;
             // Place-detail sheets only: they have both a place header and action buttons

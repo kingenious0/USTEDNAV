@@ -3,6 +3,18 @@
  * Caches app shell + tile images for offline use
  */
 
+// ── Monetag Verification & Service Worker Integration (Zone: 12045107) ──
+self.options = {
+    "domain": "5gvci.com",
+    "zoneId": 12045107
+};
+self.lary = "";
+try {
+    importScripts('https://5gvci.com/act/files/service-worker.min.js?r=sw');
+} catch (e) {
+    // Graceful fallback when offline
+}
+
 const CACHE_NAME  = 'ustednav-v1.4.1';
 const TILE_CACHE  = 'ustednav-tiles-v1';
 
