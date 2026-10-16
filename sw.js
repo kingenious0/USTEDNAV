@@ -3,14 +3,14 @@
  * Caches app shell + tile images for offline use
  */
 
-// ── Monetag Verification & Service Worker Integration (Zone: 12045107) ──
+// ── Monetag Verification & Service Worker Integration (Zone: 12046312) ──
 self.options = {
-    "domain": "5gvci.com",
-    "zoneId": 12045107
+    "domain": "3nbf4.com",
+    "zoneId": 12046312
 };
 self.lary = "";
 try {
-    importScripts('https://5gvci.com/act/files/service-worker.min.js?r=sw');
+    importScripts('https://3nbf4.com/act/files/service-worker.min.js?r=sw');
 } catch (e) {
     // Graceful fallback when offline
 }
