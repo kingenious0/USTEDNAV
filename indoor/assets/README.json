@@ -1,0 +1,4 @@
+{
+  "_note": "Drop the ROB ground floor plan image here as rob_ground_plan.png",
+  "_usage": "This image is used to: (1) visually calibrate the X,Y pixel coordinates in rob_ground.json, (2) rendered as the SVG background texture in the indoor viewer, (3) used to verify room positions by overlaying the routing graph on top of it during development."
+}

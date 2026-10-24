@@ -1,0 +1,164 @@
+{
+  "_meta": {
+    "building": "Reynolds Okai Building",
+    "buildingId": "ROB",
+    "floor": "Ground",
+    "floorIndex": 0,
+    "version": "1.2.0",
+    "imageRef": "indoor/assets/rob_ground_plan.png",
+    "imageWidth": 1040,
+    "imageHeight": 870,
+    "scaleMetersPerPixel": 0.05,
+    "note": "X,Y coordinates are calibrated to the yellow door pills on the 1040x870 floor plan."
+  },
+
+  "entrances": [
+    { "id": "entrance_main",    "label": "Main Entrance",    "x": 510, "y": 810, "isDefault": true  },
+    { "id": "entrance_esa",     "label": "ESA Entrance",     "x":  40, "y": 510, "isDefault": false },
+    { "id": "entrance_library", "label": "Library Entrance", "x": 960, "y": 510, "isDefault": false }
+  ],
+
+  "nodes": [
+    { "id": "entrance_main",       "x": 510, "y": 810, "type": "entrance",  "label": "Main Entrance" },
+    { "id": "entrance_esa",        "x":  40, "y": 510, "type": "entrance",  "label": "ESA Entrance" },
+    { "id": "entrance_library",    "x": 960, "y": 510, "type": "entrance",  "label": "Library Entrance" },
+
+    { "id": "corner_nw",           "x": 180, "y": 320, "type": "junction",  "label": "North-West Corner" },
+    { "id": "corner_sw",           "x": 180, "y": 740, "type": "junction",  "label": "South-West Corner" },
+    { "id": "corner_ne",           "x": 930, "y": 320, "type": "junction",  "label": "North-East Corner" },
+    { "id": "corner_se",           "x": 930, "y": 740, "type": "junction",  "label": "South-East Corner" },
+
+    { "id": "jct_room2_e1",        "x": 248, "y": 320, "type": "junction",  "label": "North Corridor (Room 2 E1)" },
+    { "id": "jct_room2_e2",        "x": 321, "y": 320, "type": "junction",  "label": "North Corridor (Room 2 E2)" },
+    { "id": "jct_mid_top",         "x": 400, "y": 320, "type": "junction",  "label": "North-Middle Junction" },
+    { "id": "jct_dept_lang",       "x": 440, "y": 320, "type": "junction",  "label": "North Corridor (Dept of Language)" },
+    { "id": "jct_grooms",          "x": 540, "y": 320, "type": "junction",  "label": "North Corridor (Grooms Room)" },
+    { "id": "jct_liaison",         "x": 634, "y": 320, "type": "junction",  "label": "North Corridor (Liaison Office)" },
+    { "id": "jct_room1_e1",        "x": 727, "y": 320, "type": "junction",  "label": "North Corridor (Room 1 E1)" },
+    { "id": "jct_room1_e2",        "x": 807, "y": 320, "type": "junction",  "label": "North Corridor (Room 1 E2)" },
+
+    { "id": "jct_west_office8",    "x": 180, "y": 371, "type": "junction",  "label": "West Corridor (Office 8)" },
+    { "id": "stair_west",          "x": 180, "y": 433, "type": "transit",   "label": "Stairs to 1st Floor (West)" },
+    { "id": "jct_west_mid",        "x": 180, "y": 510, "type": "junction",  "label": "West Corridor (ESA Entrance)" },
+    { "id": "jct_west_office11",   "x": 180, "y": 557, "type": "junction",  "label": "West Corridor (Office 11)" },
+    { "id": "jct_west_office12",   "x": 180, "y": 626, "type": "junction",  "label": "West Corridor (Office 12)" },
+
+    { "id": "jct_east_office5",    "x": 930, "y": 375, "type": "junction",  "label": "East Corridor (Office 5)" },
+    { "id": "stair_east",          "x": 930, "y": 438, "type": "transit",   "label": "Stairs to 1st Floor (East)" },
+    { "id": "jct_east_mid",        "x": 930, "y": 510, "type": "junction",  "label": "East Corridor (Library Entrance)" },
+    { "id": "jct_east_resource",   "x": 930, "y": 562, "type": "junction",  "label": "East Corridor (Resource Centre)" },
+    { "id": "jct_east_office1",    "x": 930, "y": 631, "type": "junction",  "label": "East Corridor (Office 1)" },
+
+    { "id": "jct_room24_e2",       "x": 215, "y": 740, "type": "junction",  "label": "South Corridor (Room 24 E2)" },
+    { "id": "jct_room24_e1",       "x": 281, "y": 740, "type": "junction",  "label": "South Corridor (Room 24 E1)" },
+    { "id": "jct_porters",         "x": 361, "y": 740, "type": "junction",  "label": "South Corridor (Porter's Office)" },
+    { "id": "jct_mid_bot",         "x": 400, "y": 740, "type": "junction",  "label": "South-Middle Junction" },
+    { "id": "jct_south_mid",       "x": 510, "y": 740, "type": "junction",  "label": "Main Entrance Corridor" },
+    { "id": "jct_office_gen",      "x": 641, "y": 740, "type": "junction",  "label": "South Corridor (Office)" },
+    { "id": "jct_room25_e2",       "x": 721, "y": 740, "type": "junction",  "label": "South Corridor (Room 25 E2)" },
+    { "id": "jct_room25_e1",       "x": 787, "y": 740, "type": "junction",  "label": "South Corridor (Room 25 E1)" },
+
+    { "id": "jct_mid_ict",         "x": 400, "y": 481, "type": "junction",  "label": "Middle Corridor (ICT Annex)" },
+    { "id": "elevator",            "x": 400, "y": 510, "type": "transit",   "label": "Elevator" },
+    { "id": "jct_mid_off16",       "x": 400, "y": 544, "type": "junction",  "label": "Middle Corridor (Office 16)" }
+  ],
+
+  "rooms": [
+    { "id": "room_2_e1",     "label": "Room 2 Entrance 1",                     "x": 248, "y": 271, "type": "lecture",   "entranceNodeId": "jct_room2_e1" },
+    { "id": "room_2_e2",     "label": "Room 2 Entrance 2",                     "x": 321, "y": 271, "type": "lecture",   "entranceNodeId": "jct_room2_e2" },
+    { "id": "dept_language", "label": "Dept of Language Office Room 7",         "x": 440, "y": 270, "type": "office",    "entranceNodeId": "jct_dept_lang" },
+    { "id": "grooms_room",   "label": "Grooms Room",                           "x": 540, "y": 270, "type": "office",    "entranceNodeId": "jct_grooms" },
+    { "id": "liaison_office","label": "Liaison Office",                       "x": 634, "y": 270, "type": "office",    "entranceNodeId": "jct_liaison" },
+    { "id": "room_1_e1",     "label": "Room 1 Entrance 1",                     "x": 727, "y": 270, "type": "lecture",   "entranceNodeId": "jct_room1_e1" },
+    { "id": "room_1_e2",     "label": "Room 1 Entrance 2",                     "x": 807, "y": 270, "type": "lecture",   "entranceNodeId": "jct_room1_e2" },
+
+    { "id": "office_8",      "label": "Office Rm 8",                           "x": 175, "y": 371, "type": "office",    "entranceNodeId": "jct_west_office8" },
+    { "id": "office_9",      "label": "Office Rm 9",                           "x": 175, "y": 433, "type": "office",    "entranceNodeId": "stair_west" },
+    { "id": "fbe_accounts",  "label": "FBE Account Office 10",                 "x": 175, "y": 495, "type": "office",    "entranceNodeId": "jct_west_mid" },
+    { "id": "office_11",     "label": "Office Rm 11",                          "x": 175, "y": 557, "type": "office",    "entranceNodeId": "jct_west_office11" },
+    { "id": "office_12",     "label": "Office 12",                             "x": 175, "y": 626, "type": "office",    "entranceNodeId": "jct_west_office12" },
+
+    { "id": "office_5",      "label": "Office Rm 5",                           "x": 894, "y": 375, "type": "office",    "entranceNodeId": "jct_east_office5" },
+    { "id": "office_4",      "label": "Office Rm 4",                           "x": 894, "y": 438, "type": "office",    "entranceNodeId": "stair_east" },
+    { "id": "essuman_office","label": "Dr. Essuman & Ms. Rita Ndonibi Rm 3",    "x": 894, "y": 500, "type": "office",    "entranceNodeId": "jct_east_mid" },
+    { "id": "resource_centre","label": "Resource Centre For Students With Special Needs Rm 2", "x": 894, "y": 562, "type": "office", "entranceNodeId": "jct_east_resource" },
+    { "id": "office_1",      "label": "Office Rm 1",                           "x": 894, "y": 631, "type": "office",    "entranceNodeId": "jct_east_office1" },
+
+    { "id": "ict_annex",     "label": "ICT Office Annex 15",                   "x": 427, "y": 481, "type": "office",    "entranceNodeId": "jct_mid_ict" },
+    { "id": "office_16",     "label": "Office 16",                             "x": 427, "y": 544, "type": "office",    "entranceNodeId": "jct_mid_off16" },
+
+    { "id": "room_24_e2",    "label": "Room 24 Entrance 2",                    "x": 215, "y": 724, "type": "lecture",   "entranceNodeId": "jct_room24_e2" },
+    { "id": "room_24_e1",    "label": "Room 24 Entrance 1",                    "x": 281, "y": 724, "type": "lecture",   "entranceNodeId": "jct_room24_e1" },
+    { "id": "porters_office","label": "Porter's Office",                      "x": 361, "y": 724, "type": "office",    "entranceNodeId": "jct_porters" },
+    { "id": "office_general","label": "Office",                               "x": 641, "y": 724, "type": "office",    "entranceNodeId": "jct_office_gen" },
+    { "id": "room_25_e2",    "label": "Room 25 Entrance 2",                    "x": 721, "y": 724, "type": "lecture",   "entranceNodeId": "jct_room25_e2" },
+    { "id": "room_25_e1",    "label": "Room 25 Entrance 1",                    "x": 787, "y": 724, "type": "lecture",   "entranceNodeId": "jct_room25_e1" },
+
+    { "id": "wash_w1",       "label": "Washroom (West 1)",                     "x": 114, "y": 146, "type": "washroom",  "entranceNodeId": "corner_nw" },
+    { "id": "wash_w2",       "label": "Washroom (West 2)",                     "x": 114, "y": 203, "type": "washroom",  "entranceNodeId": "corner_nw" },
+    { "id": "wash_w3",       "label": "Washroom (West 3)",                     "x": 114, "y": 258, "type": "washroom",  "entranceNodeId": "corner_nw" },
+    { "id": "wash_sw1",      "label": "Washroom (South-West 1)",                "x": 100, "y": 662, "type": "washroom",  "entranceNodeId": "corner_sw" },
+    { "id": "wash_sw2",      "label": "Washroom (South-West 2)",                "x": 100, "y": 711, "type": "washroom",  "entranceNodeId": "corner_sw" },
+    { "id": "wash_sw3",      "label": "Washroom (South-West 3)",                "x": 100, "y": 755, "type": "washroom",  "entranceNodeId": "corner_sw" },
+
+    { "id": "wash_e1",       "label": "Washroom (East 1)",                     "x": 940, "y": 109, "type": "washroom",  "entranceNodeId": "corner_ne" },
+    { "id": "wash_e2",       "label": "Washroom (East 2)",                     "x": 940, "y": 165, "type": "washroom",  "entranceNodeId": "corner_ne" },
+    { "id": "wash_e3",       "label": "Washroom (East 3)",                     "x": 940, "y": 221, "type": "washroom",  "entranceNodeId": "corner_ne" },
+    { "id": "wash_se1",      "label": "Washroom (South-East 1)",                "x": 1013, "y": 730, "type": "washroom", "entranceNodeId": "corner_se" },
+    { "id": "wash_se2",      "label": "Washroom (South-East 2)",                "x": 1013, "y": 780, "type": "washroom", "entranceNodeId": "corner_se" },
+    { "id": "wash_se3",      "label": "Washroom (South-East 3)",                "x": 1013, "y": 823, "type": "washroom", "entranceNodeId": "corner_se" }
+  ],
+
+  "corridors": [
+    { "id": "north_corridor", "label": "North Corridor",  "axis": "horizontal", "y": 320, "x1": 180, "x2": 930 },
+    { "id": "south_corridor", "label": "South Corridor",  "axis": "horizontal", "y": 740, "x1": 180, "x2": 930 },
+    { "id": "west_corridor",  "label": "West Corridor",   "axis": "vertical",   "x": 180, "y1": 320, "y2": 740 },
+    { "id": "east_corridor",  "label": "East Corridor",   "axis": "vertical",   "x": 930, "y1": 320, "y2": 740 },
+    { "id": "mid_corridor",   "label": "Middle Corridor", "axis": "vertical",   "x": 400, "y1": 320, "y2": 740 }
+  ],
+
+  "edges": [
+    { "from": "entrance_main",    "to": "jct_south_mid",    "meters": 3.5 },
+    { "from": "entrance_esa",     "to": "jct_west_mid",     "meters": 7.0 },
+    { "from": "entrance_library", "to": "jct_east_mid",     "meters": 2.0 },
+
+    { "from": "corner_nw",        "to": "jct_west_office8", "meters": 2.5 },
+    { "from": "jct_west_office8", "to": "stair_west",       "meters": 3.0 },
+    { "from": "stair_west",       "to": "jct_west_mid",     "meters": 3.8 },
+    { "from": "jct_west_mid",     "to": "jct_west_office11","meters": 2.4 },
+    { "from": "jct_west_office11","to": "jct_west_office12","meters": 3.5 },
+    { "from": "jct_west_office12","to": "corner_sw",        "meters": 5.7 },
+
+    { "from": "corner_ne",        "to": "jct_east_office5", "meters": 2.7 },
+    { "from": "jct_east_office5", "to": "stair_east",       "meters": 3.1 },
+    { "from": "stair_east",       "to": "jct_east_mid",     "meters": 3.6 },
+    { "from": "jct_east_mid",     "to": "jct_east_resource","meters": 2.6 },
+    { "from": "jct_east_resource","to": "jct_east_office1", "meters": 3.4 },
+    { "from": "jct_east_office1", "to": "corner_se",        "meters": 5.5 },
+
+    { "from": "corner_nw",        "to": "jct_room2_e1",     "meters": 3.4 },
+    { "from": "jct_room2_e1",     "to": "jct_room2_e2",     "meters": 3.6 },
+    { "from": "jct_room2_e2",     "to": "jct_mid_top",      "meters": 4.0 },
+    { "from": "jct_mid_top",      "to": "jct_dept_lang",    "meters": 2.0 },
+    { "from": "jct_dept_lang",    "to": "jct_grooms",       "meters": 5.0 },
+    { "from": "jct_grooms",       "to": "jct_liaison",      "meters": 4.7 },
+    { "from": "jct_liaison",      "to": "jct_room1_e1",     "meters": 4.6 },
+    { "from": "jct_room1_e1",     "to": "jct_room1_e2",     "meters": 4.0 },
+    { "from": "jct_room1_e2",     "to": "corner_ne",        "meters": 6.2 },
+
+    { "from": "corner_sw",        "to": "jct_room24_e2",    "meters": 1.8 },
+    { "from": "jct_room24_e2",    "to": "jct_room24_e1",    "meters": 3.3 },
+    { "from": "jct_room24_e1",    "to": "jct_porters",      "meters": 4.0 },
+    { "from": "jct_porters",      "to": "jct_mid_bot",      "meters": 2.0 },
+    { "from": "jct_mid_bot",      "to": "jct_south_mid",    "meters": 5.5 },
+    { "from": "jct_south_mid",    "to": "jct_office_gen",   "meters": 6.5 },
+    { "from": "jct_office_gen",   "to": "jct_room25_e2",    "meters": 4.0 },
+    { "from": "jct_room25_e2",    "to": "jct_room25_e1",    "meters": 3.3 },
+    { "from": "jct_room25_e1",    "to": "corner_se",        "meters": 7.2 },
+
+    { "from": "jct_mid_top",      "to": "jct_mid_ict",      "meters": 8.0 },
+    { "from": "jct_mid_ict",      "to": "elevator",         "meters": 1.5 },
+    { "from": "elevator",         "to": "jct_mid_off16",    "meters": 1.7 },
+    { "from": "jct_mid_off16",    "to": "jct_mid_bot",      "meters": 9.8 }
+  ]
+}

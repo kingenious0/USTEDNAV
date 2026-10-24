@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>Reynolds Okai Building (ROB) — Indoor Floor Navigator | USTED NAV</title>
+  <meta name="description" content="Interactive indoor floor plan and turn-by-turn room navigation for Reynolds Okai Building (ROB), AAMUSTED Kumasi. Powered by CampusOS.">
+  <meta name="author" content="KINGENIOUS">
+  <meta name="theme-color" content="#33449b">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+
+  <!-- Fonts & Icons (100% Matching map.html) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Indoor Stylesheet -->
+  <link rel="stylesheet" href="indoor/indoor-viewer.css?v=2.0.0">
+</head>
+<body>
+
+  <div class="indoor-app">
+
+    <!-- ─── TOP BAR (Google Maps Pill Search Style - 100% Matching map.html) ─── -->
+    <div class="top-bar" id="topBar">
+      <div class="search-bar">
+        <a href="map.html" class="search-back-btn" title="Back to Outdoor Campus Map" aria-label="Back to Campus Map">
+          <i class="fas fa-arrow-left"></i>
+        </a>
+        <input type="text" id="indoorSearchInput" placeholder="Search rooms, offices, labs in ROB..." autocomplete="off" spellcheck="false">
+        <div class="search-action-btns">
+          <button class="search-clear-btn" id="searchClearBtn" title="Clear Search" aria-label="Clear">
+            <i class="fas fa-xmark"></i>
+          </button>
+          <button class="search-icon-btn" id="searchSearchBtn" aria-label="Search">
+            <i class="fas fa-magnifying-glass"></i>
+          </button>
+        </div>
+
+        <!-- Live Autocomplete Dropdown matching outdoor search results -->
+        <div class="search-results autocomplete-dropdown" id="autocompleteDropdown"></div>
+      </div>
+    </div>
+
+    <!-- ─── FILTER CHIPS ROW (100% Matching map.html .filter-chips & .chip) ─── -->
+    <div class="filter-chips" id="filterChips">
+      <!-- Building & Floor indicator chip -->
+      <div class="chip building-chip" title="Reynolds Okai Building (Ground Floor)">
+        <i class="fas fa-building-columns" style="color: #f8b511;"></i>
+        <span>ROB Ground Floor</span>
+      </div>
+
+      <!-- Origin Selection Chip (Room-as-Origin) -->
+      <div class="chip origin-chip" id="originChip" title="Click to change starting point">
+        <i class="fas fa-location-dot" style="color: #10b981;"></i>
+        <span id="originChipLabel">From: Main Entrance</span>
+        <i class="fas fa-chevron-down origin-chevron"></i>
+      </div>
+
+      <!-- Entrance Selector Chips (Injected dynamically by indoor-viewer.js) -->
+      <div id="entranceBar" class="entrance-chips-wrap"></div>
+    </div>
+
+    <!-- ─── LIVE ACTIVE MANEUVER CARD (Walk-With-Me Turn Guidance) ─── -->
+    <div class="active-maneuver-card" id="activeManeuverCard" aria-live="polite">
+      <div class="maneuver-icon-wrap" id="maneuverIconWrap">
+        <i class="fas fa-person-walking" id="maneuverIcon"></i>
+      </div>
+      <div class="maneuver-details">
+        <div class="maneuver-primary" id="maneuverPrimary">Walk along corridor</div>
+        <div class="maneuver-secondary" id="maneuverSecondary">Toward destination</div>
+        <div class="maneuver-progress-bar">
+          <div class="maneuver-progress-fill" id="maneuverProgressFill" style="width: 0%;"></div>
+        </div>
+      </div>
+      <div class="maneuver-actions">
+        <button class="btn-step-simulate" id="btnStepSimulate" title="Take a Step (0.7m)" aria-label="Take a step">
+          <i class="fas fa-shoe-prints"></i>
+          <span>Step</span>
+        </button>
+        <button class="btn-walk-toggle" id="btnWalkToggle" title="Auto-Walk Simulation" aria-label="Toggle Auto-Walk">
+          <i class="fas fa-play" id="walkToggleIcon"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- ─── FLOATING ACTION BUTTONS (FABS - 100% Matching map.html .fabs) ─── -->
+    <div class="fabs" id="fabs">
+      <!-- Floor Level FAB matching .fab-dim-toggle 3D button -->
+      <button class="fab fab-dim-toggle active-floor" id="btnFloorToggle" title="Ground Floor (GF) Active">
+        <span>GF</span>
+      </button>
+
+      <!-- Recenter View FAB matching .fab-locate -->
+      <button class="fab" id="recenterBtn" title="Reset View & Recenter" aria-label="Recenter Map">
+        <i class="fas fa-location-crosshairs"></i>
+      </button>
+
+      <!-- Zoom Control Pill matching map.html .zoom-ctrl -->
+      <div class="zoom-ctrl">
+        <button class="zoom-btn" id="zoomInBtn" title="Zoom In" aria-label="Zoom In">
+          <i class="fas fa-plus"></i>
+        </button>
+        <button class="zoom-btn" id="zoomOutBtn" title="Zoom Out" aria-label="Zoom Out">
+          <i class="fas fa-minus"></i>
+        </button>
+      </div>
+
+      <!-- Fullscreen FAB -->
+      <button class="fab" id="fullscreenBtn" onclick="toggleFullscreen()" title="Toggle Fullscreen" aria-label="Toggle Fullscreen">
+        <i class="fas fa-expand"></i>
+      </button>
+    </div>
+
+    <!-- ─── INTERACTIVE MAP VIEWPORT ──────────────────────────── -->
+    <main id="mapViewport" class="map-viewport">
+      <div id="mapSvgContainer" class="map-svg-container">
+        <svg id="indoorSvg" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"></svg>
+      </div>
+    </main>
+
+    <!-- ─── BOTTOM SHEET (100% Matching map.html .sheet) ────────── -->
+    <div class="sheet" id="detailSheet">
+      <div class="sheet-handle" id="sheetHandle"></div>
+      <div class="sheet-content">
+        <div class="sheet-header">
+          <div class="sheet-left">
+            <div id="sheetIcon" class="sheet-icon-box">
+              <i class="fas fa-door-open"></i>
+            </div>
+            <div class="sheet-title-box">
+              <h3 id="sheetTitle">Room 24 Entrance 1</h3>
+              <p id="sheetSubtitle">Lecture Hall • Ground Floor</p>
+            </div>
+          </div>
+          <button id="sheetCloseBtn" class="sheet-close-btn" title="Close Panel" aria-label="Close">
+            <i class="fas fa-xmark"></i>
+          </button>
+        </div>
+
+        <!-- Walking Metrics Strip -->
+        <div class="route-metrics">
+          <div class="metric-item">
+            <i class="fas fa-person-walking"></i>
+            <span id="metricDistance">0 m</span>
+          </div>
+          <div class="metric-divider"></div>
+          <div class="metric-item">
+            <i class="fas fa-stopwatch"></i>
+            <span id="metricTime">0s walk</span>
+          </div>
+          <div class="metric-divider"></div>
+          <div class="metric-item">
+            <i class="fas fa-route"></i>
+            <span>Fastest Path</span>
+          </div>
+        </div>
+
+        <!-- Turn-by-Turn Steps -->
+        <div id="turnStepsList" class="turn-steps-list"></div>
+
+        <!-- Dual Navigation Actions (Origin & Destination) -->
+        <div class="sheet-actions dual-nav-actions">
+          <button class="btn-sheet-origin" id="btnSetAsOrigin" title="Set this location as your starting point">
+            <i class="fas fa-location-crosshairs"></i>
+            <span>Start From Here</span>
+          </button>
+          <button class="btn-sheet-dest" id="btnSetAsDest" title="Get directions to this room">
+            <i class="fas fa-diamond-turn-right"></i>
+            <span>Directions Here</span>
+          </button>
+        </div>
+
+        <!-- Secondary Action Buttons -->
+        <div class="sheet-actions-secondary">
+          <button class="btn-secondary-link" onclick="copyShareLink()">
+            <i class="fas fa-share-nodes"></i> Share Room Link
+          </button>
+          <button class="btn-secondary-link" onclick="window.indoorNav.fitToScreen(true)">
+            <i class="fas fa-expand"></i> Full Plan
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Fullscreen & Share Utilities -->
+  <script>
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+        document.getElementById('fullscreenBtn').innerHTML = '<i class="fas fa-compress"></i>';
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        }
+        document.getElementById('fullscreenBtn').innerHTML = '<i class="fas fa-expand"></i>';
+      }
+    }
+
+    function copyShareLink() {
+      if (!window.indoorNav || !window.indoorNav.destinationId) return;
+      const url = `${window.location.origin}${window.location.pathname}?floor=rob_ground&to=${window.indoorNav.destinationId}&from=${window.indoorNav.originNodeId}`;
+      navigator.clipboard.writeText(url).then(() => {
+        alert('Room navigation link copied to clipboard!');
+      }).catch(() => {
+        prompt('Copy room link:', url);
+      });
+    }
+  </script>
+
+  <!-- Core Indoor Navigation Engine V2.0 -->
+  <script src="indoor/indoor-viewer.js?v=2.0.0"></script>
+</body>
+</html>

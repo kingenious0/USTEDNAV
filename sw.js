@@ -15,7 +15,7 @@ try {
     // Graceful fallback when offline
 }
 
-const CACHE_NAME  = 'ustednav-v1.4.1';
+const CACHE_NAME  = 'ustednav-v1.4.4';
 const TILE_CACHE  = 'ustednav-tiles-v1';
 
 // App shell and Studio admin files to precache on install
@@ -101,6 +101,16 @@ const PRECACHE_ASSETS = [
     './js/routing/graph-builder.js',
     './js/routing/routing-engine.js',
     './js/routing/routing-adapter.js',
+    './indoor.html',
+    '/indoor.html',
+    './indoor/indoor-viewer.css',
+    '/indoor/indoor-viewer.css',
+    './indoor/indoor-viewer.js',
+    '/indoor/indoor-viewer.js',
+    './indoor/floors/rob_ground.json',
+    '/indoor/floors/rob_ground.json',
+    './indoor/assets/rob_ground_plan.png',
+    '/indoor/assets/rob_ground_plan.png',
     // Studio styling, Leaflet, Mapbox, FontAwesome, Fonts & CDNs used in Studio
     'https://cdn.tailwindcss.com',
     'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
