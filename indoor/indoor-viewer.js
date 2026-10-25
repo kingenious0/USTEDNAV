@@ -72,6 +72,39 @@ class IndoorNavigator {
     this.btnSetAsOrigin = document.getElementById('btnSetAsOrigin');
     this.btnSetAsDest = document.getElementById('btnSetAsDest');
 
+    // Apple Maps Active Walk Bottom Dock
+    this.navWalkDock = document.getElementById('navWalkDock');
+    this.walkDockHandle = document.getElementById('walkDockHandle');
+    this.dockMetricsTrigger = document.getElementById('dockMetricsTrigger');
+    this.dockRemainingDist = document.getElementById('dockRemainingDist');
+    this.dockRemainingTime = document.getElementById('dockRemainingTime');
+    this.dockDestLabel = document.getElementById('dockDestLabel');
+    this.dockVoiceBtn = document.getElementById('dockVoiceBtn');
+    this.dockVoiceIcon = document.getElementById('dockVoiceIcon');
+    this.btnStopNav = document.getElementById('btnStopNav');
+    this.dockTurnStepsList = document.getElementById('dockTurnStepsList');
+    this.isNavigating = false;
+
+    // Voice Guidance State (Web Speech API)
+    this.btnVoiceToggle = document.getElementById('btnVoiceToggle');
+    this.voiceToggleIcon = document.getElementById('voiceToggleIcon');
+    this.voiceEnabled = true;
+    try {
+      const savedVoice = localStorage.getItem('indoor_voice_enabled');
+      if (savedVoice !== null) this.voiceEnabled = (savedVoice === 'true');
+    } catch (e) {}
+
+    // Compass Readout Elements
+    this.compassIcon = document.getElementById('compassIcon');
+    this.compassReadout = document.getElementById('compassReadout');
+
+    // Category Rail Elements
+    this.categoryChips = document.getElementById('categoryChips');
+    this.activeCategory = 'all';
+
+    // Last spoken maneuver index to prevent repeating speech loops
+    this.lastSpokenIndex = -1;
+
     // Currently viewed room in detail sheet (can be different from destination)
     this.inspectedRoomId = null;
 
@@ -81,6 +114,7 @@ class IndoorNavigator {
       corridors: null,
       route: null,
       rooms: null,
+      category: null,
       entrances: null,
       user: null,
       overlay: null
@@ -96,6 +130,8 @@ class IndoorNavigator {
   async init() {
     this.syncTheme();
     this.setupSvgLayers();
+    this.setupCategoryRail();
+    this.updateVoiceToggleUI();
     this.setupEventListeners();
     this.setupMotionAndOrientation();
     await this.loadFloorData();
@@ -118,6 +154,250 @@ class IndoorNavigator {
     } catch (e) {}
   }
 
+  // ─── CATEGORY FILTER RAIL ────────────────────────────────────
+
+  setupCategoryRail() {
+    if (!this.categoryChips) return;
+    const chips = this.categoryChips.querySelectorAll('.cat-chip');
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        const cat = chip.getAttribute('data-cat') || 'all';
+        this.filterByCategory(cat);
+      });
+    });
+  }
+
+  filterByCategory(cat) {
+    this.activeCategory = cat;
+    if (this.categoryChips) {
+      this.categoryChips.querySelectorAll('.cat-chip').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-cat') === cat);
+      });
+    }
+
+    if (!this.layers.category) return;
+    this.layers.category.innerHTML = '';
+
+    if (cat === 'all') return;
+
+    let matches = [];
+    let beaconColor = '#10b981';
+
+    if (cat === 'washroom') {
+      matches = this.floorData.rooms.filter(r => r.type === 'washroom');
+      beaconColor = '#10b981';
+    } else if (cat === 'faculty') {
+      matches = this.floorData.rooms.filter(r => r.type === 'office');
+      beaconColor = '#2563eb';
+    } else if (cat === 'lecture') {
+      matches = this.floorData.rooms.filter(r => r.type === 'lecture');
+      beaconColor = '#f59e0b';
+    } else if (cat === 'entrance') {
+      matches = this.floorData.entrances || [];
+      beaconColor = '#3b82f6';
+    }
+
+    matches.forEach(item => {
+      const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      g.setAttribute('transform', `translate(${item.x}, ${item.y})`);
+      g.setAttribute('class', 'category-beacon-group');
+      g.setAttribute('cursor', 'pointer');
+
+      // Animated glowing pulse beacon
+      const beaconRing = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      beaconRing.setAttribute('class', 'category-highlight-ring');
+      beaconRing.setAttribute('fill', 'none');
+      beaconRing.setAttribute('stroke', beaconColor);
+      g.appendChild(beaconRing);
+
+      // Core dot
+      const coreDot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      coreDot.setAttribute('r', '7.5');
+      coreDot.setAttribute('fill', beaconColor);
+      coreDot.setAttribute('stroke', '#ffffff');
+      coreDot.setAttribute('stroke-width', '2');
+      coreDot.setAttribute('class', 'category-badge-marker');
+      g.appendChild(coreDot);
+
+      const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+      title.textContent = item.label;
+      g.appendChild(title);
+
+      g.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (cat === 'entrance') {
+          this.setOrigin(item.id, true);
+        } else {
+          this.setDestination(item.id, true);
+        }
+      });
+
+      this.layers.category.appendChild(g);
+    });
+
+    if (matches.length > 0) {
+      const avgX = matches.reduce((sum, m) => sum + m.x, 0) / matches.length;
+      const avgY = matches.reduce((sum, m) => sum + m.y, 0) / matches.length;
+      this.flyToPoint(avgX, avgY, 1.25);
+    }
+  }
+
+  // ─── VOICE GUIDANCE (WEB SPEECH API) ──────────────────────────
+
+  toggleVoice() {
+    this.voiceEnabled = !this.voiceEnabled;
+    try {
+      localStorage.setItem('indoor_voice_enabled', this.voiceEnabled);
+    } catch (e) {}
+
+    this.updateVoiceToggleUI();
+
+    if (!this.voiceEnabled) {
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
+    } else {
+      this.speakInstruction('Voice guidance enabled');
+    }
+  }
+
+  updateVoiceToggleUI() {
+    if (this.btnVoiceToggle) {
+      this.btnVoiceToggle.classList.toggle('active', this.voiceEnabled);
+      if (this.voiceToggleIcon) {
+        this.voiceToggleIcon.className = this.voiceEnabled ? 'fas fa-volume-high' : 'fas fa-volume-xmark';
+      }
+      this.btnVoiceToggle.setAttribute('title', this.voiceEnabled ? 'Mute Voice Guidance' : 'Unmute Voice Guidance');
+    }
+
+    if (this.dockVoiceBtn) {
+      this.dockVoiceBtn.classList.toggle('active', this.voiceEnabled);
+      if (this.dockVoiceIcon) {
+        this.dockVoiceIcon.className = this.voiceEnabled ? 'fas fa-volume-high' : 'fas fa-volume-xmark';
+      }
+      this.dockVoiceBtn.setAttribute('title', this.voiceEnabled ? 'Mute Voice Guidance' : 'Unmute Voice Guidance');
+    }
+  }
+
+  speakInstruction(text) {
+    if (!this.voiceEnabled || !text || !('speechSynthesis' in window)) return;
+    try {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 1.0;
+      utterance.pitch = 1.02;
+      utterance.lang = 'en-US';
+      window.speechSynthesis.speak(utterance);
+    } catch (err) {
+      console.warn('Speech synthesis error:', err);
+    }
+  }
+
+  // ─── APPLE MAPS ACTIVE WALK NAVIGATION MODE ──────────────────
+
+  setNavMode(active) {
+    this.isNavigating = active;
+    document.body.classList.toggle('mode-navigating', active);
+
+    if (active) {
+      this.detailSheet?.classList.remove('open');
+      document.body.classList.remove('sheet-active');
+
+      if (this.navWalkDock) {
+        this.navWalkDock.classList.add('visible');
+      }
+
+      this.updateDockContent();
+
+      // Clear category beacons when actively walking to keep route crystal clean
+      if (this.layers.category) this.layers.category.innerHTML = '';
+
+      // Voice & Haptic cue on navigation start
+      const firstManeuver = this.activeManeuvers?.[0];
+      if (firstManeuver) {
+        this.speakInstruction(firstManeuver.turnText);
+        this.lastSpokenIndex = 0;
+      }
+      if (navigator.vibrate) navigator.vibrate(50);
+    } else {
+      if (this.navWalkDock) {
+        this.navWalkDock.classList.remove('visible', 'expanded');
+      }
+      this.hideManeuverCard();
+    }
+  }
+
+  stopNavigation() {
+    this.stopAutoWalk();
+    this.setNavMode(false);
+    this.destinationId = null;
+    this.activeRoute = null;
+    this.activeManeuvers = [];
+    this.currentManeuverIndex = 0;
+    this.distAlongCurrentManeuver = 0;
+    this.lastSpokenIndex = -1;
+
+    if (this.layers.route) this.layers.route.innerHTML = '';
+    if (this.layers.overlay) this.layers.overlay.innerHTML = '';
+
+    if (this.searchInput) {
+      this.searchInput.value = '';
+      this.searchClearBtn?.classList.remove('visible');
+    }
+
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+
+    // Reset user back to current origin position
+    const coords = this.getNodeCoords(this.originNodeId);
+    this.setUserPosition(coords.x, coords.y, 0);
+    this.fitToScreen(true);
+  }
+
+  updateDockContent() {
+    if (!this.activeRoute || !this.destinationId) return;
+
+    const dest = this.roomMap[this.destinationId];
+    if (this.dockDestLabel) {
+      this.dockDestLabel.textContent = dest ? dest.label : 'Destination';
+    }
+
+    // Compute remaining distance
+    let remainingMeters = 0;
+    if (this.activeManeuvers && this.activeManeuvers.length > 0) {
+      const curr = this.activeManeuvers[this.currentManeuverIndex];
+      if (curr) {
+        remainingMeters += Math.max(0, curr.meters - this.distAlongCurrentManeuver);
+      }
+      for (let i = this.currentManeuverIndex + 1; i < this.activeManeuvers.length; i++) {
+        remainingMeters += this.activeManeuvers[i].meters || 0;
+      }
+    } else {
+      remainingMeters = this.activeRoute.totalMeters;
+    }
+
+    remainingMeters = Math.round(remainingMeters * 10) / 10;
+    const walkingSecs = Math.round(remainingMeters / 1.1);
+
+    if (this.dockRemainingDist) {
+      this.dockRemainingDist.textContent = `${remainingMeters} m`;
+    }
+
+    if (this.dockRemainingTime) {
+      this.dockRemainingTime.textContent = walkingSecs < 60 ? `~${walkingSecs}s` : `~${Math.round(walkingSecs / 60)} min`;
+    }
+
+    // Populate dock turn steps list
+    if (this.dockTurnStepsList && this.activeManeuvers) {
+      this.dockTurnStepsList.innerHTML = this.activeManeuvers.map((m, idx) => `
+        <div class="dock-step-row ${idx === this.currentManeuverIndex ? 'active' : (idx < this.currentManeuverIndex ? 'passed' : '')}">
+          <div class="dock-step-icon"><i class="fas ${m.icon}"></i></div>
+          <div class="dock-step-details">
+            <div class="dock-step-primary">${m.turnText}</div>
+            <div class="dock-step-secondary">${m.meters > 0 ? `${m.meters} m` : 'Destination'}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+  }
+
   setupSvgLayers() {
     this.svgEl.innerHTML = '';
 
@@ -132,7 +412,7 @@ class IndoorNavigator {
     `;
     this.svgEl.appendChild(defs);
 
-    const layerNames = ['base', 'corridors', 'route', 'rooms', 'entrances', 'user', 'overlay'];
+    const layerNames = ['base', 'corridors', 'route', 'rooms', 'category', 'entrances', 'user', 'overlay'];
     layerNames.forEach(name => {
       const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
       g.setAttribute('id', `layer-${name}`);
@@ -415,6 +695,15 @@ class IndoorNavigator {
     this.userHeading = angle;
     if (this.headingConeRotator) {
       this.headingConeRotator.setAttribute('transform', `rotate(${angle})`);
+    }
+    if (this.compassIcon) {
+      this.compassIcon.style.transform = `rotate(${-angle}deg)`;
+    }
+    if (this.compassReadout) {
+      const cardinals = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+      const degNormalized = ((angle % 360) + 360) % 360;
+      const idx = Math.round(degNormalized / 45) % 8;
+      this.compassReadout.textContent = `${Math.round(degNormalized)}° ${cardinals[idx]}`;
     }
   }
 
@@ -743,8 +1032,19 @@ class IndoorNavigator {
       this.setUserPosition(userX, userY, curr.bearing + 90);
     }
 
+    // Voice announcement when transitioning to a new maneuver
+    if (this.currentManeuverIndex !== this.lastSpokenIndex) {
+      this.lastSpokenIndex = this.currentManeuverIndex;
+      const stepManeuver = this.activeManeuvers[this.currentManeuverIndex];
+      if (stepManeuver) {
+        this.speakInstruction(stepManeuver.turnText);
+        if (navigator.vibrate) navigator.vibrate([40, 50, 40]);
+      }
+    }
+
     this.updateManeuverCard();
     this.updateTurnStepsHighlight();
+    this.updateDockContent();
   }
 
   onArrival() {
@@ -761,6 +1061,12 @@ class IndoorNavigator {
       this.maneuverSecondary.textContent = dest ? dest.label : 'Destination reached';
       this.maneuverProgressFill.style.width = '100%';
     }
+
+    if (this.dockRemainingDist) this.dockRemainingDist.textContent = '0 m';
+    if (this.dockRemainingTime) this.dockRemainingTime.textContent = 'Arrived';
+
+    this.speakInstruction(dest ? `You have arrived at ${dest.label}` : 'You have arrived at your destination');
+    if (navigator.vibrate) navigator.vibrate([100, 80, 200]);
   }
 
   toggleAutoWalk() {
@@ -901,6 +1207,13 @@ class IndoorNavigator {
     document.getElementById('sheetSubtitle').textContent = `${typeName} • Ground Floor`;
     document.getElementById('sheetIcon').innerHTML = `<i class="fas ${iconClass}"></i>`;
 
+    // Update Dual-Node Route Planner
+    const originLabel = this.getNodeLabel(this.originNodeId);
+    const pOrigin = document.getElementById('plannerOriginName');
+    const pDest = document.getElementById('plannerDestName');
+    if (pOrigin) pOrigin.textContent = originLabel;
+    if (pDest) pDest.textContent = room.label;
+
     this.updateSheetActionButtons(room.id);
 
     this.detailSheet.classList.add('open');
@@ -913,15 +1226,15 @@ class IndoorNavigator {
       this.btnSetAsOrigin.className = `btn-sheet-origin ${isCurrentOrigin ? 'is-current' : ''}`;
       this.btnSetAsOrigin.innerHTML = `
         <i class="fas fa-location-crosshairs"></i>
-        <span>${isCurrentOrigin ? 'Starting Point' : 'Start From Here'}</span>
+        <span>${isCurrentOrigin ? 'Starting Spot' : 'Set As Start'}</span>
       `;
     }
 
     if (this.btnSetAsDest) {
-      const isCurrentDest = (roomId === this.destinationId);
+      const isCurrentDest = (roomId === this.destinationId && this.isNavigating);
       this.btnSetAsDest.innerHTML = `
         <i class="fas fa-diamond-turn-right"></i>
-        <span>${isCurrentDest ? 'Active Target' : 'Directions Here'}</span>
+        <span>${isCurrentDest ? 'Resume Live Walk' : 'Start Live Walk'}</span>
       `;
     }
   }
@@ -963,6 +1276,7 @@ class IndoorNavigator {
       this.btnSetAsDest.addEventListener('click', () => {
         if (this.inspectedRoomId) {
           this.setDestination(this.inspectedRoomId, true);
+          this.setNavMode(true);
         }
       });
     }
@@ -980,7 +1294,27 @@ class IndoorNavigator {
       });
     }
 
-    // 3. Origin Chip Click (Quick cycle / reset to entrances)
+    // 3. Apple Maps Walk Dock Controls
+    this.btnStopNav?.addEventListener('click', () => this.stopNavigation());
+    this.dockVoiceBtn?.addEventListener('click', () => this.toggleVoice());
+    this.btnVoiceToggle?.addEventListener('click', () => this.toggleVoice());
+
+    const toggleDock = () => this.navWalkDock?.classList.toggle('expanded');
+    this.walkDockHandle?.addEventListener('click', toggleDock);
+    this.dockMetricsTrigger?.addEventListener('click', toggleDock);
+
+    // 4. Dual-Node Origin Changer Button
+    document.getElementById('btnChangeOrigin')?.addEventListener('click', () => {
+      const entrances = this.floorData?.entrances || [];
+      if (!entrances.length) return;
+      const currentIdx = entrances.findIndex(e => e.id === this.originNodeId);
+      const nextEntrance = entrances[(currentIdx + 1) % entrances.length];
+      this.setOrigin(nextEntrance.id, true);
+      const pOrigin = document.getElementById('plannerOriginName');
+      if (pOrigin) pOrigin.textContent = nextEntrance.label;
+    });
+
+    // 5. Origin Chip Click (Quick cycle / reset to entrances)
     if (this.originChip) {
       this.originChip.addEventListener('click', () => {
         const entrances = this.floorData?.entrances || [];
@@ -991,14 +1325,13 @@ class IndoorNavigator {
       });
     }
 
-    // 4. Zoom Buttons
+    // 6. Zoom & Recenter Buttons
     document.getElementById('zoomInBtn')?.addEventListener('click', () => this.zoomBy(1.25));
     document.getElementById('zoomOutBtn')?.addEventListener('click', () => this.zoomBy(0.8));
-
-    // 5. Recenter Button
     document.getElementById('recenterBtn')?.addEventListener('click', () => this.fitToScreen(true));
+    document.getElementById('compassFab')?.addEventListener('click', () => this.fitToScreen(true));
 
-    // 6. Close Sheet Button
+    // 7. Close Sheet Button
     document.getElementById('sheetCloseBtn')?.addEventListener('click', () => {
       this.detailSheet?.classList.remove('open');
       document.body.classList.remove('sheet-active');

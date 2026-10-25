@@ -28,10 +28,13 @@
         <a href="map.html" class="search-back-btn" title="Back to Outdoor Campus Map" aria-label="Back to Campus Map">
           <i class="fas fa-arrow-left"></i>
         </a>
-        <input type="text" id="indoorSearchInput" placeholder="Search rooms, offices, labs in ROB..." autocomplete="off" spellcheck="false">
+        <input type="text" id="indoorSearchInput" placeholder="Search rooms, offices, washrooms in ROB..." autocomplete="off" spellcheck="false">
         <div class="search-action-btns">
           <button class="search-clear-btn" id="searchClearBtn" title="Clear Search" aria-label="Clear">
             <i class="fas fa-xmark"></i>
+          </button>
+          <button class="voice-toggle-btn" id="btnVoiceToggle" title="Toggle Voice Guidance" aria-label="Toggle Voice">
+            <i class="fas fa-volume-high" id="voiceToggleIcon"></i>
           </button>
           <button class="search-icon-btn" id="searchSearchBtn" aria-label="Search">
             <i class="fas fa-magnifying-glass"></i>
@@ -43,26 +46,40 @@
       </div>
     </div>
 
-    <!-- ─── FILTER CHIPS ROW (100% Matching map.html .filter-chips & .chip) ─── -->
-    <div class="filter-chips" id="filterChips">
-      <!-- Building & Floor indicator chip -->
-      <div class="chip building-chip" title="Reynolds Okai Building (Ground Floor)">
-        <i class="fas fa-building-columns" style="color: #f8b511;"></i>
-        <span>ROB Ground Floor</span>
+    <!-- ─── TOP DISCOVERY BAR: QUICK CATEGORY RAIL ─────────────── -->
+    <div class="category-rail" id="categoryRail">
+      <div class="category-chips-scroll" id="categoryChips">
+        <button class="cat-chip active" data-category="all">
+          <i class="fas fa-layer-group"></i>
+          <span>All</span>
+        </button>
+        <button class="cat-chip" data-category="washroom">
+          <i class="fas fa-restroom" style="color: #10b981;"></i>
+          <span>Washrooms</span>
+        </button>
+        <button class="cat-chip" data-category="entrance">
+          <i class="fas fa-door-open" style="color: #f59e0b;"></i>
+          <span>Entrances</span>
+        </button>
+        <button class="cat-chip" data-category="faculty">
+          <i class="fas fa-briefcase" style="color: #6366f1;"></i>
+          <span>Offices</span>
+        </button>
+        <button class="cat-chip" data-category="lecture">
+          <i class="fas fa-chalkboard-user" style="color: #0ea5e9;"></i>
+          <span>Lecture Rooms</span>
+        </button>
       </div>
 
-      <!-- Origin Selection Chip (Room-as-Origin) -->
-      <div class="chip origin-chip" id="originChip" title="Click to change starting point">
+      <!-- Quick Origin Indicator Pill -->
+      <div class="origin-pill-dock" id="originChip" title="Click to choose a different starting point">
         <i class="fas fa-location-dot" style="color: #10b981;"></i>
         <span id="originChipLabel">From: Main Entrance</span>
-        <i class="fas fa-chevron-down origin-chevron"></i>
+        <i class="fas fa-chevron-down" style="font-size: 9px; opacity: 0.6;"></i>
       </div>
-
-      <!-- Entrance Selector Chips (Injected dynamically by indoor-viewer.js) -->
-      <div id="entranceBar" class="entrance-chips-wrap"></div>
     </div>
 
-    <!-- ─── LIVE ACTIVE MANEUVER CARD (Walk-With-Me Turn Guidance) ─── -->
+    <!-- ─── LIVE ACTIVE MANEUVER HUD CARD (Walk-With-Me Turn Guidance) ─── -->
     <div class="active-maneuver-card" id="activeManeuverCard" aria-live="polite">
       <div class="maneuver-icon-wrap" id="maneuverIconWrap">
         <i class="fas fa-person-walking" id="maneuverIcon"></i>
@@ -85,19 +102,26 @@
       </div>
     </div>
 
-    <!-- ─── FLOATING ACTION BUTTONS (FABS - 100% Matching map.html .fabs) ─── -->
+    <!-- ─── FLOATING ACTION BUTTONS (Right Rail HUD) ────────────── -->
     <div class="fabs" id="fabs">
-      <!-- Floor Level FAB matching .fab-dim-toggle 3D button -->
-      <button class="fab fab-dim-toggle active-floor" id="btnFloorToggle" title="Ground Floor (GF) Active">
-        <span>GF</span>
+      <!-- Floor Level FAB with 3D Badge -->
+      <button class="fab fab-dim-toggle active-floor" id="btnFloorToggle" title="Reynolds Okai Building - Ground Floor (GF) Active">
+        <span class="floor-label">GF</span>
+        <span class="floor-badge">ROB</span>
       </button>
 
-      <!-- Recenter View FAB matching .fab-locate -->
-      <button class="fab" id="recenterBtn" title="Reset View & Recenter" aria-label="Recenter Map">
+      <!-- Live Compass with Degree Readout -->
+      <button class="fab fab-compass" id="compassFab" title="Live Heading & Orientation">
+        <i class="fas fa-compass" id="compassIcon"></i>
+        <span class="compass-readout" id="compassReadout">0° N</span>
+      </button>
+
+      <!-- Recenter View FAB -->
+      <button class="fab" id="recenterBtn" title="Re-center on Your Location / Plan" aria-label="Recenter Map">
         <i class="fas fa-location-crosshairs"></i>
       </button>
 
-      <!-- Zoom Control Pill matching map.html .zoom-ctrl -->
+      <!-- Zoom Control Pill -->
       <div class="zoom-ctrl">
         <button class="zoom-btn" id="zoomInBtn" title="Zoom In" aria-label="Zoom In">
           <i class="fas fa-plus"></i>
@@ -120,7 +144,7 @@
       </div>
     </main>
 
-    <!-- ─── BOTTOM SHEET (100% Matching map.html .sheet) ────────── -->
+    <!-- ─── DISCOVERY MODE: ROOM SELECTION DETAIL SHEET ────────── -->
     <div class="sheet" id="detailSheet">
       <div class="sheet-handle" id="sheetHandle"></div>
       <div class="sheet-content">
@@ -139,8 +163,28 @@
           </button>
         </div>
 
+        <!-- Route Planner Strip -->
+        <div class="route-planner-strip" id="routePlannerStrip">
+          <div class="planner-row planner-origin-row" id="btnChangeOrigin" title="Tap to change origin">
+            <div class="planner-dot origin-dot"></div>
+            <div class="planner-label-wrap">
+              <span class="planner-sub">STARTING FROM</span>
+              <span class="planner-name" id="plannerOriginName">Main Entrance</span>
+            </div>
+            <i class="fas fa-pen-to-square planner-edit-icon"></i>
+          </div>
+          <div class="planner-divider-line"></div>
+          <div class="planner-row planner-dest-row">
+            <div class="planner-dot dest-dot"></div>
+            <div class="planner-label-wrap">
+              <span class="planner-sub">DESTINATION</span>
+              <span class="planner-name" id="plannerDestName">Select room</span>
+            </div>
+          </div>
+        </div>
+
         <!-- Walking Metrics Strip -->
-        <div class="route-metrics">
+        <div class="route-metrics" id="routeMetricsStrip">
           <div class="metric-item">
             <i class="fas fa-person-walking"></i>
             <span id="metricDistance">0 m</span>
@@ -153,34 +197,69 @@
           <div class="metric-divider"></div>
           <div class="metric-item">
             <i class="fas fa-route"></i>
-            <span>Fastest Path</span>
+            <span>Fastest Route</span>
           </div>
         </div>
 
-        <!-- Turn-by-Turn Steps -->
-        <div id="turnStepsList" class="turn-steps-list"></div>
-
-        <!-- Dual Navigation Actions (Origin & Destination) -->
+        <!-- Primary Actions -->
         <div class="sheet-actions dual-nav-actions">
           <button class="btn-sheet-origin" id="btnSetAsOrigin" title="Set this location as your starting point">
             <i class="fas fa-location-crosshairs"></i>
-            <span>Start From Here</span>
+            <span>Set As Start</span>
           </button>
-          <button class="btn-sheet-dest" id="btnSetAsDest" title="Get directions to this room">
+          <button class="btn-sheet-dest" id="btnSetAsDest" title="Start Live Walk Guidance">
             <i class="fas fa-diamond-turn-right"></i>
-            <span>Directions Here</span>
+            <span id="btnDestText">Start Live Walk</span>
           </button>
         </div>
 
         <!-- Secondary Action Buttons -->
         <div class="sheet-actions-secondary">
           <button class="btn-secondary-link" onclick="copyShareLink()">
-            <i class="fas fa-share-nodes"></i> Share Room Link
+            <i class="fas fa-share-nodes"></i> Share Link
           </button>
           <button class="btn-secondary-link" onclick="window.indoorNav.fitToScreen(true)">
             <i class="fas fa-expand"></i> Full Plan
           </button>
         </div>
+
+        <!-- Turn-by-Turn Checklist Drawer -->
+        <div class="turn-steps-container" id="turnStepsContainer">
+          <div class="turn-steps-header">
+            <span>Route Steps</span>
+            <span id="turnStepsCount" class="badge-steps-count">0 legs</span>
+          </div>
+          <div id="turnStepsList" class="turn-steps-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── ACTIVE NAVIGATION WALK HUD DOCK (Apple Maps Bottom Dock) ─── -->
+    <div class="nav-walk-dock" id="navWalkDock" aria-live="polite">
+      <div class="walk-dock-handle" id="walkDockHandle"></div>
+      <div class="walk-dock-bar">
+        <div class="dock-left-metrics" id="dockMetricsTrigger">
+          <div class="dock-eta-row">
+            <span class="dock-primary-dist" id="dockRemainingDist">0 m</span>
+            <span class="dock-eta-dot">•</span>
+            <span class="dock-primary-time" id="dockRemainingTime">~0s walk</span>
+          </div>
+          <div class="dock-secondary-dest" id="dockDestLabel">Walk in progress</div>
+        </div>
+        <div class="dock-right-actions">
+          <button class="dock-action-btn" id="dockVoiceBtn" title="Toggle Voice Prompts" aria-label="Toggle Voice">
+            <i class="fas fa-volume-high" id="dockVoiceIcon"></i>
+          </button>
+          <button class="btn-dock-stop" id="btnStopNav" title="End Navigation" aria-label="Stop Navigation">
+            <i class="fas fa-xmark"></i>
+            <span>Exit</span>
+          </button>
+        </div>
+      </div>
+      <!-- Expandable Steps Sheet when walking -->
+      <div class="walk-dock-expanded" id="walkDockExpanded">
+        <div class="dock-steps-title">Turn-by-Turn Guidance</div>
+        <div id="dockTurnStepsList" class="dock-turn-steps-list"></div>
       </div>
     </div>
 
