@@ -35,7 +35,7 @@ class IndoorNavigator {
 
     // Viewport Transform State (Pan & Zoom)
     this.scale = 1;
-    this.minScale = 0.4;
+    this.minScale = 0.2;
     this.maxScale = 3.5;
     this.translateX = 0;
     this.translateY = 0;
@@ -139,7 +139,28 @@ class IndoorNavigator {
     this.renderFloor();
     this.renderEntranceTabs();
     this.initUserMarker();
+    
+    // Initial centering with RAF and timeout fallbacks to ensure layout dimensions have computed
     this.fitToScreen();
+    requestAnimationFrame(() => {
+      this.fitToScreen();
+      setTimeout(() => this.fitToScreen(), 120);
+    });
+
+    // Auto re-center when window or mobile screen resizes/rotates (if not actively navigating)
+    window.addEventListener('resize', () => {
+      if (!this.destinationId && !this.isNavigating) {
+        this.fitToScreen(false);
+      }
+    });
+    window.addEventListener('orientationchange', () => {
+      setTimeout(() => {
+        if (!this.destinationId && !this.isNavigating) {
+          this.fitToScreen(false);
+        }
+      }, 200);
+    });
+
     this.handleUrlParams();
   }
 
@@ -161,7 +182,7 @@ class IndoorNavigator {
     const chips = this.categoryChips.querySelectorAll('.cat-chip');
     chips.forEach(chip => {
       chip.addEventListener('click', () => {
-        const cat = chip.getAttribute('data-cat') || 'all';
+        const cat = chip.getAttribute('data-category') || chip.getAttribute('data-cat') || 'all';
         this.filterByCategory(cat);
       });
     });
@@ -171,7 +192,8 @@ class IndoorNavigator {
     this.activeCategory = cat;
     if (this.categoryChips) {
       this.categoryChips.querySelectorAll('.cat-chip').forEach(btn => {
-        btn.classList.toggle('active', btn.getAttribute('data-cat') === cat);
+        const btnCat = btn.getAttribute('data-category') || btn.getAttribute('data-cat') || 'all';
+        btn.classList.toggle('active', btnCat === cat);
       });
     }
 
@@ -305,10 +327,16 @@ class IndoorNavigator {
         this.navWalkDock.classList.add('visible');
       }
 
+      this.updateManeuverCard();
       this.updateDockContent();
 
       // Clear category beacons when actively walking to keep route crystal clean
       if (this.layers.category) this.layers.category.innerHTML = '';
+
+      // Smoothly focus camera on starting position
+      const coords = this.getNodeCoords(this.originNodeId);
+      const navScale = window.innerWidth <= 640 ? 1.05 : 1.35;
+      this.flyToPoint(coords.x, coords.y, navScale);
 
       // Voice & Haptic cue on navigation start
       const firstManeuver = this.activeManeuvers?.[0];
@@ -858,7 +886,6 @@ class IndoorNavigator {
     this.activeManeuvers = this.computeRouteManeuvers(routeResult.path);
     this.currentManeuverIndex = 0;
     this.distAlongCurrentManeuver = 0;
-    this.isNavigating = true;
 
     // 2. Draw Route Geometry
     const points = routeResult.path.map(id => {
@@ -908,7 +935,11 @@ class IndoorNavigator {
     // 4. Update UI Metrics and Floating Active Maneuver Card
     const walkingSecs = Math.round(routeResult.totalMeters / 1.1);
     this.updateRouteMetrics(routeResult.totalMeters, walkingSecs, routeResult.path);
-    this.updateManeuverCard();
+    if (this.isNavigating) {
+      this.updateManeuverCard();
+    } else {
+      this.hideManeuverCard();
+    }
   }
 
   computeRouteManeuvers(path) {
@@ -1100,7 +1131,10 @@ class IndoorNavigator {
   }
 
   updateManeuverCard() {
-    if (!this.maneuverCard || !this.activeManeuvers.length) return;
+    if (!this.maneuverCard || !this.activeManeuvers.length || !this.isNavigating) {
+      this.hideManeuverCard();
+      return;
+    }
 
     const curr = this.activeManeuvers[this.currentManeuverIndex];
     if (!curr) return;
@@ -1474,21 +1508,23 @@ class IndoorNavigator {
   }
 
   fitToScreen(animated = false) {
+    if (!this.floorData || !this.floorData._meta) return;
     const meta = this.floorData._meta;
-    const vpW = this.viewportEl.clientWidth;
-    const vpH = this.viewportEl.clientHeight;
+    const vpW = this.viewportEl?.clientWidth || window.innerWidth || 360;
+    const vpH = this.viewportEl?.clientHeight || window.innerHeight || 640;
 
     const mapW = meta.imageWidth || 1040;
     const mapH = meta.imageHeight || 870;
 
-    const padTop = 135;
-    const padBottom = 80;
-    const padHoriz = 30;
+    const isMobile = (vpW <= 640);
+    const padTop = isMobile ? 120 : 135;
+    const padBottom = isMobile ? 40 : 80;
+    const padHoriz = isMobile ? 16 : 32;
 
-    const availW = vpW - padHoriz;
-    const availH = vpH - (padTop + padBottom);
+    const availW = Math.max(100, vpW - padHoriz);
+    const availH = Math.max(100, vpH - (padTop + padBottom));
 
-    const fitScale = Math.min(availW / mapW, availH / mapH, 1.15);
+    const fitScale = Math.min(availW / mapW, availH / mapH, 1.2);
     const targetScale = Math.max(this.minScale, fitScale);
 
     const targetX = (vpW - mapW * targetScale) / 2;
@@ -1504,9 +1540,12 @@ class IndoorNavigator {
     }
   }
 
-  flyToPoint(pointX, pointY, targetScale = 1.35) {
-    const vpW = this.viewportEl.clientWidth;
-    const vpH = this.viewportEl.clientHeight;
+  flyToPoint(pointX, pointY, targetScale = null) {
+    if (targetScale === null) {
+      targetScale = window.innerWidth <= 640 ? 0.95 : 1.25;
+    }
+    const vpW = this.viewportEl?.clientWidth || window.innerWidth || 360;
+    const vpH = this.viewportEl?.clientHeight || window.innerHeight || 640;
 
     const cx = vpW / 2;
     const cy = window.innerWidth <= 640 ? (vpH * 0.36) : (vpH / 2);
